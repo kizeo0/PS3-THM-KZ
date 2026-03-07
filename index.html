@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>PS3 · temas p3t</title>
+    <title>PS3 · THM KZt</title>
     <style>
         /* RESET SEGURO PARA PS3 */
         * {
@@ -21,7 +21,7 @@
             text-align: center; /* Centra todo horizontalmente */
         }
 
-        /* Contenedor principal: ancho fijo de 1200px para que quepan 4 tarjetas de 290px con márgenes */
+        /* Contenedor principal: ancho fijo de 1400px para que quepan 4 tarjetas de 340px con márgenes */
         .main-container {
             width: 1400px;
             margin: 0 auto;
@@ -30,14 +30,14 @@
 
         /* CABECERA GRANDE: título a la izquierda, iconos a la derecha */
         .header {
-            overflow: hidden; /* Contiene los floats */
+            overflow: hidden;
             margin-bottom: 30px;
-            border-bottom: 4px solid #ff6b35; /* Más grueso */
+            border-bottom: 4px solid #ff6b35;
             padding-bottom: 20px;
         }
 
         .logo-img {
-            height: 100px;          /* Mucho más grande */
+            height: 100px;
             width: auto;
             filter: drop-shadow(0 0 10px #ff6b35);
             float: left;
@@ -47,13 +47,13 @@
         .social-container {
             float: right;
             background: #0a1a2a;
-            padding: 10px 30px;     /* Más padding */
+            padding: 10px 30px;
             border-radius: 60px;
             border: 2px solid #ff6b35;
         }
 
         .social-icon {
-            width: 64px;             /* Iconos más grandes */
+            width: 64px;
             height: 64px;
             background: #0a1a2a;
             border-radius: 18px;
@@ -62,12 +62,12 @@
             vertical-align: middle;
         }
 
-        /* BARRA DE HERRAMIENTAS (sin cambios importantes) */
+        /* BARRA DE HERRAMIENTAS */
         .toolbar {
             background: #0a1a2a;
             padding: 16px 25px;
             border-radius: 60px;
-            margin: 0 0 30px 0;      /* Sin márgenes laterales para aprovechar todo el ancho */
+            margin: 0 0 30px 0;
             border-left: 5px solid #ff6b35;
             box-shadow: 0 10px 20px #00000080;
             overflow: hidden;
@@ -137,7 +137,7 @@
             line-height: 52px;
         }
 
-        /* CUADRÍCULA: 4 COLUMNAS CON TARJETAS DE 290px */
+        /* CUADRÍCULA: 4 COLUMNAS CON TARJETAS DE 340px */
         .grid {
             margin: 20px 0;
             font-size: 0;           /* Elimina espacios entre inline-block */
@@ -145,7 +145,7 @@
         }
 
         .theme-card {
-            width: 290px;            /* Reducido para que quepan 4 */
+            width: 340px;            /* Aumentado para más espacio */
             background: #0e1727;
             border-radius: 20px;
             overflow: hidden;
@@ -158,14 +158,14 @@
             box-shadow: 0 10px 18px #00000080;
         }
 
-        /* PREVIEW GRANDE (300px de alto) */
+        /* PREVIEW MÁS GRANDE (350px de alto) */
         .preview {
             width: 100%;
             background: #03070f;
             text-align: center;
             border-bottom: 3px solid #ff6b35;
-            height: 300px;
-            line-height: 300px;       /* Centrado vertical de la imagen */
+            height: 350px;            /* Aumentado */
+            line-height: 350px;        /* Centrado vertical */
         }
 
         .preview img {
@@ -187,15 +187,45 @@
             margin-bottom: 12px;
         }
 
+        /* Fila que contiene género y botón de previsualización */
+        .genre-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
         .theme-genre {
             background: #122b3b;
             padding: 5px 12px;
             border-radius: 30px;
             font-size: 0.8rem;
             color: #ffb28c;
-            margin-bottom: 18px;
             display: inline-block;
             border: 1px solid #ff6b3540;
+            cursor: pointer;          /* Indica que es clickeable */
+            transition: background 0.2s;
+        }
+
+        .theme-genre:hover {
+            background: #1e3f55;
+        }
+
+        .preview-btn {
+            background: #ff6b35;
+            border: none;
+            color: #0b0f17;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            border-bottom: 2px solid #a03d1e;
+            transition: background 0.2s;
+        }
+
+        .preview-btn:hover {
+            background: #ff8a5c;
         }
 
         .download-btn {
@@ -235,7 +265,7 @@
             padding-top: 25px;
             color: #b0c8e0;
             overflow: hidden;
-            font-size: 1.4rem;       /* Texto más grande */
+            font-size: 1.4rem;
         }
 
         .clearfix::after {
@@ -248,7 +278,7 @@
 <body>
 
 <div class="main-container">
-    <!-- CABECERA: título a la izquierda, iconos a la derecha -->
+    <!-- CABECERA -->
     <div class="header clearfix">
         <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onerror="this.style.display='none'">
         <div class="social-container">
@@ -304,6 +334,7 @@
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
     var loadMoreContainer = document.getElementById('loadMoreContainer');
+    var searchInput = document.getElementById('searchInput');
 
     // CARGA DEL JSON (compatible con PS3)
     var xhr = new XMLHttpRequest();
@@ -334,7 +365,7 @@
 
     // FILTRO BÚSQUEDA Y ORDENACIÓN
     function aplicarFiltros() {
-        var search = document.getElementById('searchInput').value.toLowerCase();
+        var search = searchInput.value.toLowerCase();
         filteredThemes = [];
         for (var i = 0; i < allThemes.length; i++) {
             if (allThemes[i].nombre.toLowerCase().indexOf(search) !== -1) {
@@ -369,14 +400,19 @@
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
             var img = encodeURI(t.nombre + '.png');
+            // URL para la preview (usamos la primera carpeta, se puede cambiar)
+            var previewUrl = PREVIEW_FOLDERS[0] + img;
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
-                            '<img src="' + PREVIEW_FOLDERS[0] + img + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}">' +
+                            '<img src="' + previewUrl + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}">' +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="theme-name">' + t.nombre + '</div>' +
-                            '<div class="theme-genre">' + t.genero + '</div>' +
+                            '<div class="genre-row">' +
+                                '<span class="theme-genre" data-genre="' + t.genero + '">' + t.genero + '</span>' +
+                                '<button class="preview-btn" data-img="' + previewUrl + '">🔍 Vista</button>' +
+                            '</div>' +
                             '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
                         '</div>' +
                     '</div>';
@@ -392,13 +428,35 @@
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // EVENTOS
+    // EVENTO DELEGADO PARA GÉNERO Y BOTÓN PREVIEW
+    grid.addEventListener('click', function(e) {
+        var target = e.target;
+        
+        // Click en género
+        if (target.classList.contains('theme-genre')) {
+            var genre = target.getAttribute('data-genre'); // Usamos data-genre para evitar espacios extra
+            if (genre) {
+                searchInput.value = genre;
+                aplicarFiltros();
+            }
+        }
+        
+        // Click en botón de previsualización
+        if (target.classList.contains('preview-btn')) {
+            var imgUrl = target.getAttribute('data-img');
+            if (imgUrl) {
+                window.open(imgUrl, '_blank');
+            }
+        }
+    });
+
+    // EVENTOS DE BOTONES
     document.getElementById('loadMoreBtn').onclick = function() {
         currentPage++;
         render(false);
     };
 
-    document.getElementById('searchInput').oninput = aplicarFiltros;
+    searchInput.oninput = aplicarFiltros;
 
     document.getElementById('sortAZ').onclick = function() {
         currentSort = 'az';
@@ -422,7 +480,3 @@
 </script>
 </body>
 </html>
-
-
-
-
