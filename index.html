@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>PS3 · THM KZt</title>
+    <title>PS3 · temas p3t</title>
     <style>
         /* RESET SEGURO PARA PS3 */
         * {
@@ -18,17 +18,17 @@
             line-height: 1.5;
             padding: 20px 0;
             min-height: 100vh;
-            text-align: center; /* Centra todo horizontalmente */
+            text-align: center;
         }
 
-        /* Contenedor principal: ancho fijo de 1400px para que quepan 4 tarjetas de 340px con márgenes */
+        /* Contenedor principal: ancho fijo de 1400px */
         .main-container {
             width: 1400px;
             margin: 0 auto;
             text-align: left;
         }
 
-        /* CABECERA GRANDE: título a la izquierda, iconos a la derecha */
+        /* CABECERA */
         .header {
             overflow: hidden;
             margin-bottom: 30px;
@@ -137,35 +137,36 @@
             line-height: 52px;
         }
 
-        /* CUADRÍCULA: 4 COLUMNAS CON TARJETAS DE 340px */
+        /* CUADRÍCULA: 4 COLUMNAS DE 340px CADA UNA (con margen 5px) */
         .grid {
             margin: 20px 0;
-            font-size: 0;           /* Elimina espacios entre inline-block */
+            font-size: 0;
             text-align: center;
         }
 
         .theme-card {
-            width: 340px;            /* Aumentado para más espacio */
+            width: 340px;               /* Aumentado para mejor vista */
             background: #0e1727;
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid #1f3a4c;
             display: inline-block;
             vertical-align: top;
-            margin: 5px;              /* Margen de 5px a cada lado */
+            margin: 5px;
             font-size: 16px;
             text-align: left;
             box-shadow: 0 10px 18px #00000080;
         }
 
-        /* PREVIEW MÁS GRANDE (350px de alto) */
+        /* PREVIEW MÁS GRANDE: 340x400 (rectangular) */
         .preview {
             width: 100%;
             background: #03070f;
             text-align: center;
             border-bottom: 3px solid #ff6b35;
-            height: 350px;            /* Aumentado */
-            line-height: 350px;        /* Centrado vertical */
+            height: 400px;              /* Aumentado */
+            line-height: 400px;
+            cursor: pointer;             /* Indica que se puede hacer clic para ampliar */
         }
 
         .preview img {
@@ -187,45 +188,21 @@
             margin-bottom: 12px;
         }
 
-        /* Fila que contiene género y botón de previsualización */
-        .genre-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-        }
-
         .theme-genre {
             background: #122b3b;
             padding: 5px 12px;
             border-radius: 30px;
             font-size: 0.8rem;
             color: #ffb28c;
+            margin-bottom: 18px;
             display: inline-block;
             border: 1px solid #ff6b3540;
-            cursor: pointer;          /* Indica que es clickeable */
+            cursor: pointer;             /* Click para filtrar por género */
             transition: background 0.2s;
         }
 
         .theme-genre:hover {
             background: #1e3f55;
-        }
-
-        .preview-btn {
-            background: #ff6b35;
-            border: none;
-            color: #0b0f17;
-            font-weight: bold;
-            padding: 5px 15px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            border-bottom: 2px solid #a03d1e;
-            transition: background 0.2s;
-        }
-
-        .preview-btn:hover {
-            background: #ff8a5c;
         }
 
         .download-btn {
@@ -258,7 +235,7 @@
             font-size: 1.2rem;
         }
 
-        /* PIE DE PÁGINA MÁS GRANDE */
+        /* PIE DE PÁGINA */
         .footer {
             margin: 60px 0 30px 0;
             border-top: 3px solid #ff6b3540;
@@ -272,6 +249,39 @@
             content: "";
             display: table;
             clear: both;
+        }
+
+        /* LIGHTBOX (visores grandes) */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            text-align: center;
+            z-index: 9999;
+            cursor: pointer;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 5%;
+            border: 4px solid #ff6b35;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        .filter-indicator {
+            background: #ff6b3520;
+            padding: 5px 15px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-left: 15px;
+            font-size: 0.9rem;
+            border: 1px solid #ff6b35;
         }
     </style>
 </head>
@@ -320,6 +330,11 @@
     </div>
 </div>
 
+<!-- LIGHTBOX PARA VISTA PREVIA GRANDE -->
+<div id="lightbox" onclick="this.style.display='none'">
+    <img id="lightboxImg" src="" alt="Vista previa grande">
+</div>
+
 <script>
     // CONFIGURACIÓN
     var JSON_URL = 'temas_ps3_conlinks.json';
@@ -330,13 +345,16 @@
     var filteredThemes = [];
     var currentSort = 'none';
     var currentPage = 0;
+    var genreFilter = null;          // Nuevo: filtro por género
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
     var loadMoreContainer = document.getElementById('loadMoreContainer');
     var searchInput = document.getElementById('searchInput');
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightboxImg');
 
-    // CARGA DEL JSON (compatible con PS3)
+    // CARGA DEL JSON
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
@@ -363,16 +381,38 @@
     };
     xhr.send();
 
-    // FILTRO BÚSQUEDA Y ORDENACIÓN
+    // FILTRO BÚSQUEDA + GÉNERO + ORDENACIÓN
     function aplicarFiltros() {
         var search = searchInput.value.toLowerCase();
-        filteredThemes = [];
+        var filtrados = [];
+
         for (var i = 0; i < allThemes.length; i++) {
-            if (allThemes[i].nombre.toLowerCase().indexOf(search) !== -1) {
-                filteredThemes.push(allThemes[i]);
+            var tema = allThemes[i];
+            var cumple = true;
+
+            // Filtro por género (si está activo)
+            if (genreFilter !== null) {
+                if (tema.genero.toLowerCase() !== genreFilter.toLowerCase()) {
+                    cumple = false;
+                }
+            }
+            // Filtro por nombre (solo si NO hay género activo, o si queremos combinarlos? 
+            // Por simplicidad, si hay género activo ignoramos búsqueda, pero ya limpiamos input al hacer clic en género.
+            // Aún así, si el usuario escribe después de filtrar por género, se resetea género en el evento oninput.
+            if (genreFilter === null && cumple) {
+                if (tema.nombre.toLowerCase().indexOf(search) === -1) {
+                    cumple = false;
+                }
+            }
+
+            if (cumple) {
+                filtrados.push(tema);
             }
         }
 
+        filteredThemes = filtrados;
+
+        // Ordenación
         if (currentSort === 'az') {
             filteredThemes.sort(function(a, b) {
                 return a.nombre.localeCompare(b.nombre);
@@ -400,19 +440,14 @@
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
             var img = encodeURI(t.nombre + '.png');
-            // URL para la preview (usamos la primera carpeta, se puede cambiar)
-            var previewUrl = PREVIEW_FOLDERS[0] + img;
 
             html += '<div class="theme-card">' +
-                        '<div class="preview">' +
-                            '<img src="' + previewUrl + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}">' +
+                        '<div class="preview" data-img="' + img + '">' +
+                            '<img src="' + PREVIEW_FOLDERS[0] + img + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}">' +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="theme-name">' + t.nombre + '</div>' +
-                            '<div class="genre-row">' +
-                                '<span class="theme-genre" data-genre="' + t.genero + '">' + t.genero + '</span>' +
-                                '<button class="preview-btn" data-img="' + previewUrl + '">🔍 Vista</button>' +
-                            '</div>' +
+                            '<div class="theme-genre">' + t.genero + '</div>' +
                             '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
                         '</div>' +
                     '</div>';
@@ -424,40 +459,31 @@
             grid.innerHTML += html;
         }
 
-        statsDiv.innerHTML = filteredThemes.length + ' temas';
+        // Actualizar estadísticas
+        var statsText = filteredThemes.length + ' temas';
+        if (genreFilter !== null) {
+            statsText += ' · Género: "' + genreFilter + '"';
+        }
+        statsDiv.innerHTML = statsText;
+
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // EVENTO DELEGADO PARA GÉNERO Y BOTÓN PREVIEW
-    grid.addEventListener('click', function(e) {
-        var target = e.target;
-        
-        // Click en género
-        if (target.classList.contains('theme-genre')) {
-            var genre = target.getAttribute('data-genre'); // Usamos data-genre para evitar espacios extra
-            if (genre) {
-                searchInput.value = genre;
-                aplicarFiltros();
-            }
-        }
-        
-        // Click en botón de previsualización
-        if (target.classList.contains('preview-btn')) {
-            var imgUrl = target.getAttribute('data-img');
-            if (imgUrl) {
-                window.open(imgUrl, '_blank');
-            }
-        }
-    });
-
-    // EVENTOS DE BOTONES
+    // EVENTO PARA CARGAR MÁS
     document.getElementById('loadMoreBtn').onclick = function() {
         currentPage++;
         render(false);
     };
 
-    searchInput.oninput = aplicarFiltros;
+    // BÚSQUEDA: al escribir, se limpia el filtro de género
+    searchInput.oninput = function() {
+        if (genreFilter !== null) {
+            genreFilter = null;   // quitamos filtro por género
+        }
+        aplicarFiltros();
+    };
 
+    // ORDENACIÓN
     document.getElementById('sortAZ').onclick = function() {
         currentSort = 'az';
         this.className = 'sort-btn active';
@@ -472,10 +498,43 @@
         aplicarFiltros();
     };
 
+    // BOTÓN ALEATORIO
     document.getElementById('randomBtn').onclick = function() {
+        // Mezclar la lista filtrada
         filteredThemes.sort(function() { return 0.5 - Math.random(); });
         currentPage = 0;
         render(true);
+    };
+
+    // CLICK EN GÉNERO (usamos delegación de eventos)
+    grid.onclick = function(e) {
+        var target = e.target;
+        // Buscar si se hizo clic en un elemento con clase 'theme-genre'
+        if (target.classList.contains('theme-genre')) {
+            var genre = target.textContent;
+            genreFilter = genre;
+            searchInput.value = '';         // Limpiamos búsqueda
+            aplicarFiltros();
+        }
+    };
+
+    // LIGHTBOX: vista previa grande al hacer clic en la imagen
+    grid.addEventListener('click', function(e) {
+        var target = e.target;
+        // Ver si el clic fue en una imagen dentro de .preview
+        if (target.tagName === 'IMG' && target.parentNode.classList.contains('preview')) {
+            var imgSrc = target.src;
+            lightboxImg.src = imgSrc;
+            lightbox.style.display = 'block';
+            e.preventDefault(); // por si acaso
+        }
+    });
+
+    // Cerrar lightbox con la tecla ESC (opcional, mejora)
+    document.onkeydown = function(e) {
+        if (e.key === 'Escape' && lightbox.style.display === 'block') {
+            lightbox.style.display = 'none';
+        }
     };
 </script>
 </body>
