@@ -249,7 +249,6 @@
 <body>
 
 <div class="main-container">
-    <!-- CABECERA: título clickeable -->
     <div class="header clearfix">
         <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" id="logoPrincipal" onclick="volverInicio()" onerror="this.style.display='none'">
         <div class="social-container">
@@ -259,7 +258,6 @@
         </div>
     </div>
 
-    <!-- BARRA DE HERRAMIENTAS -->
     <div class="toolbar clearfix">
         <div class="search-wrapper">
             <input type="text" id="searchInput" placeholder="Buscar tema..." oninput="buscarTemas()">
@@ -274,17 +272,14 @@
         <div class="stats" id="stats">...</div>
     </div>
 
-    <!-- CUADRÍCULA DE TEMAS -->
     <div id="themeGrid" class="grid">
         <div style="text-align:center; padding:50px; color:#ffb28c; font-size:20px;">⌛ Cargando temas para PS3...</div>
     </div>
 
-    <!-- BOTÓN CARGAR MÁS -->
     <div class="load-more" id="loadMoreContainer" style="display: none;">
         <button class="btn-primary" id="loadMoreBtn" onclick="cargarMas()">+ Cargar más temas</button>
     </div>
 
-    <!-- PIE DE PÁGINA -->
     <div class="footer clearfix">
         <span style="float:left">© PS3 · Temas P3T</span>
         <span style="float:right">kizeo0</span>
@@ -292,7 +287,6 @@
 </div>
 
 <script>
-    // CONFIGURACIÓN
     var JSON_URL = 'temas_ps3_conlinks.json';
     var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
     var PAGE_SIZE = 16;
@@ -310,7 +304,6 @@
     var sortAZ = document.getElementById('sortAZ');
     var sortZA = document.getElementById('sortZA');
 
-    // CARGA DEL JSON
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
@@ -326,7 +319,6 @@
                             nombre: item.archivo.replace(/\.p3t$/i, '')
                         };
                     });
-                    // Inicializar
                     filteredThemes = allThemes.slice();
                     render(true);
                 } catch (e) {
@@ -339,10 +331,8 @@
     };
     xhr.send();
 
-    // Función para aplicar todos los filtros (búsqueda + género + orden)
     function aplicarFiltros() {
         var search = searchInput.value.toLowerCase();
-
         filteredThemes = [];
         for (var i = 0; i < allThemes.length; i++) {
             var tema = allThemes[i];
@@ -352,36 +342,30 @@
                 filteredThemes.push(tema);
             }
         }
-
         if (currentSort === 'az') {
-            filteredThemes.sort(function(a, b) {
-                return a.nombre.localeCompare(b.nombre);
-            });
+            filteredThemes.sort(function(a, b) { return a.nombre.localeCompare(b.nombre); });
         } else if (currentSort === 'za') {
-            filteredThemes.sort(function(a, b) {
-                return b.nombre.localeCompare(a.nombre);
-            });
+            filteredThemes.sort(function(a, b) { return b.nombre.localeCompare(a.nombre); });
         }
-
         currentPage = 0;
         render(true);
     }
 
-    // Renderizado de tarjetas con limpieza de caracteres problemáticos en el nombre de la imagen
     function render(reset) {
-        if (reset) {
-            grid.innerHTML = '';
-        }
-
+        if (reset) { grid.innerHTML = ''; }
         var start = currentPage * PAGE_SIZE;
         var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
         var html = '';
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            // Limpiar el nombre: eliminar comillas simples, dobles y símbolos ™, ® (y cualquier otro que pueda causar problemas)
-            var nombreLimpio = t.nombre.replace(/['"™®]/g, '');
-            var img = encodeURI(nombreLimpio + '.png');
+            
+            /* SOLUCIÓN: 
+               1. encodeURI convierte espacios y símbolos (como ™) en formato web.
+               2. .replace(/'/g, "%27") convierte la comilla simple en %27. 
+                  Esto evita que la comilla rompa el atributo 'onerror' de la imagen.
+            */
+            var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27");
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
@@ -395,20 +379,14 @@
                     '</div>';
         }
 
-        if (reset) {
-            grid.innerHTML = html;
-        } else {
-            grid.innerHTML += html;
-        }
-
+        if (reset) { grid.innerHTML = html; } else { grid.innerHTML += html; }
         statsDiv.innerHTML = filteredThemes.length + ' temas';
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // Funciones globales llamadas desde los onclick
     window.filtrarPorGenero = function(genero) {
         currentGenre = genero;
-        searchInput.value = '';         // limpia búsqueda
+        searchInput.value = '';
         currentSort = 'none';
         sortAZ.className = 'sort-btn';
         sortZA.className = 'sort-btn';
@@ -421,19 +399,17 @@
         currentSort = 'none';
         sortAZ.className = 'sort-btn';
         sortZA.className = 'sort-btn';
-        filteredThemes = allThemes.slice();  // conserva el orden original
+        filteredThemes = allThemes.slice();
         currentPage = 0;
         render(true);
     };
 
     window.modoAleatorio = function() {
-        // Mezclar todos los temas (sin filtros)
         searchInput.value = '';
         currentGenre = '';
         currentSort = 'none';
         sortAZ.className = 'sort-btn';
         sortZA.className = 'sort-btn';
-
         var shuffled = allThemes.slice();
         for (var i = shuffled.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
@@ -446,29 +422,10 @@
         render(true);
     };
 
-    window.cargarMas = function() {
-        currentPage++;
-        render(false);
-    };
-
-    window.buscarTemas = function() {
-        currentGenre = '';   // al buscar, se quita filtro de género
-        aplicarFiltros();
-    };
-
-    window.ordenarAZ = function() {
-        currentSort = 'az';
-        sortAZ.className = 'sort-btn active';
-        sortZA.className = 'sort-btn';
-        aplicarFiltros();
-    };
-
-    window.ordenarZA = function() {
-        currentSort = 'za';
-        sortZA.className = 'sort-btn active';
-        sortAZ.className = 'sort-btn';
-        aplicarFiltros();
-    };
+    window.cargarMas = function() { currentPage++; render(false); };
+    window.buscarTemas = function() { currentGenre = ''; aplicarFiltros(); };
+    window.ordenarAZ = function() { currentSort = 'az'; sortAZ.className = 'sort-btn active'; sortZA.className = 'sort-btn'; aplicarFiltros(); };
+    window.ordenarZA = function() { currentSort = 'za'; sortZA.className = 'sort-btn active'; sortAZ.className = 'sort-btn'; aplicarFiltros(); };
 </script>
 </body>
 </html>
