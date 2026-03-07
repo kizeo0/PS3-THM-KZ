@@ -3,6 +3,3 @@
 " />
 </p>
 
-<h1 align="center"> PS3 Icon Tool 1.2 </h1>
-<p  align="center">
-</p>
