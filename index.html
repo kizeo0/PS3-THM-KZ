@@ -57,25 +57,6 @@
             transform: scale(1.08);
             background: #1f3a4c;
         }
-        .save-note {
-            text-align: left;
-            margin: 0 0 20px 10px;
-            color: #ffb28c;
-            font-size: 1rem;
-            background: #0a1a2a;
-            padding: 10px 25px;
-            border-radius: 60px;
-            display: inline-block;
-            border-left: 5px solid #ff6b35;
-        }
-        .save-note strong {
-            color: #ffffff;
-            background: #1e3b4f;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-family: monospace;
-            margin-left: 10px;
-        }
         .toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -84,7 +65,7 @@
             background: #0a1a2a;
             padding: 16px 25px;
             border-radius: 60px;
-            margin-bottom: 15px;
+            margin-bottom: 30px;
             border-left: 5px solid #ff6b35;
             box-shadow: 0 10px 20px #00000080;
         }
@@ -108,25 +89,28 @@
             border-color: #ff6b35;
             box-shadow: 0 0 12px #ff6b35;
         }
-        .icon-btn {
+        /* botón del dado con imagen */
+        .dice-btn {
             background: #1e3b4f;
             border: 2px solid #ff6b35;
-            color: #ffb28c;
             width: 52px;
             height: 52px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
             cursor: pointer;
             transition: 0.15s;
-            line-height: 1;
+            padding: 0;
         }
-        .icon-btn:hover {
+        .dice-btn:hover {
             background: #ff6b35;
-            color: #0b0f17;
             border-color: #ff9f7b;
+        }
+        .dice-img {
+            width: 32px;
+            height: 32px;
+            display: block;
         }
         .sort-buttons {
             display: flex;
@@ -177,13 +161,17 @@
             background: #ff6b35;
             color: #0b0f17;
         }
+        /* Contenedor de tarjetas con flex-wrap para filas horizontales */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 30px;
+            justify-content: center;
             margin: 20px 0 30px;
         }
+        /* Tarjeta con ancho fijo basado en el ancho de preview (240px) */
         .theme-card {
+            width: 240px;
             background: #0e1727;
             border-radius: 30px 30px 20px 20px;
             overflow: hidden;
@@ -233,6 +221,7 @@
             color: #fff;
             overflow: hidden;
             max-height: 2.8em;
+            word-break: break-word;
         }
         .theme-genre {
             background: #122b3b;
@@ -245,6 +234,8 @@
             border: 1px solid #ff6b3540;
             cursor: pointer;
             transition: 0.1s;
+            max-width: 100%;
+            word-break: break-word;
         }
         .theme-genre:hover {
             background: #1e3b4f;
@@ -315,7 +306,7 @@
             background: #0a1a2a;
             border-radius: 60px;
             color: #ffb28c;
-            grid-column: 1 / -1;
+            width: 100%;
         }
         .error-message {
             color: #ff8a7a;
@@ -338,14 +329,13 @@
         </div>
     </div>
 
-    <div class="save-note">
-        💾 Guarda los archivos .p3t en <strong>dev_hdd0/themes</strong>
-    </div>
-
+    <!-- Barra de herramientas (sin mensaje de guardado) -->
     <div class="toolbar">
         <div class="search-wrapper">
             <input type="text" id="searchInput" placeholder="Buscar tema...">
-            <div class="icon-btn" id="randomBtn" title="Temas aleatorios">🎲</div>
+            <div class="dice-btn" id="randomBtn" title="Temas aleatorios">
+                <img src="recursos/dado.png" alt="Aleatorio" class="dice-img" onerror="this.style.display='none'">
+            </div>
         </div>
         <div class="sort-buttons">
             <button class="sort-btn" id="sortAZ">A-Z</button>
@@ -358,10 +348,12 @@
         <div class="stats" id="stats">cargando...</div>
     </div>
 
+    <!-- Contenedor de tarjetas (grid flex) -->
     <div id="themeGrid" class="grid">
         <div class="loading">⌛ cargando temas...</div>
     </div>
 
+    <!-- Botón cargar más -->
     <div class="load-more" id="loadMoreContainer" style="display: none;">
         <button class="btn btn-primary" id="loadMoreBtn">+ cargar más</button>
     </div>
@@ -378,7 +370,7 @@
     <script>
         // Compatibilidad con navegador PS3 (ES3)
         (function() {
-            // Polyfill para trim (si no existe)
+            // Polyfill para trim
             if (typeof String.prototype.trim !== 'function') {
                 String.prototype.trim = function() {
                     return this.replace(/^\s+|\s+$/g, '');
@@ -409,20 +401,18 @@
             var loadMoreContainer = document.getElementById('loadMoreContainer');
             var loadMoreBtn = document.getElementById('loadMoreBtn');
 
-            // Función para eliminar espacios al inicio/fin (usada si el polyfill falla)
             function trimStr(str) {
                 if (str.trim) return str.trim();
                 return str.replace(/^\s+|\s+$/g, '');
             }
 
-            // Cargar JSON con XHR
             var xhr = new XMLHttpRequest();
             xhr.open('GET', JSON_URL, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         try {
-                            var data = eval('(' + xhr.responseText + ')'); // alternativa a JSON.parse (más compatible)
+                            var data = eval('(' + xhr.responseText + ')');
                             procesarDatos(data);
                         } catch (e) {
                             mostrarError('El archivo JSON no tiene formato válido. (Error: ' + e.message + ')');
@@ -449,12 +439,10 @@
                     return;
                 }
 
-                // Construir allThemes sin usar map/filter
                 for (var i = 0; i < temas.length; i++) {
                     var item = temas[i];
                     var nombreMostrar = item.archivo.replace(/\.p3t$/i, '');
                     var generoStr = item.genero || 'Otro';
-                    // Dividir por comas y limpiar espacios manualmente
                     var generosRaw = generoStr.split(',');
                     var generos = [];
                     for (var j = 0; j < generosRaw.length; j++) {
@@ -471,7 +459,6 @@
                     });
                 }
 
-                // Extraer géneros únicos sin filter/indexOf moderno
                 var genreMap = {};
                 for (i = 0; i < allThemes.length; i++) {
                     var gens = allThemes[i].generos;
@@ -483,7 +470,6 @@
                 for (var g in genreMap) {
                     if (genreMap.hasOwnProperty(g)) uniqueGenres.push(g);
                 }
-                // Ordenar manualmente (bubble sort simple)
                 for (i = 0; i < uniqueGenres.length - 1; i++) {
                     for (j = i + 1; j < uniqueGenres.length; j++) {
                         if (uniqueGenres[i] > uniqueGenres[j]) {
@@ -496,7 +482,6 @@
 
                 aplicarFiltros();
 
-                // Eventos usando onclick para mayor compatibilidad
                 searchInput.oninput = function() {
                     currentSearch = searchInput.value.toLowerCase();
                     aplicarFiltros();
@@ -535,7 +520,6 @@
                 sortAZ.onclick = function() {
                     if (currentSort === 'az') { currentSort = 'none'; }
                     else { currentSort = 'az'; }
-                    // actualizar clases manualmente
                     sortAZ.className = 'sort-btn' + (currentSort === 'az' ? ' active' : '');
                     sortZA.className = 'sort-btn' + (currentSort === 'za' ? ' active' : '');
                     aplicarFiltros();
@@ -566,7 +550,6 @@
                     resultados.push(allThemes[i]);
                 }
 
-                // filtro texto
                 if (currentSearch !== '') {
                     var temp = [];
                     for (i = 0; i < resultados.length; i++) {
@@ -577,7 +560,6 @@
                     resultados = temp;
                 }
 
-                // filtro género
                 if (currentGenreFilter !== null) {
                     var temp2 = [];
                     for (i = 0; i < resultados.length; i++) {
@@ -594,7 +576,6 @@
                     resultados = temp2;
                 }
 
-                // ordenación
                 if (currentSort === 'az') {
                     resultados.sort(function(a, b) {
                         return a.nombreMostrar.localeCompare(b.nombreMostrar);
@@ -637,7 +618,6 @@
                         generosStr += t.generos[g];
                     }
 
-                    // Imagen con fallback usando onerror (se mantiene igual)
                     var imgHtml = '<img src="' + PREVIEW_FOLDERS[0] + previewEncoded + '" onerror="this.onerror=null; this.src=\'' + PREVIEW_FOLDERS[1] + previewEncoded + '\'; this.onerror=function(){this.style.display=\'none\'; this.parentNode.innerHTML+=\'<div class=\\\'no-preview\\\'>sin preview</div>\';}" alt="preview">';
 
                     html += '<div class="theme-card">' +
@@ -655,7 +635,6 @@
                     grid.innerHTML = grid.innerHTML + html;
                 }
 
-                // Asignar eventos onclick a los géneros
                 var genreSpans = grid.getElementsByClassName('theme-genre');
                 for (var j = 0; j < genreSpans.length; j++) {
                     (function(span) {
