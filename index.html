@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>PS3 P3T Themes Library</title>
+    <style>
+        /* Estilos optimizados para PS3 y estética Profesional */
+        body {
+            background-color: #000000;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header: Título a la izquierda y Redes a la derecha */
+        #header {
+            background-color: #000814;
+            border-bottom: 3px solid #ff6600;
+            padding: 10px 20px;
+            overflow: hidden; 
+        }
+
+        #site-logo {
+            float: left;
+            max-height: 50px;
+            width: auto;
+        }
+
+        .social-container {
+            float: right;
+            padding-top: 10px;
+        }
+
+        .social-icon {
+            width: 30px;
+            height: 30px;
+            margin-left: 15px;
+            vertical-align: middle;
+            transition: opacity 0.3s;
+        }
+
+        .social-icon:hover {
+            opacity: 0.7;
+        }
+
+        /* Banner Principal */
+        #banner-wrapper {
+            width: 100%;
+            background-color: #000;
+            text-align: center;
+        }
+
+        #banner {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .container {
+            width: 98%;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        /* Sidebar de Filtros (Géneros) */
+        #sidebar {
+            width: 200px;
+            float: left;
+            background: #0a0f1d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #003366;
+        }
+
+        #sidebar h3 {
+            color: #ff6600;
+            font-size: 16px;
+            margin-top: 0;
+            text-transform: uppercase;
+            border-bottom: 1px solid #ff6600;
+            padding-bottom: 5px;
+        }
+
+        .genre-option {
+            margin: 12px 0;
+            display: block;
+            font-size: 13px;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+        /* Galería de Temas */
+        #main-content {
+            margin-left: 235px;
+        }
+
+        .theme-grid {
+            overflow: hidden;
+        }
+
+        .theme-card {
+            width: 190px;
+            background: #111;
+            border: 1px solid #1f2937;
+            float: left;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .theme-card:hover {
+            border-color: #ff6600;
+            background: #161b22;
+        }
+
+        .preview-img {
+            width: 170px;
+            height: 100px;
+            background: #000;
+            display: block;
+            margin: 0 auto 10px auto;
+            border: 1px solid #333;
+            object-fit: cover;
+        }
+
+        .theme-name {
+            font-size: 12px;
+            font-weight: bold;
+            height: 32px;
+            line-height: 16px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .btn-download {
+            background-color: #0044cc;
+            color: #ffffff;
+            padding: 6px 12px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .btn-download:hover {
+            background-color: #ff6600;
+        }
+
+        /* Footer y Créditos */
+        #footer {
+            clear: both;
+            background: #000814;
+            border-top: 2px solid #ff6600;
+            padding: 40px 20px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .credit-box {
+            display: inline-block;
+            text-align: center;
+        }
+
+        .credit-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid #ff6600;
+            margin-bottom: 10px;
+        }
+
+        .credit-link {
+            display: block;
+            color: #ff6600;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Ajuste para PS3 / Móvil */
+        @media screen and (max-width: 800px) {
+            #sidebar { width: 100%; float: none; margin-bottom: 20px; }
+            #main-content { margin-left: 0; }
+            #site-logo, .social-container { float: none; text-align: center; display: block; margin: 5px auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="header">
+        <img src="recursos/titulo.png" id="site-logo" alt="PS3 Themes">
+
+        <div class="social-container">
+            <a href="https://www.youtube.com/@kizeo0/videos" target="_blank"><img src="recursos/yt.png" alt="YT" class="social-icon"></a>
+            <a href="https://github.com/kizeo0" target="_blank"><img src="recursos/git.png" alt="Git" class="social-icon"></a>
+            <a href="https://x.com/KiZeo0" target="_blank"><img src="recursos/x.png" alt="X" class="social-icon"></a>
+        </div>
+    </div>
+
+    <div id="banner-wrapper">
+        <img src="recursos/banner.jpg" id="banner" alt="Banner">
+    </div>
+
+    <div class="container">
+        <div id="sidebar">
+            <h3>Filtros</h3>
+            <div id="genre-list"></div>
+        </div>
+
+        <div id="main-content">
+            <div id="theme-gallery" class="theme-grid">
+                <p style="padding: 20px;">Cargando catálogo...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="credit-box">
+            <img src="recursos/creditos.png" class="credit-img" alt="Crédito">
+            <a href="https://github.com/kizeo0" class="credit-link">KiZeo</a>
+            <p style="font-size: 11px; color: #666;">Design & Archive</p>
+        </div>
+        <p style="font-size: 10px; color: #444; margin-top: 20px;">Optimizado para el navegador de PlayStation 3.</p>
+    </div>
+
+    <script>
+        var allThemes = [];
+        var activeGenres = {};
+
+        function loadJSON() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'temas_ps3_conlinks.json', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    allThemes = JSON.parse(xhr.responseText);
+                    setupFilters();
+                    renderGallery();
+                }
+            };
+            xhr.send();
+        }
+
+        function setupFilters() {
+            var genresMap = {};
+            for (var i = 0; i < allThemes.length; i++) {
+                if (allThemes[i].genero) {
+                    var gs = allThemes[i].genero.split(',');
+                    for(var j=0; j<gs.length; j++) {
+                        var gName = gs[j].trim();
+                        if(gName) genresMap[gName] = true;
+                    }
+                }
+            }
+
+            var html = '';
+            for (var key in genresMap) {
+                html += '<label class="genre-option">' +
+                        '<input type="checkbox" value="' + key + '" onchange="updateFilters(this)"> ' + key +
+                        '</label>';
+            }
+            document.getElementById('genre-list').innerHTML = html;
+        }
+
+        function updateFilters(cb) {
+            if (cb.checked) activeGenres[cb.value] = true;
+            else delete activeGenres[cb.value];
+            renderGallery();
+        }
+
+        // Lógica de fallback para 2 carpetas
+        function fallbackImage(img) {
+            var fileName = img.getAttribute('data-filename');
+            
+            // Si ya intentó cargar de previews1 y falló, intenta previews2
+            if (img.getAttribute('data-tried') !== 'true') {
+                img.setAttribute('data-tried', 'true');
+                img.src = 'previews2/' + fileName;
+            } else {
+                // Si también falló previews2, muestra imagen por defecto
+                img.src = 'recursos/no_photo.png';
+                img.onerror = null; // Evita bucle infinito
+            }
+        }
+
+        function renderGallery() {
+            var container = document.getElementById('theme-gallery');
+            var html = '';
+            var hasActiveFilters = Object.keys(activeGenres).length > 0;
+
+            for (var i = 0; i < allThemes.length; i++) {
+                var theme = allThemes[i];
+                
+                if (hasActiveFilters) {
+                    var match = false;
+                    for(var g in activeGenres) {
+                        if(theme.genero && theme.genero.indexOf(g) !== -1) match = true;
+                    }
+                    if(!match) continue;
+                }
+
+                var fileName = theme.archivo;
+                var displayName = fileName.replace('.p3t', '');
+                var imgName = fileName.replace('.p3t', '.jpg');
+                
+                // Inicialmente intenta cargar desde previews1
+                var imgPath = 'previews1/' + imgName;
+
+                html += '<div class="theme-card">' +
+                        '<img src="' + imgPath + '" class="preview-img" data-filename="' + imgName + '" onerror="fallbackImage(this)">' +
+                        '<div class="theme-name">' + displayName + '</div>' +
+                        '<a href="' + theme.descarga + '" class="btn-download">DESCARGAR</a>' +
+                        '</div>';
+            }
+            container.innerHTML = html || '<p>No hay temas en esta categoría.</p>';
+        }
+
+        loadJSON();
+    </script>
+</body>
+</html>
