@@ -2,29 +2,34 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PS3 · temas p3t</title>
     <style>
+        /* RESET SEGURO PARA PS3 */
         * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box; /* Ayuda con los anchos */
         }
+
         body {
             background: #0b0f17;
             color: #e0e5f0;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
             line-height: 1.5;
             padding: 20px 0;
             min-height: 100vh;
-            text-align: center; /* Centra el contenido para el navegador PS3 */
+            text-align: center; /* Centra todo para pantallas de PS3 */
         }
 
-        /* Contenedor principal forzado para 4 columnas en 720p/1080p */
+        /* Contenedor principal con ancho fijo para 4 columnas exactas */
         .main-container {
-            width: 1260px;
+            width: 1260px;          /* 4 tarjetas de 300px + márgenes */
             margin: 0 auto;
             text-align: left;
         }
 
+        /* CABECERA */
         .header {
             overflow: hidden;
             margin-bottom: 25px;
@@ -33,12 +38,14 @@
             margin-left: 10px;
             margin-right: 10px;
         }
+
         .logo-img {
             height: 65px;
             width: auto;
             filter: drop-shadow(0 0 6px #ff6b35);
             float: left;
         }
+
         .social-container {
             float: right;
             background: #0a1a2a;
@@ -46,6 +53,7 @@
             border-radius: 50px;
             border: 1px solid #ff6b35;
         }
+
         .social-icon {
             width: 44px;
             height: 44px;
@@ -56,6 +64,7 @@
             vertical-align: middle;
         }
 
+        /* BARRA DE HERRAMIENTAS */
         .toolbar {
             background: #0a1a2a;
             padding: 16px 25px;
@@ -65,10 +74,12 @@
             box-shadow: 0 10px 20px #00000080;
             overflow: hidden;
         }
+
         .search-wrapper {
             float: left;
             white-space: nowrap;
         }
+
         .search-wrapper input {
             width: 250px;
             padding: 14px 18px;
@@ -79,6 +90,7 @@
             font-size: 1rem;
             vertical-align: middle;
         }
+
         .dice-btn {
             display: inline-block;
             width: 52px;
@@ -92,15 +104,18 @@
             cursor: pointer;
             vertical-align: middle;
         }
+
         .dice-img {
             width: 32px;
             height: 32px;
             vertical-align: middle;
         }
+
         .sort-buttons {
             float: left;
             margin-left: 20px;
         }
+
         .sort-btn {
             background: transparent;
             border: 2px solid #1e3b4f;
@@ -112,51 +127,60 @@
             display: inline-block;
             margin-right: 8px;
         }
+
         .sort-btn.active {
             background: #ff6b35;
             color: #0b0f17;
         }
+
         .stats {
             float: right;
             color: #9ab8d9;
             line-height: 52px;
         }
 
-        /* GRID CONFIGURADO PARA 4 COLUMNAS GIGANTES */
+        /* CUADRÍCULA DE 4 COLUMNAS (inline-block sin espacios) */
         .grid {
             margin: 20px 0;
-            font-size: 0; /* Evita espacios fantasma en PS3 */
-            text-align: center;
+            font-size: 0;           /* Elimina espacios entre tarjetas */
+            text-align: center;      /* Centra las tarjetas horizontalmente */
         }
+
+        /* TARJETA DE TEMA - TAMAÑO MEJORADO (preview más grande) */
         .theme-card {
-            width: 300px; /* Tamaño máximo para 4 columnas */
+            width: 300px;
             background: #0e1727;
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid #1f3a4c;
             display: inline-block;
             vertical-align: top;
-            margin: 7px; /* Margen preciso para cuadrar 4 temas */
-            font-size: 16px;
+            margin: 7px;             /* Margen simétrico para 4 columnas */
+            font-size: 16px;         /* Restauramos tamaño de texto */
             text-align: left;
             box-shadow: 0 10px 18px #00000080;
         }
+
+        /* CONTENEDOR DE PREVIEW MÁS GRANDE (300px de alto) */
         .preview {
             width: 100%;
             background: #03070f;
             text-align: center;
             border-bottom: 3px solid #ff6b35;
-            height: 250px; /* Imagen mucho más grande */
-            line-height: 250px;
+            height: 300px;           /* Aumentado de 250px a 300px */
+            line-height: 300px;       /* Centrado vertical de la imagen */
         }
+
         .preview img {
             max-width: 100%;
             max-height: 100%;
             vertical-align: middle;
         }
+
         .card-info {
             padding: 18px 15px;
         }
+
         .theme-name {
             font-weight: 600;
             font-size: 1.1rem;
@@ -165,6 +189,7 @@
             overflow: hidden;
             margin-bottom: 12px;
         }
+
         .theme-genre {
             background: #122b3b;
             padding: 5px 12px;
@@ -175,6 +200,7 @@
             display: inline-block;
             border: 1px solid #ff6b3540;
         }
+
         .download-btn {
             background: #ff6b35;
             color: #0b0f17;
@@ -193,6 +219,7 @@
             margin: 30px 0;
             clear: both;
         }
+
         .btn-primary {
             background: #ff6b35;
             color: #0b0f17;
@@ -211,6 +238,7 @@
             color: #b0c8e0;
             overflow: hidden;
         }
+
         .clearfix::after {
             content: "";
             display: table;
@@ -220,63 +248,72 @@
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="header clearfix">
-            <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onerror="this.style.display='none'">
-            <div class="social-container">
-                <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon"></a>
-                <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon"></a>
-                <a href="https://x.com/KiZeo0"><img src="recursos/x.png" alt="X" class="social-icon"></a>
-            </div>
-        </div>
-
-        <div class="toolbar clearfix">
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Buscar tema...">
-                <div class="dice-btn" id="randomBtn">
-                    <img src="recursos/dado.png" alt="D" class="dice-img" onerror="this.style.display='none'">
-                </div>
-            </div>
-            <div class="sort-buttons">
-                <button class="sort-btn" id="sortAZ">A-Z</button>
-                <button class="sort-btn" id="sortZA">Z-A</button>
-            </div>
-            <div class="stats" id="stats">...</div>
-        </div>
-
-        <div id="themeGrid" class="grid">
-            <div style="text-align:center; padding:50px; color:#ffb28c; font-size:20px;">⌛ Cargando temas para PS3...</div>
-        </div>
-
-        <div class="load-more" id="loadMoreContainer" style="display: none;">
-            <button class="btn-primary" id="loadMoreBtn">+ Cargar más temas</button>
-        </div>
-
-        <div class="footer clearfix">
-            <span style="float:left">© PS3 · Temas P3T</span>
-            <span style="float:right">kizeo0</span>
+<div class="main-container">
+    <!-- CABECERA -->
+    <div class="header clearfix">
+        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onerror="this.style.display='none'">
+        <div class="social-container">
+            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon" onerror="this.style.display='none'"></a>
+            <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon" onerror="this.style.display='none'"></a>
+            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" alt="X" class="social-icon" onerror="this.style.display='none'"></a>
         </div>
     </div>
 
-    <script>
-        var JSON_URL = 'temas_ps3_conlinks.json';
-        var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
-        var PAGE_SIZE = 16; // 4 filas completas de 4 temas cada una
+    <!-- BARRA DE HERRAMIENTAS -->
+    <div class="toolbar clearfix">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Buscar tema...">
+            <div class="dice-btn" id="randomBtn">
+                <img src="recursos/dado.png" alt="D" class="dice-img" onerror="this.style.display='none'">
+            </div>
+        </div>
+        <div class="sort-buttons">
+            <button class="sort-btn" id="sortAZ">A-Z</button>
+            <button class="sort-btn" id="sortZA">Z-A</button>
+        </div>
+        <div class="stats" id="stats">...</div>
+    </div>
 
-        var allThemes = [];
-        var filteredThemes = [];
-        var currentSort = 'none';
-        var currentPage = 0;
+    <!-- CUADRÍCULA DE TEMAS -->
+    <div id="themeGrid" class="grid">
+        <div style="text-align:center; padding:50px; color:#ffb28c; font-size:20px;">⌛ Cargando temas para PS3...</div>
+    </div>
 
-        var grid = document.getElementById('themeGrid');
-        var statsDiv = document.getElementById('stats');
-        var loadMoreContainer = document.getElementById('loadMoreContainer');
+    <!-- BOTÓN CARGAR MÁS -->
+    <div class="load-more" id="loadMoreContainer" style="display: none;">
+        <button class="btn-primary" id="loadMoreBtn">+ Cargar más temas</button>
+    </div>
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', JSON_URL, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
+    <!-- PIE DE PÁGINA -->
+    <div class="footer clearfix">
+        <span style="float:left">© PS3 · Temas P3T</span>
+        <span style="float:right">kizeo0</span>
+    </div>
+</div>
+
+<script>
+    // CONFIGURACIÓN
+    var JSON_URL = 'temas_ps3_conlinks.json';
+    var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
+    var PAGE_SIZE = 16; // 4 filas de 4 temas = 16 temas por carga
+
+    var allThemes = [];
+    var filteredThemes = [];
+    var currentSort = 'none';
+    var currentPage = 0;
+
+    var grid = document.getElementById('themeGrid');
+    var statsDiv = document.getElementById('stats');
+    var loadMoreContainer = document.getElementById('loadMoreContainer');
+
+    // CARGA DEL JSON (compatible con PS3)
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', JSON_URL, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
                 try {
+                    // Usamos eval para máxima compatibilidad (el JSON no es malicioso)
                     var data = eval('(' + xhr.responseText + ')');
                     allThemes = data.map(function(item) {
                         return {
@@ -287,71 +324,104 @@
                         };
                     });
                     aplicarFiltros();
-                } catch (e) { grid.innerHTML = "Error cargando JSON."; }
-            }
-        };
-        xhr.send();
-
-        function aplicarFiltros() {
-            var search = document.getElementById('searchInput').value.toLowerCase();
-            filteredThemes = [];
-            for(var i=0; i<allThemes.length; i++) {
-                if(allThemes[i].nombre.toLowerCase().indexOf(search) !== -1) {
-                    filteredThemes.push(allThemes[i]);
+                } catch (e) {
+                    grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar los temas.</div>';
                 }
+            } else {
+                grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">No se pudo cargar la lista de temas.</div>';
             }
-            if (currentSort === 'az') filteredThemes.sort(function(a,b){ return a.nombre.localeCompare(b.nombre); });
-            if (currentSort === 'za') filteredThemes.sort(function(a,b){ return b.nombre.localeCompare(a.nombre); });
-            currentPage = 0;
-            render(true);
+        }
+    };
+    xhr.send();
+
+    // FILTRO BÚSQUEDA Y ORDENACIÓN
+    function aplicarFiltros() {
+        var search = document.getElementById('searchInput').value.toLowerCase();
+        filteredThemes = [];
+        for (var i = 0; i < allThemes.length; i++) {
+            if (allThemes[i].nombre.toLowerCase().indexOf(search) !== -1) {
+                filteredThemes.push(allThemes[i]);
+            }
         }
 
-        function render(reset) {
-            if (reset) grid.innerHTML = '';
-            var start = currentPage * PAGE_SIZE;
-            var end = start + PAGE_SIZE;
-            var html = '';
-
-            for (var i = start; i < end && i < filteredThemes.length; i++) {
-                var t = filteredThemes[i];
-                var img = encodeURI(t.nombre + '.png');
-                
-                html += '<div class="theme-card">' +
-                    '<div class="preview">' +
-                        '<img src="' + PREVIEW_FOLDERS[0] + img + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}"> ' +
-                    '</div>' +
-                    '<div class="card-info">' +
-                        '<div class="theme-name">' + t.nombre + '</div>' +
-                        '<div class="theme-genre">' + t.genero + '</div>' +
-                        '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
-                    '</div>' +
-                '</div>';
-            }
-
-            if (reset) grid.innerHTML = html;
-            else grid.innerHTML += html;
-
-            statsDiv.innerHTML = filteredThemes.length + ' temas';
-            loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
+        if (currentSort === 'az') {
+            filteredThemes.sort(function(a, b) {
+                return a.nombre.localeCompare(b.nombre);
+            });
+        } else if (currentSort === 'za') {
+            filteredThemes.sort(function(a, b) {
+                return b.nombre.localeCompare(a.nombre);
+            });
         }
 
-        document.getElementById('loadMoreBtn').onclick = function() {
-            currentPage++;
-            render(false);
-        };
-        document.getElementById('searchInput').oninput = aplicarFiltros;
-        document.getElementById('sortAZ').onclick = function() {
-            currentSort = 'az'; this.className = 'sort-btn active';
-            document.getElementById('sortZA').className = 'sort-btn'; aplicarFiltros();
-        };
-        document.getElementById('sortZA').onclick = function() {
-            currentSort = 'za'; this.className = 'sort-btn active';
-            document.getElementById('sortAZ').className = 'sort-btn'; aplicarFiltros();
-        };
-        document.getElementById('randomBtn').onclick = function() {
-            filteredThemes.sort(function() { return 0.5 - Math.random() });
-            currentPage = 0; render(true);
-        };
-    </script>
+        currentPage = 0;
+        render(true);
+    }
+
+    // RENDERIZADO DE TARJETAS
+    function render(reset) {
+        if (reset) {
+            grid.innerHTML = '';
+        }
+
+        var start = currentPage * PAGE_SIZE;
+        var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
+        var html = '';
+
+        for (var i = start; i < end; i++) {
+            var t = filteredThemes[i];
+            var img = encodeURI(t.nombre + '.png');
+
+            html += '<div class="theme-card">' +
+                        '<div class="preview">' +
+                            '<img src="' + PREVIEW_FOLDERS[0] + img + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}">' +
+                        '</div>' +
+                        '<div class="card-info">' +
+                            '<div class="theme-name">' + t.nombre + '</div>' +
+                            '<div class="theme-genre">' + t.genero + '</div>' +
+                            '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
+                        '</div>' +
+                    '</div>';
+        }
+
+        if (reset) {
+            grid.innerHTML = html;
+        } else {
+            grid.innerHTML += html;
+        }
+
+        statsDiv.innerHTML = filteredThemes.length + ' temas';
+        loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
+    }
+
+    // EVENTOS
+    document.getElementById('loadMoreBtn').onclick = function() {
+        currentPage++;
+        render(false);
+    };
+
+    document.getElementById('searchInput').oninput = aplicarFiltros;
+
+    document.getElementById('sortAZ').onclick = function() {
+        currentSort = 'az';
+        this.className = 'sort-btn active';
+        document.getElementById('sortZA').className = 'sort-btn';
+        aplicarFiltros();
+    };
+
+    document.getElementById('sortZA').onclick = function() {
+        currentSort = 'za';
+        this.className = 'sort-btn active';
+        document.getElementById('sortAZ').className = 'sort-btn';
+        aplicarFiltros();
+    };
+
+    document.getElementById('randomBtn').onclick = function() {
+        // Mezcla aleatoria simple (suficiente para PS3)
+        filteredThemes.sort(function() { return 0.5 - Math.random(); });
+        currentPage = 0;
+        render(true);
+    };
+</script>
 </body>
 </html>
