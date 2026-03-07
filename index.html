@@ -67,7 +67,7 @@
             background: #0a1a2a;
             padding: 16px 25px;
             border-radius: 60px;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             border-left: 5px solid #ff6b35;
             box-shadow: 0 10px 20px #00000080;
         }
@@ -124,6 +124,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: 0.1s;
+            min-width: 70px;
         }
         .sort-btn.active {
             background: #ff6b35;
@@ -132,6 +133,26 @@
         }
         .sort-btn:hover {
             background: #1f3a4c;
+        }
+        /* mensaje de guardado */
+        .save-note {
+            text-align: left;
+            margin: 0 0 20px 10px;
+            color: #ffb28c;
+            font-size: 1rem;
+            background: #0a1a2a;
+            padding: 10px 25px;
+            border-radius: 60px;
+            display: inline-block;
+            border-left: 5px solid #ff6b35;
+        }
+        .save-note strong {
+            color: #ffffff;
+            background: #1e3b4f;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-family: monospace;
+            margin-left: 10px;
         }
         .filter-indicator {
             background: #122b3b;
@@ -296,13 +317,17 @@
             text-decoration: none;
             border-bottom: 1px dotted #ff6b35;
         }
-        .loading, .no-results {
+        .loading, .no-results, .error-message {
             text-align: center;
             padding: 50px;
             background: #0a1a2a;
             border-radius: 60px;
             color: #ffb28c;
             grid-column: 1 / -1;
+        }
+        .error-message {
+            color: #ff8a7a;
+            border: 2px solid #ff6b35;
         }
         .stats {
             color: #9ab8d9;
@@ -321,6 +346,11 @@
         </div>
     </div>
 
+    <!-- Nota de almacenamiento para PS3 -->
+    <div class="save-note">
+        💾 Guarda los archivos .p3t en <strong>dev_hdd0/themes</strong>
+    </div>
+
     <!-- Barra de herramientas -->
     <div class="toolbar">
         <div class="search-wrapper">
@@ -328,8 +358,8 @@
             <div class="icon-btn" id="randomBtn" title="Temas aleatorios">🎲</div>
         </div>
         <div class="sort-buttons">
-            <button class="sort-btn" id="sortAZ">A→Z</button>
-            <button class="sort-btn" id="sortZA">Z→A</button>
+            <button class="sort-btn" id="sortAZ">A-Z</button>
+            <button class="sort-btn" id="sortZA">Z-A</button>
         </div>
         <div class="filter-indicator" id="filterIndicator" style="display: none;">
             <span class="active-filter" id="activeFilterLabel"></span>
@@ -358,7 +388,7 @@
     </div>
 
     <script>
-        (function() { // ES5 compatible
+        (function() { // ES5 compatible, pensado para navegador PS3
             // ------------------------------------------------------------
             // CONFIG
             var JSON_URL = 'temas_ps3_conlinks.json';
@@ -366,11 +396,11 @@
             var PAGE_SIZE = 20;
 
             // Variables globales
-            var allThemes = [];               // {archivo, descarga, generos[], nombreMostrar}
+            var allThemes = [];
             var uniqueGenres = [];
-            var filteredThemes = [];           // temas tras filtros y búsqueda
-            var currentSort = 'none';           // 'az', 'za', 'none'
-            var currentGenreFilter = null;      // género seleccionado (string) o null
+            var filteredThemes = [];
+            var currentSort = 'none';
+            var currentGenreFilter = null;
             var currentSearch = '';
             var currentPage = 0;
 
@@ -388,25 +418,41 @@
             var loadMoreBtn = document.getElementById('loadMoreBtn');
 
             // ------------------------------------------------------------
-            // Cargar JSON
+            // Cargar JSON con manejo de errores mejorado
             var xhr = new XMLHttpRequest();
             xhr.open('GET', JSON_URL, true);
             xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        procesarDatos(data);
-                    } catch (e) {
-                        grid.innerHTML = '<div class="no-results">❌ error al leer JSON</div>';
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            procesarDatos(data);
+                        } catch (e) {
+                            mostrarError('El archivo JSON no tiene formato válido. (Error: ' + e.message + ')');
+                        }
+                    } else {
+                        mostrarError('No se pudo cargar el archivo JSON (código ' + xhr.status + ').<br>Verifica que <strong>temas_ps3_conlinks.json</strong> esté en el mismo directorio que este HTML.');
                     }
-                } else if (xhr.readyState === 4) {
-                    grid.innerHTML = '<div class="no-results">❌ no se encontró ' + JSON_URL + '</div>';
                 }
+            };
+            xhr.onerror = function() {
+                mostrarError('Error de red al intentar cargar el JSON.');
             };
             xhr.send();
 
+            function mostrarError(mensaje) {
+                grid.innerHTML = '<div class="error-message">❌ ' + mensaje + '</div>';
+                statsDiv.innerText = 'error';
+                loadMoreContainer.style.display = 'none';
+            }
+
             // ------------------------------------------------------------
             function procesarDatos(temas) {
+                if (!temas || !temas.length) {
+                    mostrarError('El archivo JSON está vacío.');
+                    return;
+                }
+
                 // Construir allThemes
                 allThemes = [];
                 for (var i = 0; i < temas.length; i++) {
@@ -423,7 +469,7 @@
                     });
                 }
 
-                // Extraer géneros únicos (para posible uso futuro, aunque no se muestren en panel)
+                // Extraer géneros únicos (no se muestran en panel, pero se usan para filtro)
                 var genreMap = {};
                 for (var j = 0; j < allThemes.length; j++) {
                     var gens = allThemes[j].generos;
@@ -477,7 +523,7 @@
                     currentSort = (currentSort === 'az') ? 'none' : 'az';
                     sortAZ.classList.toggle('active', currentSort === 'az');
                     sortZA.classList.remove('active');
-                    aplicarFiltros(); // reordena
+                    aplicarFiltros();
                 });
 
                 sortZA.addEventListener('click', function() {
@@ -541,10 +587,11 @@
                 }
                 var start = currentPage * PAGE_SIZE;
                 var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
-                if (start >= filteredThemes.length) {
-                    if (currentPage === 0) grid.innerHTML = '<div class="no-results">✨ no hay temas con esos criterios</div>';
+                if (filteredThemes.length === 0) {
+                    grid.innerHTML = '<div class="no-results">✨ no hay temas con esos criterios</div>';
                     return;
                 }
+                if (start >= filteredThemes.length) return;
 
                 var html = '';
                 for (var i = start; i < end; i++) {
@@ -579,7 +626,7 @@
                             currentGenreFilter = genre;
                             activeFilterLabel.innerText = 'Género: ' + genre;
                             filterIndicator.style.display = 'flex';
-                            // Limpiar búsqueda? No necesariamente, mejor mantener
+                            // No se limpia la búsqueda, pero se podría hacer opcional
                             aplicarFiltros();
                         }
                         e.stopPropagation();
