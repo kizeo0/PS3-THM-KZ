@@ -2,14 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PS3 · temas p3t</title>
     <style>
         /* RESET SEGURO PARA PS3 */
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box; /* Ayuda con los anchos */
+            box-sizing: border-box; /* Ayuda a mantener medidas consistentes */
         }
 
         body {
@@ -19,52 +18,52 @@
             line-height: 1.5;
             padding: 20px 0;
             min-height: 100vh;
-            text-align: center; /* Centra todo para pantallas de PS3 */
+            text-align: center; /* Centra todo horizontalmente */
         }
 
-        /* Contenedor principal con ancho fijo para 4 columnas exactas */
+        /* Contenedor principal: ancho fijo pero ligeramente más estrecho para garantizar 4 columnas en PS3 */
         .main-container {
-            width: 1260px;          /* 4 tarjetas de 300px + márgenes */
+            width: 1220px;          /* Ajustado para que 4 tarjetas de 295px + 5px de margen quepan */
             margin: 0 auto;
             text-align: left;
         }
 
-        /* CABECERA */
+        /* CABECERA MÁS GRANDE */
         .header {
             overflow: hidden;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #ff6b35;
-            padding-bottom: 15px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #ff6b35; /* más grueso */
+            padding-bottom: 20px;
             margin-left: 10px;
             margin-right: 10px;
         }
 
         .logo-img {
-            height: 65px;
+            height: 85px;            /* Antes 65px, ahora más grande */
             width: auto;
-            filter: drop-shadow(0 0 6px #ff6b35);
+            filter: drop-shadow(0 0 8px #ff6b35);
             float: left;
         }
 
         .social-container {
             float: right;
             background: #0a1a2a;
-            padding: 6px 20px;
-            border-radius: 50px;
-            border: 1px solid #ff6b35;
+            padding: 8px 25px;       /* Más padding */
+            border-radius: 60px;
+            border: 2px solid #ff6b35;
         }
 
         .social-icon {
-            width: 44px;
-            height: 44px;
+            width: 54px;              /* Antes 44px, más grandes */
+            height: 54px;
             background: #0a1a2a;
-            border-radius: 12px;
-            padding: 4px;
+            border-radius: 15px;
+            padding: 6px;
             display: inline-block;
             vertical-align: middle;
         }
 
-        /* BARRA DE HERRAMIENTAS */
+        /* BARRA DE HERRAMIENTAS (sin cambios, ya funcionaba bien) */
         .toolbar {
             background: #0a1a2a;
             padding: 16px 25px;
@@ -139,36 +138,35 @@
             line-height: 52px;
         }
 
-        /* CUADRÍCULA DE 4 COLUMNAS (inline-block sin espacios) */
+        /* CUADRÍCULA: 4 COLUMNAS CON TARJETAS LIGERAMENTE MÁS ESTRECHAS */
         .grid {
             margin: 20px 0;
-            font-size: 0;           /* Elimina espacios entre tarjetas */
-            text-align: center;      /* Centra las tarjetas horizontalmente */
+            font-size: 0;           /* Elimina espacios entre inline-block */
+            text-align: center;
         }
 
-        /* TARJETA DE TEMA - TAMAÑO MEJORADO (preview más grande) */
         .theme-card {
-            width: 300px;
+            width: 295px;            /* Antes 300px, ahora 295px para asegurar 4 columnas */
             background: #0e1727;
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid #1f3a4c;
             display: inline-block;
             vertical-align: top;
-            margin: 7px;             /* Margen simétrico para 4 columnas */
-            font-size: 16px;         /* Restauramos tamaño de texto */
+            margin: 5px;              /* Margen reducido a 5px para que 4 quepan justo */
+            font-size: 16px;          /* Restaura el tamaño del texto dentro */
             text-align: left;
             box-shadow: 0 10px 18px #00000080;
         }
 
-        /* CONTENEDOR DE PREVIEW MÁS GRANDE (300px de alto) */
+        /* PREVIEW GRANDE (300px de alto) */
         .preview {
             width: 100%;
             background: #03070f;
             text-align: center;
             border-bottom: 3px solid #ff6b35;
-            height: 300px;           /* Aumentado de 250px a 300px */
-            line-height: 300px;       /* Centrado vertical de la imagen */
+            height: 300px;
+            line-height: 300px;       /* Centra verticalmente la imagen */
         }
 
         .preview img {
@@ -231,12 +229,14 @@
             font-size: 1.2rem;
         }
 
+        /* PIE DE PÁGINA MÁS GRANDE */
         .footer {
-            margin: 50px 10px 20px 10px;
-            border-top: 1px solid #ff6b3540;
-            padding-top: 20px;
+            margin: 60px 10px 30px 10px;
+            border-top: 2px solid #ff6b3540;  /* Más grueso */
+            padding-top: 25px;                  /* Más espacio */
             color: #b0c8e0;
             overflow: hidden;
+            font-size: 1.3rem;                  /* Texto más grande */
         }
 
         .clearfix::after {
@@ -249,7 +249,7 @@
 <body>
 
 <div class="main-container">
-    <!-- CABECERA -->
+    <!-- CABECERA MÁS GRANDE -->
     <div class="header clearfix">
         <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onerror="this.style.display='none'">
         <div class="social-container">
@@ -284,7 +284,7 @@
         <button class="btn-primary" id="loadMoreBtn">+ Cargar más temas</button>
     </div>
 
-    <!-- PIE DE PÁGINA -->
+    <!-- PIE DE PÁGINA MÁS GRANDE -->
     <div class="footer clearfix">
         <span style="float:left">© PS3 · Temas P3T</span>
         <span style="float:right">kizeo0</span>
@@ -313,7 +313,6 @@
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 try {
-                    // Usamos eval para máxima compatibilidad (el JSON no es malicioso)
                     var data = eval('(' + xhr.responseText + ')');
                     allThemes = data.map(function(item) {
                         return {
@@ -417,7 +416,6 @@
     };
 
     document.getElementById('randomBtn').onclick = function() {
-        // Mezcla aleatoria simple (suficiente para PS3)
         filteredThemes.sort(function() { return 0.5 - Math.random(); });
         currentPage = 0;
         render(true);
