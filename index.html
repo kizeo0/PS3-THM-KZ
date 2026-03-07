@@ -367,7 +367,7 @@
         render(true);
     }
 
-    // Renderizado de tarjetas con limpieza de comillas en el nombre de la imagen
+    // Renderizado de tarjetas con limpieza de caracteres problemáticos en el nombre de la imagen
     function render(reset) {
         if (reset) {
             grid.innerHTML = '';
@@ -379,8 +379,8 @@
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            // Limpiar el nombre: eliminar comillas simples y dobles para que coincida con el archivo de imagen
-            var nombreLimpio = t.nombre.replace(/['"]/g, '');
+            // Limpiar el nombre: eliminar comillas simples, dobles y símbolos ™, ® (y cualquier otro que pueda causar problemas)
+            var nombreLimpio = t.nombre.replace(/['"™®]/g, '');
             var img = encodeURI(nombreLimpio + '.png');
 
             html += '<div class="theme-card">' +
