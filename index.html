@@ -137,7 +137,7 @@
             line-height: 52px;
         }
 
-        /* CUADRÍCULA: 4 COLUMNAS DE 340px CADA UNA (con margen 5px) */
+        /* CUADRÍCULA: 3 COLUMNAS DE 440px */
         .grid {
             margin: 20px 0;
             font-size: 0;
@@ -145,7 +145,7 @@
         }
 
         .theme-card {
-            width: 340px;               /* Aumentado para mejor vista */
+            width: 440px;               /* Tarjetas más anchas */
             background: #0e1727;
             border-radius: 20px;
             overflow: hidden;
@@ -158,15 +158,15 @@
             box-shadow: 0 10px 18px #00000080;
         }
 
-        /* PREVIEW MÁS GRANDE: 340x400 (rectangular) */
+        /* PREVIEW RECTANGULAR HORIZONTAL 440x300 (16:9) */
         .preview {
             width: 100%;
             background: #03070f;
             text-align: center;
             border-bottom: 3px solid #ff6b35;
-            height: 400px;              /* Aumentado */
-            line-height: 400px;
-            cursor: pointer;             /* Indica que se puede hacer clic para ampliar */
+            height: 300px;
+            line-height: 300px;
+            cursor: pointer;
         }
 
         .preview img {
@@ -197,7 +197,7 @@
             margin-bottom: 18px;
             display: inline-block;
             border: 1px solid #ff6b3540;
-            cursor: pointer;             /* Click para filtrar por género */
+            cursor: pointer;
             transition: background 0.2s;
         }
 
@@ -251,7 +251,7 @@
             clear: both;
         }
 
-        /* LIGHTBOX (visores grandes) */
+        /* LIGHTBOX */
         #lightbox {
             display: none;
             position: fixed;
@@ -272,16 +272,6 @@
             border: 4px solid #ff6b35;
             border-radius: 10px;
             background: #000;
-        }
-
-        .filter-indicator {
-            background: #ff6b3520;
-            padding: 5px 15px;
-            border-radius: 30px;
-            display: inline-block;
-            margin-left: 15px;
-            font-size: 0.9rem;
-            border: 1px solid #ff6b35;
         }
     </style>
 </head>
@@ -330,7 +320,7 @@
     </div>
 </div>
 
-<!-- LIGHTBOX PARA VISTA PREVIA GRANDE -->
+<!-- LIGHTBOX -->
 <div id="lightbox" onclick="this.style.display='none'">
     <img id="lightboxImg" src="" alt="Vista previa grande">
 </div>
@@ -339,13 +329,13 @@
     // CONFIGURACIÓN
     var JSON_URL = 'temas_ps3_conlinks.json';
     var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
-    var PAGE_SIZE = 16; // 4 filas de 4 temas = 16 temas por carga
+    var PAGE_SIZE = 12; // 3 columnas x 4 filas = 12 temas por carga
 
     var allThemes = [];
     var filteredThemes = [];
     var currentSort = 'none';
     var currentPage = 0;
-    var genreFilter = null;          // Nuevo: filtro por género
+    var genreFilter = null;
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
@@ -381,7 +371,7 @@
     };
     xhr.send();
 
-    // FILTRO BÚSQUEDA + GÉNERO + ORDENACIÓN
+    // APLICAR FILTROS (búsqueda, género, ordenación)
     function aplicarFiltros() {
         var search = searchInput.value.toLowerCase();
         var filtrados = [];
@@ -390,15 +380,11 @@
             var tema = allThemes[i];
             var cumple = true;
 
-            // Filtro por género (si está activo)
             if (genreFilter !== null) {
                 if (tema.genero.toLowerCase() !== genreFilter.toLowerCase()) {
                     cumple = false;
                 }
             }
-            // Filtro por nombre (solo si NO hay género activo, o si queremos combinarlos? 
-            // Por simplicidad, si hay género activo ignoramos búsqueda, pero ya limpiamos input al hacer clic en género.
-            // Aún así, si el usuario escribe después de filtrar por género, se resetea género en el evento oninput.
             if (genreFilter === null && cumple) {
                 if (tema.nombre.toLowerCase().indexOf(search) === -1) {
                     cumple = false;
@@ -459,7 +445,6 @@
             grid.innerHTML += html;
         }
 
-        // Actualizar estadísticas
         var statsText = filteredThemes.length + ' temas';
         if (genreFilter !== null) {
             statsText += ' · Género: "' + genreFilter + '"';
@@ -469,16 +454,16 @@
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // EVENTO PARA CARGAR MÁS
+    // BOTÓN CARGAR MÁS
     document.getElementById('loadMoreBtn').onclick = function() {
         currentPage++;
         render(false);
     };
 
-    // BÚSQUEDA: al escribir, se limpia el filtro de género
+    // BÚSQUEDA (limpia género)
     searchInput.oninput = function() {
         if (genreFilter !== null) {
-            genreFilter = null;   // quitamos filtro por género
+            genreFilter = null;
         }
         aplicarFiltros();
     };
@@ -500,37 +485,34 @@
 
     // BOTÓN ALEATORIO
     document.getElementById('randomBtn').onclick = function() {
-        // Mezclar la lista filtrada
         filteredThemes.sort(function() { return 0.5 - Math.random(); });
         currentPage = 0;
         render(true);
     };
 
-    // CLICK EN GÉNERO (usamos delegación de eventos)
+    // CLICK EN GÉNERO (delegación)
     grid.onclick = function(e) {
         var target = e.target;
-        // Buscar si se hizo clic en un elemento con clase 'theme-genre'
         if (target.classList.contains('theme-genre')) {
             var genre = target.textContent;
             genreFilter = genre;
-            searchInput.value = '';         // Limpiamos búsqueda
+            searchInput.value = '';
             aplicarFiltros();
         }
     };
 
-    // LIGHTBOX: vista previa grande al hacer clic en la imagen
+    // LIGHTBOX
     grid.addEventListener('click', function(e) {
         var target = e.target;
-        // Ver si el clic fue en una imagen dentro de .preview
         if (target.tagName === 'IMG' && target.parentNode.classList.contains('preview')) {
             var imgSrc = target.src;
             lightboxImg.src = imgSrc;
             lightbox.style.display = 'block';
-            e.preventDefault(); // por si acaso
+            e.preventDefault();
         }
     });
 
-    // Cerrar lightbox con la tecla ESC (opcional, mejora)
+    // CERRAR LIGHTBOX CON ESC
     document.onkeydown = function(e) {
         if (e.key === 'Escape' && lightbox.style.display === 'block') {
             lightbox.style.display = 'none';
