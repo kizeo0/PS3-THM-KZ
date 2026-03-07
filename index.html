@@ -15,14 +15,14 @@
             line-height: 1.5;
             padding: 20px 0;
             min-height: 100vh;
-            text-align: center; /* Centra el contenido en el navegador de PS3 */
+            text-align: center; /* Centra el contenido para el navegador PS3 */
         }
 
-        /* Contenedor principal ajustado para 4 columnas (1240px de ancho) */
-        .main-wrapper {
-            width: 1240px;
+        /* Contenedor principal forzado para 4 columnas en 720p/1080p */
+        .main-container {
+            width: 1260px;
             margin: 0 auto;
-            text-align: left; /* Restaura la alineación a la izquierda dentro del centro */
+            text-align: left;
         }
 
         .header {
@@ -36,7 +36,6 @@
         .logo-img {
             height: 65px;
             width: auto;
-            max-width: 100%;
             filter: drop-shadow(0 0 6px #ff6b35);
             float: left;
         }
@@ -50,7 +49,6 @@
         .social-icon {
             width: 44px;
             height: 44px;
-            object-fit: contain;
             background: #0a1a2a;
             border-radius: 12px;
             padding: 4px;
@@ -79,7 +77,6 @@
             border-radius: 60px;
             color: white;
             font-size: 1rem;
-            outline: none;
             vertical-align: middle;
         }
         .dice-btn {
@@ -125,32 +122,32 @@
             line-height: 52px;
         }
 
-        /* GRID CONFIGURADO PARA 4 COLUMNAS DE 290px */
+        /* GRID CONFIGURADO PARA 4 COLUMNAS GIGANTES */
         .grid {
             margin: 20px 0;
-            font-size: 0; 
+            font-size: 0; /* Evita espacios fantasma en PS3 */
             text-align: center;
         }
         .theme-card {
-            width: 290px; /* Tamaño aumentado */
+            width: 300px; /* Tamaño máximo para 4 columnas */
             background: #0e1727;
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid #1f3a4c;
-            box-shadow: 0 10px 18px #00000080;
             display: inline-block;
             vertical-align: top;
-            margin: 10px; /* Espacio para que encajen 4 en 1240px */
+            margin: 7px; /* Margen preciso para cuadrar 4 temas */
             font-size: 16px;
             text-align: left;
+            box-shadow: 0 10px 18px #00000080;
         }
         .preview {
             width: 100%;
             background: #03070f;
             text-align: center;
             border-bottom: 3px solid #ff6b35;
-            height: 220px; /* Más alto para que luzca la imagen */
-            line-height: 220px;
+            height: 250px; /* Imagen mucho más grande */
+            line-height: 250px;
         }
         .preview img {
             max-width: 100%;
@@ -158,23 +155,23 @@
             vertical-align: middle;
         }
         .card-info {
-            padding: 15px;
+            padding: 18px 15px;
         }
         .theme-name {
             font-weight: 600;
-            font-size: 1.05rem;
-            height: 2.8em; /* Mantiene alineación si el nombre es largo */
-            overflow: hidden;
+            font-size: 1.1rem;
             color: #fff;
-            margin-bottom: 10px;
+            height: 2.8em;
+            overflow: hidden;
+            margin-bottom: 12px;
         }
         .theme-genre {
             background: #122b3b;
-            padding: 4px 10px;
-            border-radius: 20px;
+            padding: 5px 12px;
+            border-radius: 30px;
             font-size: 0.8rem;
             color: #ffb28c;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             display: inline-block;
             border: 1px solid #ff6b3540;
         }
@@ -183,8 +180,8 @@
             color: #0b0f17;
             text-decoration: none;
             font-weight: bold;
-            padding: 12px;
-            border-radius: 40px;
+            padding: 14px;
+            border-radius: 50px;
             text-align: center;
             display: block;
             text-transform: uppercase;
@@ -202,9 +199,9 @@
             padding: 15px 60px;
             border-radius: 60px;
             font-weight: bold;
-            border: none;
+            border: 2px solid #ff9f7b;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         .footer {
@@ -223,152 +220,138 @@
 </head>
 <body>
 
-<div class="main-wrapper">
-    <div class="header clearfix">
-        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onerror="this.style.display='none'">
-        <div class="social-container">
-            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon"></a>
-            <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon"></a>
-            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" alt="X" class="social-icon"></a>
-        </div>
-    </div>
-
-    <div class="toolbar clearfix">
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Buscar tema...">
-            <div class="dice-btn" id="randomBtn">
-                <img src="recursos/dado.png" alt="D" class="dice-img" onerror="this.style.display='none'">
+    <div class="main-container">
+        <div class="header clearfix">
+            <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onerror="this.style.display='none'">
+            <div class="social-container">
+                <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon"></a>
+                <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon"></a>
+                <a href="https://x.com/KiZeo0"><img src="recursos/x.png" alt="X" class="social-icon"></a>
             </div>
         </div>
-        <div class="sort-buttons">
-            <button class="sort-btn" id="sortAZ">A-Z</button>
-            <button class="sort-btn" id="sortZA">Z-A</button>
+
+        <div class="toolbar clearfix">
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Buscar tema...">
+                <div class="dice-btn" id="randomBtn">
+                    <img src="recursos/dado.png" alt="D" class="dice-img" onerror="this.style.display='none'">
+                </div>
+            </div>
+            <div class="sort-buttons">
+                <button class="sort-btn" id="sortAZ">A-Z</button>
+                <button class="sort-btn" id="sortZA">Z-A</button>
+            </div>
+            <div class="stats" id="stats">...</div>
         </div>
-        <div class="stats" id="stats">...</div>
+
+        <div id="themeGrid" class="grid">
+            <div style="text-align:center; padding:50px; color:#ffb28c; font-size:20px;">⌛ Cargando temas para PS3...</div>
+        </div>
+
+        <div class="load-more" id="loadMoreContainer" style="display: none;">
+            <button class="btn-primary" id="loadMoreBtn">+ Cargar más temas</button>
+        </div>
+
+        <div class="footer clearfix">
+            <span style="float:left">© PS3 · Temas P3T</span>
+            <span style="float:right">kizeo0</span>
+        </div>
     </div>
 
-    <div id="themeGrid" class="grid">
-        <div style="text-align:center; padding:50px; color:#ff6b35;">⌛ Cargando temas...</div>
-    </div>
+    <script>
+        var JSON_URL = 'temas_ps3_conlinks.json';
+        var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
+        var PAGE_SIZE = 16; // 4 filas completas de 4 temas cada una
 
-    <div class="load-more" id="loadMoreContainer" style="display: none;">
-        <button class="btn-primary" id="loadMoreBtn">+ Cargar más temas</button>
-    </div>
+        var allThemes = [];
+        var filteredThemes = [];
+        var currentSort = 'none';
+        var currentPage = 0;
 
-    <div class="footer clearfix">
-        <span style="float:left">© PS3 · Temas P3T</span>
-        <span style="float:right">kizeo0</span>
-    </div>
-</div>
+        var grid = document.getElementById('themeGrid');
+        var statsDiv = document.getElementById('stats');
+        var loadMoreContainer = document.getElementById('loadMoreContainer');
 
-<script>
-    var JSON_URL = 'temas_ps3_conlinks.json';
-    var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
-    var PAGE_SIZE = 24; // Múltiplo de 4 para que las filas siempre estén llenas
-
-    var allThemes = [];
-    var filteredThemes = [];
-    var currentSort = 'none';
-    var currentPage = 0;
-
-    var grid = document.getElementById('themeGrid');
-    var statsDiv = document.getElementById('stats');
-    var loadMoreContainer = document.getElementById('loadMoreContainer');
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', JSON_URL, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                var data = eval('(' + xhr.responseText + ')');
-                allThemes = data.map(function(item) {
-                    return {
-                        archivo: item.archivo,
-                        descarga: item.descarga,
-                        genero: item.genero || 'Otro',
-                        nombre: item.archivo.replace(/\.p3t$/i, '')
-                    };
-                });
-                aplicarFiltros();
-            } catch (e) {
-                grid.innerHTML = "Error cargando datos.";
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', JSON_URL, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var data = eval('(' + xhr.responseText + ')');
+                    allThemes = data.map(function(item) {
+                        return {
+                            archivo: item.archivo,
+                            descarga: item.descarga,
+                            genero: item.genero || 'Otro',
+                            nombre: item.archivo.replace(/\.p3t$/i, '')
+                        };
+                    });
+                    aplicarFiltros();
+                } catch (e) { grid.innerHTML = "Error cargando JSON."; }
             }
-        }
-    };
-    xhr.send();
+        };
+        xhr.send();
 
-    function aplicarFiltros() {
-        var search = document.getElementById('searchInput').value.toLowerCase();
-        filteredThemes = allThemes.filter(function(t) {
-            return t.nombre.toLowerCase().indexOf(search) !== -1;
-        });
-
-        if (currentSort === 'az') {
-            filteredThemes.sort(function(a,b){ return a.nombre.localeCompare(b.nombre); });
-        } else if (currentSort === 'za') {
-            filteredThemes.sort(function(a,b){ return b.nombre.localeCompare(a.nombre); });
-        }
-
-        currentPage = 0;
-        render(true);
-    }
-
-    function render(reset) {
-        if (reset) grid.innerHTML = '';
-        var start = currentPage * PAGE_SIZE;
-        var end = start + PAGE_SIZE;
-        var html = '';
-
-        for (var i = start; i < end && i < filteredThemes.length; i++) {
-            var t = filteredThemes[i];
-            var imgName = encodeURI(t.nombre + '.png');
-            
-            html += '<div class="theme-card">' +
-                '<div class="preview">' +
-                    '<img src="' + PREVIEW_FOLDERS[0] + imgName + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + imgName + '\'; this.onerror=function(){this.style.display=\'none\';}"> ' +
-                '</div>' +
-                '<div class="card-info">' +
-                    '<div class="theme-name">' + t.nombre + '</div>' +
-                    '<div class="theme-genre">' + t.genero + '</div>' +
-                    '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
-                '</div>' +
-            '</div>';
+        function aplicarFiltros() {
+            var search = document.getElementById('searchInput').value.toLowerCase();
+            filteredThemes = [];
+            for(var i=0; i<allThemes.length; i++) {
+                if(allThemes[i].nombre.toLowerCase().indexOf(search) !== -1) {
+                    filteredThemes.push(allThemes[i]);
+                }
+            }
+            if (currentSort === 'az') filteredThemes.sort(function(a,b){ return a.nombre.localeCompare(b.nombre); });
+            if (currentSort === 'za') filteredThemes.sort(function(a,b){ return b.nombre.localeCompare(a.nombre); });
+            currentPage = 0;
+            render(true);
         }
 
-        if (reset) grid.innerHTML = html;
-        else grid.innerHTML += html;
+        function render(reset) {
+            if (reset) grid.innerHTML = '';
+            var start = currentPage * PAGE_SIZE;
+            var end = start + PAGE_SIZE;
+            var html = '';
 
-        statsDiv.innerHTML = filteredThemes.length + ' temas';
-        loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
-    }
+            for (var i = start; i < end && i < filteredThemes.length; i++) {
+                var t = filteredThemes[i];
+                var img = encodeURI(t.nombre + '.png');
+                
+                html += '<div class="theme-card">' +
+                    '<div class="preview">' +
+                        '<img src="' + PREVIEW_FOLDERS[0] + img + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}"> ' +
+                    '</div>' +
+                    '<div class="card-info">' +
+                        '<div class="theme-name">' + t.nombre + '</div>' +
+                        '<div class="theme-genre">' + t.genero + '</div>' +
+                        '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
+                    '</div>' +
+                '</div>';
+            }
 
-    document.getElementById('loadMoreBtn').onclick = function() {
-        currentPage++;
-        render(false);
-    };
+            if (reset) grid.innerHTML = html;
+            else grid.innerHTML += html;
 
-    document.getElementById('searchInput').oninput = aplicarFiltros;
+            statsDiv.innerHTML = filteredThemes.length + ' temas';
+            loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
+        }
 
-    document.getElementById('sortAZ').onclick = function() {
-        currentSort = 'az';
-        this.className = 'sort-btn active';
-        document.getElementById('sortZA').className = 'sort-btn';
-        aplicarFiltros();
-    };
-
-    document.getElementById('sortZA').onclick = function() {
-        currentSort = 'za';
-        this.className = 'sort-btn active';
-        document.getElementById('sortAZ').className = 'sort-btn';
-        aplicarFiltros();
-    };
-
-    document.getElementById('randomBtn').onclick = function() {
-        filteredThemes.sort(function() { return 0.5 - Math.random() });
-        currentPage = 0;
-        render(true);
-    };
-</script>
-
+        document.getElementById('loadMoreBtn').onclick = function() {
+            currentPage++;
+            render(false);
+        };
+        document.getElementById('searchInput').oninput = aplicarFiltros;
+        document.getElementById('sortAZ').onclick = function() {
+            currentSort = 'az'; this.className = 'sort-btn active';
+            document.getElementById('sortZA').className = 'sort-btn'; aplicarFiltros();
+        };
+        document.getElementById('sortZA').onclick = function() {
+            currentSort = 'za'; this.className = 'sort-btn active';
+            document.getElementById('sortAZ').className = 'sort-btn'; aplicarFiltros();
+        };
+        document.getElementById('randomBtn').onclick = function() {
+            filteredThemes.sort(function() { return 0.5 - Math.random() });
+            currentPage = 0; render(true);
+        };
+    </script>
 </body>
 </html>
