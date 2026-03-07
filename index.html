@@ -18,42 +18,41 @@
             line-height: 1.5;
             padding: 20px 0;
             min-height: 100vh;
-            text-align: center; /* Centra todo horizontalmente */
+            text-align: center;
         }
 
-        /* Contenedor principal: ancho fijo de 1200px para que quepan 4 tarjetas de 290px con márgenes */
         .main-container {
             width: 1400px;
             margin: 0 auto;
             text-align: left;
         }
 
-        /* CABECERA GRANDE: título a la izquierda, iconos a la derecha */
         .header {
-            overflow: hidden; /* Contiene los floats */
+            overflow: hidden;
             margin-bottom: 30px;
-            border-bottom: 4px solid #ff6b35; /* Más grueso */
+            border-bottom: 4px solid #ff6b35;
             padding-bottom: 20px;
         }
 
         .logo-img {
-            height: 100px;          /* Mucho más grande */
+            height: 100px;
             width: auto;
             filter: drop-shadow(0 0 10px #ff6b35);
             float: left;
             display: block;
+            cursor: pointer; /* Indica que es clickeable */
         }
 
         .social-container {
             float: right;
             background: #0a1a2a;
-            padding: 10px 30px;     /* Más padding */
+            padding: 10px 30px;
             border-radius: 60px;
             border: 2px solid #ff6b35;
         }
 
         .social-icon {
-            width: 64px;             /* Iconos más grandes */
+            width: 64px;
             height: 64px;
             background: #0a1a2a;
             border-radius: 18px;
@@ -62,12 +61,11 @@
             vertical-align: middle;
         }
 
-        /* BARRA DE HERRAMIENTAS (sin cambios importantes) */
         .toolbar {
             background: #0a1a2a;
             padding: 16px 25px;
             border-radius: 60px;
-            margin: 0 0 30px 0;      /* Sin márgenes laterales para aprovechar todo el ancho */
+            margin: 0 0 30px 0;
             border-left: 5px solid #ff6b35;
             box-shadow: 0 10px 20px #00000080;
             overflow: hidden;
@@ -137,35 +135,33 @@
             line-height: 52px;
         }
 
-        /* CUADRÍCULA: 4 COLUMNAS CON TARJETAS DE 290px */
         .grid {
             margin: 20px 0;
-            font-size: 0;           /* Elimina espacios entre inline-block */
+            font-size: 0;
             text-align: center;
         }
 
         .theme-card {
-            width: 290px;            /* Reducido para que quepan 4 */
+            width: 290px;
             background: #0e1727;
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid #1f3a4c;
             display: inline-block;
             vertical-align: top;
-            margin: 5px;              /* Margen de 5px a cada lado */
+            margin: 5px;
             font-size: 16px;
             text-align: left;
             box-shadow: 0 10px 18px #00000080;
         }
 
-        /* PREVIEW GRANDE (300px de alto) */
         .preview {
             width: 100%;
             background: #03070f;
             text-align: center;
             border-bottom: 3px solid #ff6b35;
             height: 300px;
-            line-height: 300px;       /* Centrado vertical de la imagen */
+            line-height: 300px;
         }
 
         .preview img {
@@ -196,6 +192,12 @@
             margin-bottom: 18px;
             display: inline-block;
             border: 1px solid #ff6b3540;
+            cursor: pointer;         /* Indica que es clickeable */
+            transition: 0.2s;
+        }
+        .theme-genre:hover {
+            background: #1e3f55;
+            border-color: #ff6b35;
         }
 
         .download-btn {
@@ -228,14 +230,13 @@
             font-size: 1.2rem;
         }
 
-        /* PIE DE PÁGINA MÁS GRANDE */
         .footer {
             margin: 60px 0 30px 0;
             border-top: 3px solid #ff6b3540;
             padding-top: 25px;
             color: #b0c8e0;
             overflow: hidden;
-            font-size: 1.4rem;       /* Texto más grande */
+            font-size: 1.4rem;
         }
 
         .clearfix::after {
@@ -248,9 +249,9 @@
 <body>
 
 <div class="main-container">
-    <!-- CABECERA: título a la izquierda, iconos a la derecha -->
+    <!-- CABECERA: título clickeable -->
     <div class="header clearfix">
-        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onerror="this.style.display='none'">
+        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" id="logoPrincipal" onerror="this.style.display='none'">
         <div class="social-container">
             <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon" onerror="this.style.display='none'"></a>
             <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon" onerror="this.style.display='none'"></a>
@@ -300,10 +301,14 @@
     var filteredThemes = [];
     var currentSort = 'none';
     var currentPage = 0;
+    var currentGenre = '';          // Nuevo: filtro por género
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
     var loadMoreContainer = document.getElementById('loadMoreContainer');
+    var searchInput = document.getElementById('searchInput');
+    var sortAZ = document.getElementById('sortAZ');
+    var sortZA = document.getElementById('sortZA');
 
     // CARGA DEL JSON (compatible con PS3)
     var xhr = new XMLHttpRequest();
@@ -321,6 +326,7 @@
                             nombre: item.archivo.replace(/\.p3t$/i, '')
                         };
                     });
+                    // Inicializar con todos los temas
                     aplicarFiltros();
                 } catch (e) {
                     grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar los temas.</div>';
@@ -332,16 +338,24 @@
     };
     xhr.send();
 
-    // FILTRO BÚSQUEDA Y ORDENACIÓN
+    // FILTRO BÚSQUEDA (por nombre) + GÉNERO + ORDENACIÓN
     function aplicarFiltros() {
-        var search = document.getElementById('searchInput').value.toLowerCase();
+        var search = searchInput.value.toLowerCase();
+
         filteredThemes = [];
         for (var i = 0; i < allThemes.length; i++) {
-            if (allThemes[i].nombre.toLowerCase().indexOf(search) !== -1) {
-                filteredThemes.push(allThemes[i]);
+            var tema = allThemes[i];
+            // Coincidencia por nombre (si hay búsqueda)
+            var nombreMatch = tema.nombre.toLowerCase().indexOf(search) !== -1;
+            // Coincidencia por género (si hay filtro de género)
+            var generoMatch = (currentGenre === '') || (tema.genero.toLowerCase() === currentGenre.toLowerCase());
+
+            if (nombreMatch && generoMatch) {
+                filteredThemes.push(tema);
             }
         }
 
+        // Aplicar ordenación
         if (currentSort === 'az') {
             filteredThemes.sort(function(a, b) {
                 return a.nombre.localeCompare(b.nombre);
@@ -376,7 +390,7 @@
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="theme-name">' + t.nombre + '</div>' +
-                            '<div class="theme-genre">' + t.genero + '</div>' +
+                            '<div class="theme-genre" data-genre="' + t.genero.replace(/"/g, '&quot;') + '">' + t.genero + '</div>' +
                             '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
                         '</div>' +
                     '</div>';
@@ -392,35 +406,84 @@
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // EVENTOS
+    // EVENTO CLIC EN EL LOGO (volver a pantalla principal)
+    document.getElementById('logoPrincipal').onclick = function() {
+        // Limpiar todo: búsqueda, género, ordenación
+        searchInput.value = '';
+        currentGenre = '';
+        currentSort = 'none';
+        // Desactivar botones de ordenación
+        sortAZ.className = 'sort-btn';
+        sortZA.className = 'sort-btn';
+        // Restaurar lista completa (copia del original)
+        filteredThemes = allThemes.slice();  // conserva el orden original del JSON
+        currentPage = 0;
+        render(true);
+    };
+
+    // DELEGACIÓN DE EVENTOS: clic en el género (dentro de grid)
+    grid.onclick = function(e) {
+        var target = e.target;
+        if (target.classList.contains('theme-genre')) {
+            var genre = target.getAttribute('data-genre') || target.textContent.trim();
+            // Filtrar por ese género
+            searchInput.value = '';               // limpia búsqueda anterior
+            currentGenre = genre;
+            currentSort = 'none';                  // quita ordenación activa
+            sortAZ.className = 'sort-btn';
+            sortZA.className = 'sort-btn';
+            aplicarFiltros();
+        }
+    };
+
+    // BOTÓN DE ALEATORIO (dado): mezcla todos los temas sin filtros
+    document.getElementById('randomBtn').onclick = function() {
+        // Limpiar filtros y orden
+        searchInput.value = '';
+        currentGenre = '';
+        currentSort = 'none';
+        sortAZ.className = 'sort-btn';
+        sortZA.className = 'sort-btn';
+
+        // Mezclar todos los temas (copia aleatoria)
+        var shuffled = allThemes.slice();
+        for (var i = shuffled.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = shuffled[i];
+            shuffled[i] = shuffled[j];
+            shuffled[j] = temp;
+        }
+        filteredThemes = shuffled;
+        currentPage = 0;
+        render(true);
+    };
+
+    // RESTO DE EVENTOS (sin cambios, pero usamos las variables globales)
     document.getElementById('loadMoreBtn').onclick = function() {
         currentPage++;
         render(false);
     };
 
-    document.getElementById('searchInput').oninput = aplicarFiltros;
+    searchInput.oninput = function() {
+        // Al escribir en la búsqueda, eliminamos el filtro de género activo (opcional, pero más intuitivo)
+        currentGenre = '';
+        // Quitamos clase activa de ordenación si la hubiera (se reaplica en aplicarFiltros)
+        aplicarFiltros();
+    };
 
-    document.getElementById('sortAZ').onclick = function() {
+    sortAZ.onclick = function() {
         currentSort = 'az';
         this.className = 'sort-btn active';
-        document.getElementById('sortZA').className = 'sort-btn';
+        sortZA.className = 'sort-btn';
         aplicarFiltros();
     };
 
-    document.getElementById('sortZA').onclick = function() {
+    sortZA.onclick = function() {
         currentSort = 'za';
         this.className = 'sort-btn active';
-        document.getElementById('sortAZ').className = 'sort-btn';
+        sortAZ.className = 'sort-btn';
         aplicarFiltros();
-    };
-
-    document.getElementById('randomBtn').onclick = function() {
-        filteredThemes.sort(function() { return 0.5 - Math.random(); });
-        currentPage = 0;
-        render(true);
     };
 </script>
 </body>
 </html>
-
-
