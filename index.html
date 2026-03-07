@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>PS3 · temas p3t (colección)</title>
+    <title>PS3 · temas p3t</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,6 @@
             display: flex;
             flex-direction: column;
         }
-        /* cabecera */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -58,7 +57,25 @@
             transform: scale(1.08);
             background: #1f3a4c;
         }
-        /* barra de herramientas */
+        .save-note {
+            text-align: left;
+            margin: 0 0 20px 10px;
+            color: #ffb28c;
+            font-size: 1rem;
+            background: #0a1a2a;
+            padding: 10px 25px;
+            border-radius: 60px;
+            display: inline-block;
+            border-left: 5px solid #ff6b35;
+        }
+        .save-note strong {
+            color: #ffffff;
+            background: #1e3b4f;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
         .toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -134,26 +151,6 @@
         .sort-btn:hover {
             background: #1f3a4c;
         }
-        /* mensaje de guardado */
-        .save-note {
-            text-align: left;
-            margin: 0 0 20px 10px;
-            color: #ffb28c;
-            font-size: 1rem;
-            background: #0a1a2a;
-            padding: 10px 25px;
-            border-radius: 60px;
-            display: inline-block;
-            border-left: 5px solid #ff6b35;
-        }
-        .save-note strong {
-            color: #ffffff;
-            background: #1e3b4f;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-family: monospace;
-            margin-left: 10px;
-        }
         .filter-indicator {
             background: #122b3b;
             border-radius: 40px;
@@ -180,7 +177,6 @@
             background: #ff6b35;
             color: #0b0f17;
         }
-        /* grid */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -202,7 +198,6 @@
             border-color: #ff6b35;
             box-shadow: 0 20px 25px #ff6b3530;
         }
-        /* preview ajustada para mostrar imagen completa sin recortar */
         .preview {
             width: 100%;
             background: #03070f;
@@ -211,7 +206,7 @@
             justify-content: center;
             padding: 10px 0;
             border-bottom: 3px solid #ff6b35;
-            height: 200px;           /* altura fija para consistencia */
+            height: 200px;
         }
         .preview img {
             max-width: 100%;
@@ -236,12 +231,9 @@
             line-height: 1.4;
             margin-bottom: 10px;
             color: #fff;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
             overflow: hidden;
+            max-height: 2.8em;
         }
-        /* el género ahora es clickeable */
         .theme-genre {
             background: #122b3b;
             padding: 5px 12px;
@@ -346,12 +338,10 @@
         </div>
     </div>
 
-    <!-- Nota de almacenamiento para PS3 -->
     <div class="save-note">
         💾 Guarda los archivos .p3t en <strong>dev_hdd0/themes</strong>
     </div>
 
-    <!-- Barra de herramientas -->
     <div class="toolbar">
         <div class="search-wrapper">
             <input type="text" id="searchInput" placeholder="Buscar tema...">
@@ -368,12 +358,10 @@
         <div class="stats" id="stats">cargando...</div>
     </div>
 
-    <!-- Grid de temas -->
     <div id="themeGrid" class="grid">
         <div class="loading">⌛ cargando temas...</div>
     </div>
 
-    <!-- Botón cargar más -->
     <div class="load-more" id="loadMoreContainer" style="display: none;">
         <button class="btn btn-primary" id="loadMoreBtn">+ cargar más</button>
     </div>
@@ -388,14 +376,19 @@
     </div>
 
     <script>
-        (function() { // ES5 compatible, pensado para navegador PS3
-            // ------------------------------------------------------------
-            // CONFIG
+        // Compatibilidad con navegador PS3 (ES3)
+        (function() {
+            // Polyfill para trim (si no existe)
+            if (typeof String.prototype.trim !== 'function') {
+                String.prototype.trim = function() {
+                    return this.replace(/^\s+|\s+$/g, '');
+                };
+            }
+
             var JSON_URL = 'temas_ps3_conlinks.json';
             var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
             var PAGE_SIZE = 20;
 
-            // Variables globales
             var allThemes = [];
             var uniqueGenres = [];
             var filteredThemes = [];
@@ -404,7 +397,6 @@
             var currentSearch = '';
             var currentPage = 0;
 
-            // Elementos DOM
             var grid = document.getElementById('themeGrid');
             var searchInput = document.getElementById('searchInput');
             var randomBtn = document.getElementById('randomBtn');
@@ -417,21 +409,26 @@
             var loadMoreContainer = document.getElementById('loadMoreContainer');
             var loadMoreBtn = document.getElementById('loadMoreBtn');
 
-            // ------------------------------------------------------------
-            // Cargar JSON con manejo de errores mejorado
+            // Función para eliminar espacios al inicio/fin (usada si el polyfill falla)
+            function trimStr(str) {
+                if (str.trim) return str.trim();
+                return str.replace(/^\s+|\s+$/g, '');
+            }
+
+            // Cargar JSON con XHR
             var xhr = new XMLHttpRequest();
             xhr.open('GET', JSON_URL, true);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         try {
-                            var data = JSON.parse(xhr.responseText);
+                            var data = eval('(' + xhr.responseText + ')'); // alternativa a JSON.parse (más compatible)
                             procesarDatos(data);
                         } catch (e) {
                             mostrarError('El archivo JSON no tiene formato válido. (Error: ' + e.message + ')');
                         }
                     } else {
-                        mostrarError('No se pudo cargar el archivo JSON (código ' + xhr.status + ').<br>Verifica que <strong>temas_ps3_conlinks.json</strong> esté en el mismo directorio que este HTML.');
+                        mostrarError('No se pudo cargar el archivo JSON (código ' + xhr.status + ').<br>Verifica que <strong>temas_ps3_conlinks.json</strong> esté en el mismo directorio.');
                     }
                 }
             };
@@ -442,24 +439,29 @@
 
             function mostrarError(mensaje) {
                 grid.innerHTML = '<div class="error-message">❌ ' + mensaje + '</div>';
-                statsDiv.innerText = 'error';
+                statsDiv.innerHTML = 'error';
                 loadMoreContainer.style.display = 'none';
             }
 
-            // ------------------------------------------------------------
             function procesarDatos(temas) {
                 if (!temas || !temas.length) {
                     mostrarError('El archivo JSON está vacío.');
                     return;
                 }
 
-                // Construir allThemes
-                allThemes = [];
+                // Construir allThemes sin usar map/filter
                 for (var i = 0; i < temas.length; i++) {
                     var item = temas[i];
                     var nombreMostrar = item.archivo.replace(/\.p3t$/i, '');
                     var generoStr = item.genero || 'Otro';
-                    var generos = generoStr.split(',').map(function(g) { return g.trim(); }).filter(function(g) { return g !== ''; });
+                    // Dividir por comas y limpiar espacios manualmente
+                    var generosRaw = generoStr.split(',');
+                    var generos = [];
+                    for (var j = 0; j < generosRaw.length; j++) {
+                        var g = generosRaw[j];
+                        g = trimStr(g);
+                        if (g !== '') generos.push(g);
+                    }
                     if (generos.length === 0) generos = ['sin género'];
                     allThemes.push({
                         archivo: item.archivo,
@@ -469,97 +471,127 @@
                     });
                 }
 
-                // Extraer géneros únicos (no se muestran en panel, pero se usan para filtro)
+                // Extraer géneros únicos sin filter/indexOf moderno
                 var genreMap = {};
-                for (var j = 0; j < allThemes.length; j++) {
-                    var gens = allThemes[j].generos;
-                    for (var k = 0; k < gens.length; k++) {
-                        genreMap[gens[k]] = true;
+                for (i = 0; i < allThemes.length; i++) {
+                    var gens = allThemes[i].generos;
+                    for (j = 0; j < gens.length; j++) {
+                        genreMap[gens[j]] = true;
                     }
                 }
                 uniqueGenres = [];
-                for (var g in genreMap) uniqueGenres.push(g);
-                uniqueGenres.sort();
+                for (var g in genreMap) {
+                    if (genreMap.hasOwnProperty(g)) uniqueGenres.push(g);
+                }
+                // Ordenar manualmente (bubble sort simple)
+                for (i = 0; i < uniqueGenres.length - 1; i++) {
+                    for (j = i + 1; j < uniqueGenres.length; j++) {
+                        if (uniqueGenres[i] > uniqueGenres[j]) {
+                            var temp = uniqueGenres[i];
+                            uniqueGenres[i] = uniqueGenres[j];
+                            uniqueGenres[j] = temp;
+                        }
+                    }
+                }
 
-                // Inicializar filtros
                 aplicarFiltros();
 
-                // Eventos
-                searchInput.addEventListener('input', function() {
-                    currentSearch = searchInput.value.toLowerCase().trim();
+                // Eventos usando onclick para mayor compatibilidad
+                searchInput.oninput = function() {
+                    currentSearch = searchInput.value.toLowerCase();
                     aplicarFiltros();
-                });
+                };
 
-                randomBtn.addEventListener('click', function() {
-                    // Aleatorio: seleccionar 20 temas al azar de allThemes (o menos)
+                randomBtn.onclick = function() {
                     var randomIndexes = [];
                     var total = allThemes.length;
-                    var count = Math.min(20, total);
+                    var count = total < 20 ? total : 20;
                     while (randomIndexes.length < count) {
                         var r = Math.floor(Math.random() * total);
-                        if (randomIndexes.indexOf(r) === -1) randomIndexes.push(r);
+                        var existe = false;
+                        for (var k = 0; k < randomIndexes.length; k++) {
+                            if (randomIndexes[k] === r) { existe = true; break; }
+                        }
+                        if (!existe) randomIndexes.push(r);
                     }
                     var randomThemes = [];
-                    for (var i = 0; i < randomIndexes.length; i++) {
-                        randomThemes.push(allThemes[randomIndexes[i]]);
+                    for (k = 0; k < randomIndexes.length; k++) {
+                        randomThemes.push(allThemes[randomIndexes[k]]);
                     }
-                    // Desactivar filtros de género y búsqueda
                     currentGenreFilter = null;
                     currentSearch = '';
                     searchInput.value = '';
                     currentSort = 'none';
-                    sortAZ.classList.remove('active');
-                    sortZA.classList.remove('active');
+                    sortAZ.className = 'sort-btn';
+                    sortZA.className = 'sort-btn';
                     ocultarIndicadorFiltro();
-                    // Asignar filteredThemes y resetear página
                     filteredThemes = randomThemes;
                     currentPage = 0;
                     renderizarPagina(true);
                     actualizarStats();
                     actualizarBotonCarga();
-                });
+                };
 
-                sortAZ.addEventListener('click', function() {
-                    currentSort = (currentSort === 'az') ? 'none' : 'az';
-                    sortAZ.classList.toggle('active', currentSort === 'az');
-                    sortZA.classList.remove('active');
+                sortAZ.onclick = function() {
+                    if (currentSort === 'az') { currentSort = 'none'; }
+                    else { currentSort = 'az'; }
+                    // actualizar clases manualmente
+                    sortAZ.className = 'sort-btn' + (currentSort === 'az' ? ' active' : '');
+                    sortZA.className = 'sort-btn' + (currentSort === 'za' ? ' active' : '');
                     aplicarFiltros();
-                });
+                };
 
-                sortZA.addEventListener('click', function() {
-                    currentSort = (currentSort === 'za') ? 'none' : 'za';
-                    sortZA.classList.toggle('active', currentSort === 'za');
-                    sortAZ.classList.remove('active');
+                sortZA.onclick = function() {
+                    if (currentSort === 'za') { currentSort = 'none'; }
+                    else { currentSort = 'za'; }
+                    sortAZ.className = 'sort-btn' + (currentSort === 'az' ? ' active' : '');
+                    sortZA.className = 'sort-btn' + (currentSort === 'za' ? ' active' : '');
                     aplicarFiltros();
-                });
+                };
 
-                clearFilterBtn.addEventListener('click', function() {
+                clearFilterBtn.onclick = function() {
                     currentGenreFilter = null;
                     ocultarIndicadorFiltro();
                     aplicarFiltros();
-                });
+                };
 
-                loadMoreBtn.addEventListener('click', function() {
+                loadMoreBtn.onclick = function() {
                     cargarMas();
-                });
+                };
             }
 
-            // Aplica todos los filtros (texto, género) y orden, actualiza filteredThemes y renderiza primera página
             function aplicarFiltros() {
-                var resultados = allThemes.slice(); // copia
+                var resultados = [];
+                for (var i = 0; i < allThemes.length; i++) {
+                    resultados.push(allThemes[i]);
+                }
 
                 // filtro texto
                 if (currentSearch !== '') {
-                    resultados = resultados.filter(function(t) {
-                        return t.nombreMostrar.toLowerCase().indexOf(currentSearch) !== -1;
-                    });
+                    var temp = [];
+                    for (i = 0; i < resultados.length; i++) {
+                        if (resultados[i].nombreMostrar.toLowerCase().indexOf(currentSearch) !== -1) {
+                            temp.push(resultados[i]);
+                        }
+                    }
+                    resultados = temp;
                 }
 
                 // filtro género
                 if (currentGenreFilter !== null) {
-                    resultados = resultados.filter(function(t) {
-                        return t.generos.indexOf(currentGenreFilter) !== -1;
-                    });
+                    var temp2 = [];
+                    for (i = 0; i < resultados.length; i++) {
+                        var gens = resultados[i].generos;
+                        var tiene = false;
+                        for (j = 0; j < gens.length; j++) {
+                            if (gens[j] === currentGenreFilter) {
+                                tiene = true;
+                                break;
+                            }
+                        }
+                        if (tiene) temp2.push(resultados[i]);
+                    }
+                    resultados = temp2;
                 }
 
                 // ordenación
@@ -580,13 +612,14 @@
                 actualizarBotonCarga();
             }
 
-            // Renderiza la página actual (currentPage) en el grid
             function renderizarPagina(reset) {
                 if (reset) {
                     grid.innerHTML = '';
                 }
                 var start = currentPage * PAGE_SIZE;
-                var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
+                var end = start + PAGE_SIZE;
+                if (end > filteredThemes.length) end = filteredThemes.length;
+
                 if (filteredThemes.length === 0) {
                     grid.innerHTML = '<div class="no-results">✨ no hay temas con esos criterios</div>';
                     return;
@@ -598,8 +631,13 @@
                     var t = filteredThemes[i];
                     var previewName = t.archivo.replace(/\.p3t$/i, '') + '.png';
                     var previewEncoded = encodeURI(previewName);
-                    var generosStr = t.generos.join(', ');
-                    // imagen con fallback
+                    var generosStr = '';
+                    for (var g = 0; g < t.generos.length; g++) {
+                        if (g > 0) generosStr += ', ';
+                        generosStr += t.generos[g];
+                    }
+
+                    // Imagen con fallback usando onerror (se mantiene igual)
                     var imgHtml = '<img src="' + PREVIEW_FOLDERS[0] + previewEncoded + '" onerror="this.onerror=null; this.src=\'' + PREVIEW_FOLDERS[1] + previewEncoded + '\'; this.onerror=function(){this.style.display=\'none\'; this.parentNode.innerHTML+=\'<div class=\\\'no-preview\\\'>sin preview</div>\';}" alt="preview">';
 
                     html += '<div class="theme-card">' +
@@ -614,23 +652,24 @@
                 if (reset) {
                     grid.innerHTML = html;
                 } else {
-                    grid.insertAdjacentHTML('beforeend', html);
+                    grid.innerHTML = grid.innerHTML + html;
                 }
 
-                // Añadir eventos click a los géneros (delegación)
-                var genreSpans = grid.querySelectorAll('.theme-genre');
+                // Asignar eventos onclick a los géneros
+                var genreSpans = grid.getElementsByClassName('theme-genre');
                 for (var j = 0; j < genreSpans.length; j++) {
-                    genreSpans[j].addEventListener('click', function(e) {
-                        var genre = this.getAttribute('data-genre');
-                        if (genre) {
-                            currentGenreFilter = genre;
-                            activeFilterLabel.innerText = 'Género: ' + genre;
-                            filterIndicator.style.display = 'flex';
-                            // No se limpia la búsqueda, pero se podría hacer opcional
-                            aplicarFiltros();
-                        }
-                        e.stopPropagation();
-                    });
+                    (function(span) {
+                        span.onclick = function(e) {
+                            var genre = this.getAttribute('data-genre');
+                            if (genre) {
+                                currentGenreFilter = genre;
+                                activeFilterLabel.innerHTML = 'Género: ' + genre;
+                                filterIndicator.style.display = 'flex';
+                                aplicarFiltros();
+                            }
+                            e.stopPropagation();
+                        };
+                    })(genreSpans[j]);
                 }
             }
 
@@ -651,14 +690,13 @@
             }
 
             function actualizarStats() {
-                statsDiv.innerText = filteredThemes.length + ' temas';
+                statsDiv.innerHTML = filteredThemes.length + ' temas';
             }
 
             function ocultarIndicadorFiltro() {
                 filterIndicator.style.display = 'none';
-                activeFilterLabel.innerText = '';
+                activeFilterLabel.innerHTML = '';
             }
-
         })();
     </script>
 </body>
