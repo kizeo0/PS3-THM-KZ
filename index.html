@@ -7,20 +7,18 @@
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            /* Evitamos box-sizing para máxima compatibilidad */
         }
         body {
             background: #0b0f17;
             color: #e0e5f0;
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
             line-height: 1.5;
-            padding: 20px 20px 40px;
+            padding: 20px;
             min-height: 100vh;
-            display: block; /* cambiamos de flex a block para mayor compatibilidad */
         }
         .header {
-            display: block; /* quitamos flex */
-            overflow: hidden; /* clearfix */
+            overflow: hidden;
             margin-bottom: 25px;
             border-bottom: 2px solid #ff6b35;
             padding-bottom: 15px;
@@ -29,7 +27,6 @@
             height: 65px;
             width: auto;
             max-width: 100%;
-            object-fit: contain;
             filter: drop-shadow(0 0 6px #ff6b35);
             float: left;
         }
@@ -44,14 +41,13 @@
             width: 44px;
             height: 44px;
             object-fit: contain;
-            transition: transform 0.2s;
             background: #0a1a2a;
             border-radius: 12px;
             padding: 4px;
             display: inline-block;
+            vertical-align: middle;
         }
         .social-icon:hover {
-            transform: scale(1.08);
             background: #1f3a4c;
         }
         .toolbar {
@@ -61,16 +57,17 @@
             margin-bottom: 30px;
             border-left: 5px solid #ff6b35;
             box-shadow: 0 10px 20px #00000080;
-            overflow: hidden; /* clearfix */
+            overflow: hidden;
         }
         .search-wrapper {
             float: left;
-            width: 50%; /* ajustable */
+            width: auto;
             min-width: 240px;
             margin-right: 15px;
+            white-space: nowrap;
         }
         .search-wrapper input {
-            width: calc(100% - 60px); /* dejar espacio para el botón */
+            width: 200px;
             padding: 14px 18px;
             background: #0b1a2a;
             border: 2px solid #1e3b4f;
@@ -78,35 +75,33 @@
             color: white;
             font-size: 1rem;
             outline: none;
-            float: left;
+            vertical-align: middle;
         }
         .dice-btn {
-            float: left;
+            display: inline-block;
             width: 52px;
             height: 52px;
             margin-left: 8px;
             background: #1e3b4f;
             border: 2px solid #ff6b35;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
+            line-height: 52px;
             cursor: pointer;
-            transition: 0.15s;
-            padding: 0;
+            vertical-align: middle;
         }
         .dice-btn:hover {
             background: #ff6b35;
-            border-color: #ff9f7b;
         }
         .dice-img {
             width: 32px;
             height: 32px;
-            display: block;
+            vertical-align: middle;
         }
         .sort-buttons {
             float: left;
             margin-left: 15px;
+            white-space: nowrap;
         }
         .sort-btn {
             background: transparent;
@@ -116,10 +111,11 @@
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.1s;
             min-width: 70px;
-            float: left;
+            display: inline-block;
             margin-right: 8px;
+            vertical-align: middle;
+            text-align: center;
         }
         .sort-btn.active {
             background: #ff6b35;
@@ -135,16 +131,17 @@
             border-radius: 40px;
             padding: 8px 20px;
             margin-left: 15px;
-            display: none; /* por defecto oculto, se muestra con JS */
+            display: none; /* se muestra con JS */
+            white-space: nowrap;
         }
         .active-filter {
             color: #ffb28c;
             font-weight: 500;
-            float: left;
+            display: inline-block;
+            vertical-align: middle;
             margin-right: 15px;
         }
         .clear-filter {
-            float: left;
             background: none;
             border: 2px solid #ff6b35;
             color: #ffb28c;
@@ -152,6 +149,8 @@
             border-radius: 40px;
             cursor: pointer;
             font-weight: bold;
+            display: inline-block;
+            vertical-align: middle;
         }
         .clear-filter:hover {
             background: #ff6b35;
@@ -161,13 +160,14 @@
             float: right;
             color: #9ab8d9;
             font-size: 0.9rem;
-            line-height: 52px; /* alinear con altura de la barra */
+            line-height: 52px;
         }
 
-        /* Grid con float left para compatibilidad PS3 */
+        /* Grid con inline-block para compatibilidad PS3 */
         .grid {
             margin: 20px 0 30px;
-            overflow: hidden; /* clearfix */
+            font-size: 0; /* elimina espacios entre inline-block */
+            text-align: left;
         }
         .theme-card {
             width: 240px;
@@ -176,35 +176,34 @@
             overflow: hidden;
             border: 1px solid #1f3a4c;
             box-shadow: 0 10px 18px #00000080;
-            transition: 0.2s;
-            float: left;
-            margin: 0 20px 20px 0; /* margen derecho e inferior */
+            display: inline-block;
+            vertical-align: top;
+            margin: 0 10px 20px 10px;
+            font-size: 16px; /* restaurar tamaño de fuente */
         }
         .theme-card:hover {
-            transform: translateY(-5px);
             border-color: #ff6b35;
             box-shadow: 0 20px 25px #ff6b3530;
         }
         .preview {
             width: 100%;
             background: #03070f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 0;
+            text-align: center;
             border-bottom: 3px solid #ff6b35;
             height: 200px;
+            line-height: 200px; /* para centrar verticalmente si es necesario */
         }
         .preview img {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain;
-            display: block;
+            vertical-align: middle;
         }
         .no-preview {
             color: #456f8a;
             font-size: 0.9rem;
-            text-align: center;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
         }
         .card-info {
             padding: 16px 14px 20px;
@@ -229,7 +228,6 @@
             display: inline-block;
             border: 1px solid #ff6b3540;
             cursor: pointer;
-            transition: 0.1s;
             max-width: 100%;
             word-break: break-word;
         }
@@ -249,7 +247,6 @@
             font-size: 0.95rem;
             border: 1px solid #ff9f7b;
             box-shadow: 0 4px 0 #a03d1e;
-            transition: 0.1s;
             display: block;
             text-transform: uppercase;
         }
@@ -260,7 +257,7 @@
         .load-more {
             text-align: center;
             margin: 20px 0;
-            clear: both; /* importante para que no flote junto a las tarjetas */
+            clear: both;
         }
         .btn {
             background: transparent;
@@ -307,13 +304,14 @@
             background: #0a1a2a;
             border-radius: 60px;
             color: #ffb28c;
+            font-size: 16px;
             clear: both;
         }
         .error-message {
             color: #ff8a7a;
             border: 2px solid #ff6b35;
         }
-        /* Clearfix para contenedores con floats */
+        /* clearfix para contenedores con floats */
         .clearfix::after {
             content: "";
             display: table;
@@ -331,7 +329,6 @@
         </div>
     </div>
 
-    <!-- Barra de herramientas con floats -->
     <div class="toolbar clearfix">
         <div class="search-wrapper">
             <input type="text" id="searchInput" placeholder="Buscar tema...">
@@ -350,12 +347,10 @@
         <div class="stats" id="stats">cargando...</div>
     </div>
 
-    <!-- Grid con float left -->
-    <div id="themeGrid" class="grid clearfix">
+    <div id="themeGrid" class="grid">
         <div class="loading">⌛ cargando temas...</div>
     </div>
 
-    <!-- Botón cargar más -->
     <div class="load-more" id="loadMoreContainer" style="display: none;">
         <button class="btn btn-primary" id="loadMoreBtn">+ cargar más</button>
     </div>
@@ -370,14 +365,7 @@
     </div>
 
     <script>
-        // Código JavaScript sin cambios, pero asegurando que no se use flexbox
-        // ... (el mismo script que antes, pero lo mantendremos igual, solo cambiamos CSS)
-        // [El script es idéntico al de la respuesta anterior, pero lo incluyo completo para que funcione]
-        // (Por brevedad, no repito todo el script aquí, pero debes mantener el que ya funcionaba)
-        // IMPORTANTE: El script debe ser el mismo que el de la respuesta anterior.
-    </script>
-    <!-- Por completitud, incluyo el script (exactamente igual que antes) -->
-    <script>
+        // (El script es el mismo que antes, pero lo incluyo completo por si acaso)
         // Polyfill para trim
         if (typeof String.prototype.trim !== 'function') {
             String.prototype.trim = function() {
@@ -651,7 +639,7 @@
                         if (genre) {
                             currentGenreFilter = genre;
                             activeFilterLabel.innerHTML = 'Género: ' + genre;
-                            filterIndicator.style.display = 'block'; // mostramos el indicador
+                            filterIndicator.style.display = 'block';
                             aplicarFiltros();
                         }
                         e.stopPropagation();
