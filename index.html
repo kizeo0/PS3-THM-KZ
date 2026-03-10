@@ -1,21 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>PS3 · temas p3t</title>
+    <style>
+        /* RESET SEGURO PARA PS3 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0f17;
+            color: #e0e5f0;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.5;
+            padding: 20px 0;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .main-container {
+            width: 1400px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .header {
+            overflow: hidden;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #ff6b35;
+            padding-bottom: 20px;
+        }
+
+        .logo-img {
+            height: 100px;
+            width: auto;
+            filter: drop-shadow(0 0 10px #ff6b35);
+            float: left;
+            display: block;
+            cursor: pointer;
+        }
+
+        .social-container {
+            float: right;
+            background: #0a1a2a;
+            padding: 10px 30px;
+            border-radius: 60px;
+            border: 2px solid #ff6b35;
+        }
+
+        .social-icon {
+            width: 64px;
+            height: 64px;
+            background: #0a1a2a;
+            border-radius: 18px;
+            padding: 8px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .toolbar {
+            background: #0a1a2a;
+            padding: 16px 25px;
+            border-radius: 60px;
+            margin: 0 0 30px 0;
+            border-left: 5px solid #ff6b35;
+            box-shadow: 0 10px 20px #00000080;
+            overflow: hidden;
+        }
+
+        .search-wrapper {
+            float: left;
+            white-space: nowrap;
+        }
+
+        .search-wrapper input {
+            width: 250px;
+            padding: 14px 18px;
+            background: #0b1a2a;
+            border: 2px solid #1e3b4f;
+            border-radius: 60px;
+            color: white;
+            font-size: 1rem;
+            vertical-align: middle;
+        }
+
+        .dice-btn {
+            display: inline-block;
+            width: 52px;
+            height: 52px;
+            margin-left: 8px;
+            background: #1e3b4f;
+            border: 2px solid #ff6b35;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 52px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        .dice-img {
+            width: 32px;
+            height: 32px;
+            vertical-align: middle;
+        }
+
+        .sort-buttons {
+            float: left;
+            margin-left: 20px;
+        }
+
+        .sort-btn {
+            background: transparent;
+            border: 2px solid #1e3b4f;
+            color: #c9d9e8;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .sort-btn.active {
+            background: #ff6b35;
+            color: #0b0f17;
+        }
+
+        .stats {
+            float: right;
+            color: #9ab8d9;
+            line-height: 52px;
+        }
+
+        .grid {
+            margin: 20px 0;
+            font-size: 0;
+            text-align: center;
+        }
+
+        .theme-card {
+            width: 290px;
+            background: #0e1727;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #1f3a4c;
+            display: inline-block;
+            vertical-align: top;
+            margin: 5px;
+            font-size: 16px;
+            text-align: left;
+            box-shadow: 0 10px 18px #00000080;
+        }
+
+        .preview {
+            width: 100%;
+            background: #03070f;
+            text-align: center;
+            border-bottom: 3px solid #ff6b35;
+            height: 300px;
+            line-height: 300px;
+        }
+
+        .preview img {
+            max-width: 100%;
+            max-height: 100%;
+            vertical-align: middle;
+        }
+
+        .card-info {
+            padding: 18px 15px;
+        }
+
+        .theme-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+            height: 2.8em;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .theme-genre {
+            background: #122b3b;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: #ffb28c;
+            margin-bottom: 18px;
+            display: inline-block;
+            border: 1px solid #ff6b3540;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .theme-genre:hover {
+            background: #1e3f55;
+            border-color: #ff6b35;
+        }
+
+        .download-btn {
+            background: #ff6b35;
+            color: #0b0f17;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 14px;
+            border-radius: 50px;
+            text-align: center;
+            display: block;
+            text-transform: uppercase;
+            border-bottom: 4px solid #a03d1e;
+        }
+
+        .load-more {
+            text-align: center;
+            margin: 30px 0;
+            clear: both;
+        }
+
+        .btn-primary {
+            background: #ff6b35;
+            color: #0b0f17;
+            padding: 15px 60px;
+            border-radius: 60px;
+            font-weight: bold;
+            border: 2px solid #ff9f7b;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .footer {
+            margin: 60px 0 30px 0;
+            border-top: 3px solid #ff6b3540;
+            padding-top: 25px;
+            color: #b0c8e0;
+            overflow: hidden;
+            font-size: 1.4rem;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="header clearfix">
+        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" id="logoPrincipal" onclick="volverInicio()" onerror="this.style.display='none'">
+        <div class="social-container">
+            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon" onerror="this.style.display='none'"></a>
+            <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon" onerror="this.style.display='none'"></a>
+            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" alt="X" class="social-icon" onerror="this.style.display='none'"></a>
+        </div>
+    </div>
+
+    <div class="toolbar clearfix">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Buscar tema..." oninput="buscarTemas()">
+            <div class="dice-btn" id="randomBtn" onclick="modoAleatorio()">
+                <img src="recursos/dado.png" alt="D" class="dice-img" onerror="this.style.display='none'">
+            </div>
+        </div>
+        <div class="sort-buttons">
+            <button class="sort-btn" id="sortAZ" onclick="ordenarAZ()">A-Z</button>
+            <button class="sort-btn" id="sortZA" onclick="ordenarZA()">Z-A</button>
+        </div>
+        <div class="stats" id="stats">...</div>
+    </div>
+
+    <div id="themeGrid" class="grid">
+        <div style="text-align:center; padding:50px; color:#ffb28c; font-size:20px;">⌛ Cargando temas para PS3...</div>
+    </div>
+
+    <div class="load-more" id="loadMoreContainer" style="display: none;">
+        <button class="btn-primary" id="loadMoreBtn" onclick="cargarMas()">+ Cargar más temas</button>
+    </div>
+
+    <div class="footer clearfix">
+        <span style="float:left">© PS3 · Temas P3T</span>
+        <span style="float:right">kizeo0</span>
+    </div>
+</div>
+
 <script>
     var JSON_URL = 'temas_ps3_conlinks.json';
-    
-    // Lista de carpetas. Solo añade el link de GitHub en las comillas vacías cuando los tengas.
-    var PREVIEW_FOLDERS = [
-        'previews1/',                                                               // Índice 0
-        'previews2/',                                                               // Índice 1
-        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',   // Índice 2 (GitHub)
-        '', // Espacio para preview4 (Índice 3)
-        '', // Espacio para preview5 (Índice 4)
-        '', // Espacio para preview6 (Índice 5)
-        '', // Espacio para preview7 (Índice 6)
-        '', // Espacio para preview8 (Índice 7)
-        '', // Espacio para preview9 (Índice 8)
-        ''  // Espacio para preview10 (Índice 9)
-    ];
-
+    var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
     var PAGE_SIZE = 16;
+
     var allThemes = [];
     var filteredThemes = [];
     var currentSort = 'none';
@@ -26,42 +301,55 @@
     var statsDiv = document.getElementById('stats');
     var loadMoreContainer = document.getElementById('loadMoreContainer');
     var searchInput = document.getElementById('searchInput');
+    var sortAZ = document.getElementById('sortAZ');
+    var sortZA = document.getElementById('sortZA');
 
-    // Función compatible con PS3 para intentar cargar imagen de otra carpeta si falla
-    window.intentarSiguiente = function(imgElement, currentIndex, imgName) {
-        var nextIndex = currentIndex + 1;
-        if (nextIndex < PREVIEW_FOLDERS.length && PREVIEW_FOLDERS[nextIndex] !== "") {
-            imgElement.src = PREVIEW_FOLDERS[nextIndex] + imgName;
-            imgElement.onerror = function() { 
-                window.intentarSiguiente(imgElement, nextIndex, imgName); 
-            };
-        } else {
-            imgElement.style.display = 'none';
-        }
-    };
-
-    // Carga de datos compatible con el navegador de PS3
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var data = JSON.parse(xhr.responseText);
-            for (var i = 0; i < data.length; i++) {
-                var item = data[i];
-                allThemes.push({
-                    archivo: item.archivo,
-                    descarga: item.descarga,
-                    genero: item.genero || 'Otro',
-                    nombre: item.archivo.replace(/\.p3t$/i, ''),
-                    // Si el JSON no tiene preview_idx, usamos 0 por defecto
-                    p_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
-                });
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                try {
+                    var data = eval('(' + xhr.responseText + ')');
+                    allThemes = data.map(function(item) {
+                        return {
+                            archivo: item.archivo,
+                            descarga: item.descarga,
+                            genero: item.genero || 'Otro',
+                            nombre: item.archivo.replace(/\.p3t$/i, '')
+                        };
+                    });
+                    filteredThemes = allThemes.slice();
+                    render(true);
+                } catch (e) {
+                    grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar los temas.</div>';
+                }
+            } else {
+                grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">No se pudo cargar la lista de temas.</div>';
             }
-            filteredThemes = allThemes.slice();
-            render(true);
         }
     };
     xhr.send();
+
+    function aplicarFiltros() {
+        var search = searchInput.value.toLowerCase();
+        filteredThemes = [];
+        for (var i = 0; i < allThemes.length; i++) {
+            var tema = allThemes[i];
+            var nombreMatch = tema.nombre.toLowerCase().indexOf(search) !== -1;
+            var generoMatch = (currentGenre === '') || (tema.genero.toLowerCase() === currentGenre.toLowerCase());
+            if (nombreMatch && generoMatch) {
+                filteredThemes.push(tema);
+            }
+        }
+        if (currentSort === 'az') {
+            filteredThemes.sort(function(a, b) { return a.nombre.localeCompare(b.nombre); });
+        } else if (currentSort === 'za') {
+            filteredThemes.sort(function(a, b) { return b.nombre.localeCompare(a.nombre); });
+        }
+        currentPage = 0;
+        render(true);
+    }
 
     function render(reset) {
         if (reset) { grid.innerHTML = ''; }
@@ -71,15 +359,17 @@
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            var imgName = encodeURI(t.nombre + '.png').replace(/'/g, "%27");
             
-            // Determinar carpeta inicial
-            var folderBase = PREVIEW_FOLDERS[t.p_idx] || PREVIEW_FOLDERS[0];
+            /* SOLUCIÓN: 
+               1. encodeURI convierte espacios y símbolos (como ™) en formato web.
+               2. .replace(/'/g, "%27") convierte la comilla simple en %27. 
+                  Esto evita que la comilla rompa el atributo 'onerror' de la imagen.
+            */
+            var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27");
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
-                            '<img src="' + folderBase + imgName + '" ' +
-                            'onerror="window.intentarSiguiente(this, ' + t.p_idx + ', \'' + imgName + '\')">' +
+                            '<img src="' + PREVIEW_FOLDERS[0] + img + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}">' +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="theme-name">' + t.nombre + '</div>' +
@@ -94,5 +384,48 @@
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // Mantén el resto de tus funciones (buscarTemas, filtrarPorGenero, etc.) igual que las tenías originalmente
+    window.filtrarPorGenero = function(genero) {
+        currentGenre = genero;
+        searchInput.value = '';
+        currentSort = 'none';
+        sortAZ.className = 'sort-btn';
+        sortZA.className = 'sort-btn';
+        aplicarFiltros();
+    };
+
+    window.volverInicio = function() {
+        searchInput.value = '';
+        currentGenre = '';
+        currentSort = 'none';
+        sortAZ.className = 'sort-btn';
+        sortZA.className = 'sort-btn';
+        filteredThemes = allThemes.slice();
+        currentPage = 0;
+        render(true);
+    };
+
+    window.modoAleatorio = function() {
+        searchInput.value = '';
+        currentGenre = '';
+        currentSort = 'none';
+        sortAZ.className = 'sort-btn';
+        sortZA.className = 'sort-btn';
+        var shuffled = allThemes.slice();
+        for (var i = shuffled.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = shuffled[i];
+            shuffled[i] = shuffled[j];
+            shuffled[j] = temp;
+        }
+        filteredThemes = shuffled;
+        currentPage = 0;
+        render(true);
+    };
+
+    window.cargarMas = function() { currentPage++; render(false); };
+    window.buscarTemas = function() { currentGenre = ''; aplicarFiltros(); };
+    window.ordenarAZ = function() { currentSort = 'az'; sortAZ.className = 'sort-btn active'; sortZA.className = 'sort-btn'; aplicarFiltros(); };
+    window.ordenarZA = function() { currentSort = 'za'; sortZA.className = 'sort-btn active'; sortAZ.className = 'sort-btn'; aplicarFiltros(); };
 </script>
+</body>
+</html>
