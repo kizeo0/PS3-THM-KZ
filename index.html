@@ -287,8 +287,23 @@
 </div>
 
 <script>
+    // CONFIGURACIÓN
     var JSON_URL = 'temas_ps3_conlinks.json';
-    var PREVIEW_FOLDERS = ['previews1/', 'previews2/'];
+
+    // SECCIÓN DE ENLACES: Aquí puedes gestionar tus carpetas de previews (locales o GitHub)
+    var PREVIEW_FOLDERS = [
+        'previews1/',                                                                 // Índice 0 (Local)
+        'previews2/',                                                                 // Índice 1 (Local)
+        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',    // Índice 2 (GitHub Cloud 1)
+        '', // Espacio para preview4 (Índice 3)
+        '', // Espacio para preview5 (Índice 4)
+        '', // Espacio para preview6 (Índice 5)
+        '', // Espacio para preview7 (Índice 6)
+        '', // Espacio para preview8 (Índice 7)
+        '', // Espacio para preview9 (Índice 8)
+        ''  // Espacio para preview10 (Índice 9)
+    ];
+
     var PAGE_SIZE = 16;
 
     var allThemes = [];
@@ -304,6 +319,23 @@
     var sortAZ = document.getElementById('sortAZ');
     var sortZA = document.getElementById('sortZA');
 
+    // Función de ayuda para buscar la imagen en otras carpetas si falla
+    function intentarSiguienteCarpeta(imgElement, currentIndex, imgName) {
+        var nextIndex = currentIndex + 1;
+        // Solo intentamos si hay más carpetas definidas y no están vacías
+        if (nextIndex < PREVIEW_FOLDERS.length && PREVIEW_FOLDERS[nextIndex] !== "") {
+            imgElement.src = PREVIEW_FOLDERS[nextIndex] + imgName;
+            // Si vuelve a fallar, llamamos a esta misma función con el siguiente índice
+            imgElement.onerror = function() { 
+                intentarSiguienteCarpeta(imgElement, nextIndex, imgName); 
+            };
+        } else {
+            // Si ya no hay más carpetas, ocultamos la imagen
+            imgElement.style.display = 'none';
+        }
+    }
+
+    // Carga del JSON
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
@@ -316,13 +348,15 @@
                             archivo: item.archivo,
                             descarga: item.descarga,
                             genero: item.genero || 'Otro',
-                            nombre: item.archivo.replace(/\.p3t$/i, '')
+                            nombre: item.archivo.replace(/\.p3t$/i, ''),
+                            // preview_idx viene desde el script de Python (por defecto 0)
+                            preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
                         };
                     });
                     filteredThemes = allThemes.slice();
                     render(true);
                 } catch (e) {
-                    grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar los temas.</div>';
+                    grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar el archivo de temas.</div>';
                 }
             } else {
                 grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">No se pudo cargar la lista de temas.</div>';
@@ -331,6 +365,7 @@
     };
     xhr.send();
 
+    // Función que aplica filtros (búsqueda y género) y ordenación
     function aplicarFiltros() {
         var search = searchInput.value.toLowerCase();
         filteredThemes = [];
@@ -351,6 +386,7 @@
         render(true);
     }
 
+    // Renderizado de las tarjetas
     function render(reset) {
         if (reset) { grid.innerHTML = ''; }
         var start = currentPage * PAGE_SIZE;
@@ -359,17 +395,17 @@
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            
-            /* SOLUCIÓN: 
-               1. encodeURI convierte espacios y símbolos (como ™) en formato web.
-               2. .replace(/'/g, "%27") convierte la comilla simple en %27. 
-                  Esto evita que la comilla rompa el atributo 'onerror' de la imagen.
-            */
+            // Codificamos el nombre del archivo y escapamos comillas simples para el onerror
             var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27");
+            
+            // Usamos el índice específico del tema o el 0 por defecto
+            var startIdx = t.preview_idx;
+            var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
-                            '<img src="' + PREVIEW_FOLDERS[0] + img + '" onerror="this.src=\'' + PREVIEW_FOLDERS[1] + img + '\'; this.onerror=function(){this.style.display=\'none\';}">' +
+                            '<img src="' + folderBase + img + '" ' +
+                            'onerror="intentarSiguienteCarpeta(this, ' + startIdx + ', \'' + img + '\')">' +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="theme-name">' + t.nombre + '</div>' +
@@ -384,6 +420,7 @@
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
+    // Funciones globales (usadas en onclick)
     window.filtrarPorGenero = function(genero) {
         currentGenre = genero;
         searchInput.value = '';
@@ -422,10 +459,29 @@
         render(true);
     };
 
-    window.cargarMas = function() { currentPage++; render(false); };
-    window.buscarTemas = function() { currentGenre = ''; aplicarFiltros(); };
-    window.ordenarAZ = function() { currentSort = 'az'; sortAZ.className = 'sort-btn active'; sortZA.className = 'sort-btn'; aplicarFiltros(); };
-    window.ordenarZA = function() { currentSort = 'za'; sortZA.className = 'sort-btn active'; sortAZ.className = 'sort-btn'; aplicarFiltros(); };
+    window.cargarMas = function() { 
+        currentPage++; 
+        render(false); 
+    };
+
+    window.buscarTemas = function() { 
+        currentGenre = ''; 
+        aplicarFiltros(); 
+    };
+
+    window.ordenarAZ = function() { 
+        currentSort = 'az'; 
+        sortAZ.className = 'sort-btn active'; 
+        sortZA.className = 'sort-btn'; 
+        aplicarFiltros(); 
+    };
+
+    window.ordenarZA = function() { 
+        currentSort = 'za'; 
+        sortZA.className = 'sort-btn active'; 
+        sortAZ.className = 'sort-btn'; 
+        aplicarFiltros(); 
+    };
 </script>
 </body>
 </html>
