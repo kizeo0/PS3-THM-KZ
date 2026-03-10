@@ -1,11 +1,11 @@
 <script>
     var JSON_URL = 'temas_ps3_conlinks.json';
     
-    // SECCIÓN DE ENLACES: Aquí puedes gestionar tus cuentas de GitHub
+    // Lista de carpetas. Solo añade el link de GitHub en las comillas vacías cuando los tengas.
     var PREVIEW_FOLDERS = [
-        'previews1/',                                                                 // Índice 0 (Local)
-        'previews2/',                                                                 // Índice 1 (Local)
-        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',    // Índice 2 (GitHub Cloud 1)
+        'previews1/',                                                               // Índice 0
+        'previews2/',                                                               // Índice 1
+        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',   // Índice 2 (GitHub)
         '', // Espacio para preview4 (Índice 3)
         '', // Espacio para preview5 (Índice 4)
         '', // Espacio para preview6 (Índice 5)
@@ -27,45 +27,38 @@
     var loadMoreContainer = document.getElementById('loadMoreContainer');
     var searchInput = document.getElementById('searchInput');
 
-    // Función de ayuda para buscar la imagen en otras carpetas si falla
-    function intentarSiguienteCarpeta(imgElement, currentIndex, imgName) {
+    // Función compatible con PS3 para intentar cargar imagen de otra carpeta si falla
+    window.intentarSiguiente = function(imgElement, currentIndex, imgName) {
         var nextIndex = currentIndex + 1;
-        // Solo intentamos si hay más carpetas definidas y no están vacías
         if (nextIndex < PREVIEW_FOLDERS.length && PREVIEW_FOLDERS[nextIndex] !== "") {
             imgElement.src = PREVIEW_FOLDERS[nextIndex] + imgName;
-            // Si vuelve a fallar, llamamos a esta misma función con el siguiente índice
             imgElement.onerror = function() { 
-                intentarSiguienteCarpeta(imgElement, nextIndex, imgName); 
+                window.intentarSiguiente(imgElement, nextIndex, imgName); 
             };
         } else {
-            // Si ya no hay más carpetas, ocultamos la imagen
             imgElement.style.display = 'none';
         }
-    }
+    };
 
+    // Carga de datos compatible con el navegador de PS3
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                try {
-                    var data = eval('(' + xhr.responseText + ')');
-                    allThemes = data.map(function(item) {
-                        return {
-                            archivo: item.archivo,
-                            descarga: item.descarga,
-                            genero: item.genero || 'Otro',
-                            nombre: item.archivo.replace(/\.p3t$/i, ''),
-                            // Capturamos el índice que pone tu script de Python
-                            preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
-                        };
-                    });
-                    filteredThemes = allThemes.slice();
-                    render(true);
-                } catch (e) {
-                    grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar el archivo de temas.</div>';
-                }
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                allThemes.push({
+                    archivo: item.archivo,
+                    descarga: item.descarga,
+                    genero: item.genero || 'Otro',
+                    nombre: item.archivo.replace(/\.p3t$/i, ''),
+                    // Si el JSON no tiene preview_idx, usamos 0 por defecto
+                    p_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
+                });
             }
+            filteredThemes = allThemes.slice();
+            render(true);
         }
     };
     xhr.send();
@@ -78,16 +71,15 @@
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27");
+            var imgName = encodeURI(t.nombre + '.png').replace(/'/g, "%27");
             
-            // Usamos el índice específico del tema o el 0 por defecto
-            var startIdx = t.preview_idx;
-            var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
+            // Determinar carpeta inicial
+            var folderBase = PREVIEW_FOLDERS[t.p_idx] || PREVIEW_FOLDERS[0];
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
-                            '<img src="' + folderBase + img + '" ' +
-                            'onerror="intentarSiguienteCarpeta(this, ' + startIdx + ', \'' + img + '\')">' +
+                            '<img src="' + folderBase + imgName + '" ' +
+                            'onerror="window.intentarSiguiente(this, ' + t.p_idx + ', \'' + imgName + '\')">' +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="theme-name">' + t.nombre + '</div>' +
@@ -102,5 +94,5 @@
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // ... (El resto de tus funciones como buscarTemas, ordenarAZ, etc. se mantienen igual) ...
+    // Mantén el resto de tus funciones (buscarTemas, filtrarPorGenero, etc.) igual que las tenías originalmente
 </script>
