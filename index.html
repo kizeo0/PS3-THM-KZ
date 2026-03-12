@@ -410,7 +410,8 @@
     }
 
     function aplicarFiltros() {
-        var search = searchInput.value.toLowerCase();
+        // CORRECCIÓN: Se agrega .trim() para ignorar espacios accidentales al final o principio
+        var search = searchInput.value.toLowerCase().trim();
         filteredThemes = [];
         
         for (var i = 0; i < allThemes.length; i++) {
@@ -456,14 +457,13 @@
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            // La variable 'img' mantiene el nombre original para no romper el enlace con la preview
+            // CORRECCIÓN ANTERIOR: Soporte para '&' en URLs de previews
             var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27").replace(/&/g, "%26");
             var startIdx = t.preview_idx;
             var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
 
-            // CREACIÓN DEL NOMBRE LIMPIO (Solo para mostrar en pantalla)
-            // Esto elimina "(nombre igual)", "PKG" y "pkg" del texto visible
-            var nombreVisible = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
+            // CORRECCIÓN ANTERIOR: Ocultar texto innecesario en el nombre visual
+            var nombreVisible = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "").trim();
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
