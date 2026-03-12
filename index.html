@@ -14,7 +14,7 @@
         body {
             background: #0b0f17;
             color: #e0e5f0;
-            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            font-family: Arial, sans-serif; /* Fuente estándar para PS3 */
             line-height: 1.5;
             padding: 20px 0;
             min-height: 100vh;
@@ -22,7 +22,7 @@
         }
 
         .main-container {
-            width: 1400px;
+            width: 1000px; /* Reducido para mejor visualización en TV */
             margin: 0 auto;
             text-align: left;
         }
@@ -35,9 +35,8 @@
         }
 
         .logo-img {
-            height: 100px;
+            height: 80px;
             width: auto;
-            filter: drop-shadow(0 0 10px #ff6b35);
             float: left;
             display: block;
             cursor: pointer;
@@ -46,82 +45,77 @@
         .social-container {
             float: right;
             background: #0a1a2a;
-            padding: 10px 30px;
-            border-radius: 60px;
+            padding: 10px 20px;
+            border-radius: 30px;
             border: 2px solid #ff6b35;
         }
 
         .social-icon {
-            width: 64px;
-            height: 64px;
-            background: #0a1a2a;
-            border-radius: 18px;
-            padding: 8px;
+            width: 48px;
+            height: 48px;
+            margin: 0 5px;
             display: inline-block;
             vertical-align: middle;
         }
 
         .toolbar {
             background: #0a1a2a;
-            padding: 16px 25px;
-            border-radius: 60px;
+            padding: 15px;
+            border-radius: 40px;
             margin: 0 0 30px 0;
             border-left: 5px solid #ff6b35;
-            box-shadow: 0 10px 20px #00000080;
             overflow: hidden;
         }
 
         .search-wrapper {
             float: left;
-            white-space: nowrap;
         }
 
         .search-wrapper input {
-            width: 250px;
-            padding: 14px 18px;
+            width: 200px;
+            padding: 10px 15px;
             background: #0b1a2a;
             border: 2px solid #1e3b4f;
-            border-radius: 60px;
+            border-radius: 20px;
             color: white;
-            font-size: 1rem;
             vertical-align: middle;
         }
 
         .dice-btn {
             display: inline-block;
-            width: 52px;
-            height: 52px;
+            width: 42px;
+            height: 42px;
             margin-left: 8px;
             background: #1e3b4f;
             border: 2px solid #ff6b35;
             border-radius: 50%;
             text-align: center;
-            line-height: 52px;
+            line-height: 42px;
             cursor: pointer;
             vertical-align: middle;
         }
 
         .dice-img {
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             vertical-align: middle;
         }
 
         .sort-buttons {
             float: left;
-            margin-left: 20px;
+            margin-left: 15px;
         }
 
         .sort-btn {
-            background: transparent;
-            border: 2px solid #1e3b4f;
+            background: #1e3b4f;
+            border: 1px solid #ff6b35;
             color: #c9d9e8;
-            padding: 12px 20px;
-            border-radius: 40px;
-            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px;
             cursor: pointer;
             display: inline-block;
-            margin-right: 8px;
+            margin-right: 5px;
+            font-size: 14px;
         }
 
         .sort-btn.active {
@@ -129,49 +123,39 @@
             color: #0b0f17;
         }
 
-        /* Estilo para el botón de filtro adultos */
-        .btn-adult {
-            border-color: #ff3535;
-            color: #ff9b9b;
-        }
-        .btn-adult.active {
-            background: #ff3535;
-            color: white;
-        }
+        .btn-adult { border-color: #ff3535; color: #ff9b9b; }
+        .btn-adult.active { background: #ff3535; color: white; }
 
         .stats {
             float: right;
             color: #9ab8d9;
-            line-height: 52px;
+            line-height: 42px;
         }
 
         .grid {
             margin: 20px 0;
-            font-size: 0;
             text-align: center;
         }
 
         .theme-card {
-            width: 290px;
+            width: 230px; /* Más compacto para PS3 */
             background: #0e1727;
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
             border: 1px solid #1f3a4c;
             display: inline-block;
             vertical-align: top;
-            margin: 5px;
-            font-size: 16px;
+            margin: 8px;
             text-align: left;
-            box-shadow: 0 10px 18px #00000080;
         }
 
         .preview {
             width: 100%;
             background: #03070f;
             text-align: center;
-            border-bottom: 3px solid #ff6b35;
-            height: 300px;
-            line-height: 300px;
+            border-bottom: 2px solid #ff6b35;
+            height: 180px;
+            line-height: 180px;
         }
 
         .preview img {
@@ -180,34 +164,26 @@
             vertical-align: middle;
         }
 
-        .card-info {
-            padding: 18px 15px;
-        }
+        .card-info { padding: 12px; }
 
         .theme-name {
-            font-weight: 600;
-            font-size: 1.1rem;
+            font-weight: bold;
+            font-size: 14px;
             color: #fff;
-            height: 2.8em;
+            height: 3em;
             overflow: hidden;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .theme-genre {
             background: #122b3b;
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
             color: #ffb28c;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             display: inline-block;
             border: 1px solid #ff6b3540;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .theme-genre:hover {
-            background: #1e3f55;
-            border-color: #ff6b35;
         }
 
         .download-btn {
@@ -215,64 +191,52 @@
             color: #0b0f17;
             text-decoration: none;
             font-weight: bold;
-            padding: 14px;
-            border-radius: 50px;
+            padding: 10px;
+            border-radius: 20px;
             text-align: center;
             display: block;
-            text-transform: uppercase;
-            border-bottom: 4px solid #a03d1e;
+            font-size: 13px;
         }
 
-        .load-more {
-            text-align: center;
-            margin: 30px 0;
-            clear: both;
-        }
+        .load-more { text-align: center; margin: 30px 0; clear: both; }
 
         .btn-primary {
             background: #ff6b35;
             color: #0b0f17;
-            padding: 15px 60px;
-            border-radius: 60px;
+            padding: 12px 40px;
+            border-radius: 30px;
             font-weight: bold;
-            border: 2px solid #ff9f7b;
             cursor: pointer;
-            font-size: 1.2rem;
         }
 
         .footer {
-            margin: 60px 0 30px 0;
-            border-top: 3px solid #ff6b3540;
-            padding-top: 25px;
+            margin: 40px 0;
+            border-top: 1px solid #ff6b3540;
+            padding-top: 20px;
             color: #b0c8e0;
-            overflow: hidden;
-            font-size: 1.4rem;
+            font-size: 18px;
         }
 
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
+        .clearfix::after { content: ""; display: table; clear: both; }
     </style>
 </head>
 <body>
 
 <div class="main-container">
     <div class="header clearfix">
-        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" id="logoPrincipal" onclick="volverInicio()" onerror="this.style.display='none'">
+        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" id="logoPrincipal" onclick="volverInicio()">
         <div class="social-container">
-            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon" onerror="this.style.display='none'"></a>
-            <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon" onerror="this.style.display='none'"></a>
-            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" alt="X" class="social-icon" onerror="this.style.display='none'"></a>
+            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon"></a>
+            <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon"></a>
+            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" alt="X" class="social-icon"></a>
         </div>
     </div>
 
     <div class="toolbar clearfix">
         <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Buscar tema..." oninput="buscarTemas()">
-            <div class="dice-btn" id="randomBtn" onclick="modoAleatorio()">
-                <img src="recursos/dado.png" alt="D" class="dice-img" onerror="this.style.display='none'">
+            <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="buscarTemas()">
+            <div class="dice-btn" onclick="modoAleatorio()">
+                <img src="recursos/dado.png" alt="D" class="dice-img">
             </div>
         </div>
         <div class="sort-buttons">
@@ -284,11 +248,11 @@
     </div>
 
     <div id="themeGrid" class="grid">
-        <div style="text-align:center; padding:50px; color:#ffb28c; font-size:20px;">Cargando temas para PS3...</div>
+        <div style="padding:50px; color:#ffb28c;">Cargando base de datos...</div>
     </div>
 
     <div class="load-more" id="loadMoreContainer" style="display: none;">
-        <button class="btn-primary" id="loadMoreBtn" onclick="cargarMas()">+ Cargar más temas</button>
+        <button class="btn-primary" onclick="cargarMas()">Ver más temas</button>
     </div>
 
     <div class="footer clearfix">
@@ -298,67 +262,40 @@
 </div>
 
 <script>
-    // ==========================================
-    // SECCIÓN DE CONFIGURACIÓN (FÁCIL DE EDITAR)
-    // ==========================================
-    
+    // CONFIGURACIÓN
     var JSON_URL = 'temas_ps3_conlinks.json';
-    
-    // Agrega aquí todas las palabras que quieras que activen el filtro +18
-    var PALABRAS_ADULTO = [
-        'adult', 
-        '18+', 
-        'girls/adult', 
-        'girl', 
-        'harem', 
-        'sexy', 
-        'ecchi', 
-        'hentai',
-        'Gilr',
-        'Girls',
-        'Babes',
-        'babes',
-        'People',
-        'Harem',
-        'Comics/Harem',
-        'Sexy',
-        'sexy',
-    ];
-
-    var PAGE_SIZE = 16;
-
+    var PAGE_SIZE = 12; // Reducido para RAM de PS3
+    var PALABRAS_ADULTO = ['adult','18+','girls/adult','girl','sexy','ecchi','hentai','babes','harem'];
     var PREVIEW_FOLDERS = [
-        'previews1/', 
-        'previews2/', 
+        'previews1/', 'previews2/', 
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
-        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud1/main/previews4/',
-        '', '', '', '', '', ''
+        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud1/main/previews4/'
     ];
 
-    // ==========================================
-    // LÓGICA DEL SISTEMA
-    // ==========================================
-
+    // VARIABLES GLOBALES
     var allThemes = [];
     var filteredThemes = [];
     var currentSort = 'none';
     var currentPage = 0;
     var currentGenre = '';
-    
-    // Cargar preferencia del usuario (por defecto oculto)
-    var mostrarContenidoAdulto = localStorage.getItem('ps3_adult_filter') === 'true';
+    var mostrarContenidoAdulto = false;
 
+    // Elementos DOM
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
     var loadMoreContainer = document.getElementById('loadMoreContainer');
     var searchInput = document.getElementById('searchInput');
-    var sortAZ = document.getElementById('sortAZ');
-    var sortZA = document.getElementById('sortZA');
     var adultBtn = document.getElementById('adultBtn');
+
+    // Inicialización segura de preferencia
+    try {
+        var pref = localStorage.getItem('ps3_adult_filter');
+        mostrarContenidoAdulto = (pref === 'true');
+    } catch(e) {}
 
     function intentarSiguienteCarpeta(imgElement, currentIndex, imgName) {
         var nextIndex = currentIndex + 1;
-        if (nextIndex < PREVIEW_FOLDERS.length && PREVIEW_FOLDERS[nextIndex] !== "") {
+        if (nextIndex < PREVIEW_FOLDERS.length) {
             imgElement.src = PREVIEW_FOLDERS[nextIndex] + imgName;
             imgElement.onerror = function() { intentarSiguienteCarpeta(imgElement, nextIndex, imgName); };
         } else {
@@ -366,35 +303,46 @@
         }
     }
 
-    // Carga inicial
+    // CARGA DE DATOS (AJAX COMPATIBLE)
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                var data = eval('(' + xhr.responseText + ')');
-                allThemes = data.map(function(item) {
-                    return {
-                        archivo: item.archivo,
-                        descarga: item.descarga,
-                        genero: item.genero || 'Otro',
-                        nombre: item.archivo.replace(/\.p3t$/i, ''),
-                        preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
-                    };
-                });
-                actualizarInterfazBoton();
-                aplicarFiltros();
-            } catch (e) {
-                grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar el JSON.</div>';
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 0) {
+                try {
+                    var data;
+                    if (window.JSON && window.JSON.parse) {
+                        data = JSON.parse(xhr.responseText);
+                    } else {
+                        data = eval('(' + xhr.responseText + ')');
+                    }
+                    
+                    allThemes = [];
+                    for(var i=0; i<data.length; i++) {
+                        var item = data[i];
+                        allThemes.push({
+                            archivo: item.archivo,
+                            descarga: item.descarga,
+                            genero: item.genero || 'Otro',
+                            nombre: item.archivo.replace(/\.p3t$/i, ''),
+                            preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
+                        });
+                    }
+                    actualizarInterfazBoton();
+                    aplicarFiltros();
+                } catch (e) {
+                    grid.innerHTML = '<div style="color:red;">Error de datos.</div>';
+                }
+            } else {
+                grid.innerHTML = '<div style="color:red;">No se pudo cargar el JSON.</div>';
             }
         }
     };
     xhr.send();
 
-    // Función para alternar el filtro
     window.toggleAdulto = function() {
         mostrarContenidoAdulto = !mostrarContenidoAdulto;
-        localStorage.setItem('ps3_adult_filter', mostrarContenidoAdulto);
+        try { localStorage.setItem('ps3_adult_filter', mostrarContenidoAdulto); } catch(e) {}
         actualizarInterfazBoton();
         aplicarFiltros();
     };
@@ -410,27 +358,22 @@
     }
 
     function aplicarFiltros() {
-        // CORRECCIÓN: Se agrega .trim() para ignorar espacios accidentales al final o principio
-        var search = searchInput.value.toLowerCase().trim();
+        var search = searchInput.value.toLowerCase();
         filteredThemes = [];
         
         for (var i = 0; i < allThemes.length; i++) {
             var tema = allThemes[i];
             var genLower = tema.genero.toLowerCase();
 
-            // Detectar si el tema es adulto basado en la lista de arriba
             var esTemaAdulto = false;
             for (var j = 0; j < PALABRAS_ADULTO.length; j++) {
-                if (genLower.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) {
+                if (genLower.indexOf(PALABRAS_ADULTO[j]) !== -1) {
                     esTemaAdulto = true;
                     break;
                 }
             }
 
-            // Si el filtro está apagado y es un tema adulto, lo saltamos
-            if (!mostrarContenidoAdulto && esTemaAdulto) {
-                continue;
-            }
+            if (!mostrarContenidoAdulto && esTemaAdulto) continue;
 
             var nombreMatch = tema.nombre.toLowerCase().indexOf(search) !== -1;
             var generoMatch = (currentGenre === '') || (genLower === currentGenre.toLowerCase());
@@ -441,86 +384,56 @@
         }
 
         if (currentSort === 'az') {
-            filteredThemes.sort(function(a, b) { return a.nombre.localeCompare(b.nombre); });
+            filteredThemes.sort(function(a, b) { return a.nombre < b.nombre ? -1 : 1; });
         } else if (currentSort === 'za') {
-            filteredThemes.sort(function(a, b) { return b.nombre.localeCompare(a.nombre); });
+            filteredThemes.sort(function(a, b) { return a.nombre > b.nombre ? -1 : 1; });
         }
         currentPage = 0;
         render(true);
     }
 
     function render(reset) {
-        if (reset) { grid.innerHTML = ''; }
+        if (reset) grid.innerHTML = '';
         var start = currentPage * PAGE_SIZE;
-        var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
+        var end = (start + PAGE_SIZE > filteredThemes.length) ? filteredThemes.length : start + PAGE_SIZE;
         var html = '';
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            // CORRECCIÓN ANTERIOR: Soporte para '&' en URLs de previews
-            var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27").replace(/&/g, "%26");
+            var imgName = encodeURI(t.nombre + '.png').replace(/'/g, "%27").replace(/&/g, "%26");
             var startIdx = t.preview_idx;
             var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
-
-            // CORRECCIÓN ANTERIOR: Ocultar texto innecesario en el nombre visual
-            var nombreVisible = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "").trim();
+            var nombreVisible = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
-                            '<img src="' + folderBase + img + '" ' +
-                            'onerror="intentarSiguienteCarpeta(this, ' + startIdx + ', \'' + img + '\')">' +
+                            '<img src="' + folderBase + imgName + '" ' +
+                            'onerror="intentarSiguienteCarpeta(this, ' + startIdx + ', \'' + imgName + '\')">' +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="theme-name">' + nombreVisible + '</div>' +
-                            '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.genero.replace(/'/g, "\\'") + '\')">' + t.genero + '</div>' +
+                            '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.genero + '\')">' + t.genero + '</div>' +
                             '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
                         '</div>' +
                     '</div>';
         }
 
-        if (reset) { grid.innerHTML = html; } else { grid.innerHTML += html; }
+        if (reset) grid.innerHTML = html; else grid.innerHTML += html;
         statsDiv.innerHTML = filteredThemes.length + ' temas';
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // Funciones globales de navegación
-    window.filtrarPorGenero = function(genero) {
-        currentGenre = genero;
-        searchInput.value = '';
-        currentSort = 'none';
-        sortAZ.className = 'sort-btn';
-        sortZA.className = 'sort-btn';
-        aplicarFiltros();
-    };
-
-    window.volverInicio = function() {
-        searchInput.value = '';
-        currentGenre = '';
-        currentSort = 'none';
-        sortAZ.className = 'sort-btn';
-        sortZA.className = 'sort-btn';
-        aplicarFiltros();
-    };
-
+    window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; aplicarFiltros(); };
+    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'none'; aplicarFiltros(); };
+    window.buscarTemas = function() { currentGenre = ''; aplicarFiltros(); };
+    window.cargarMas = function() { currentPage++; render(false); };
+    window.ordenarAZ = function() { currentSort = 'az'; aplicarFiltros(); };
+    window.ordenarZA = function() { currentSort = 'za'; aplicarFiltros(); };
     window.modoAleatorio = function() {
-        aplicarFiltros();
-        var shuffled = filteredThemes.slice();
-        for (var i = shuffled.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = shuffled[i];
-            shuffled[i] = shuffled[j];
-            shuffled[j] = temp;
-        }
-        filteredThemes = shuffled;
+        filteredThemes.sort(function() { return 0.5 - Math.random(); });
         currentPage = 0;
         render(true);
     };
-
-    window.cargarMas = function() { currentPage++; render(false); };
-    window.buscarTemas = function() { currentGenre = ''; aplicarFiltros(); };
-    window.ordenarAZ = function() { currentSort = 'az'; sortAZ.className = 'sort-btn active'; sortZA.className = 'sort-btn'; aplicarFiltros(); };
-    window.ordenarZA = function() { currentSort = 'za'; sortZA.className = 'sort-btn active'; sortAZ.className = 'sort-btn'; aplicarFiltros(); };
 </script>
 </body>
 </html>
-
