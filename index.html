@@ -14,7 +14,7 @@
         body {
             background: #0b0f17;
             color: #e0e5f0;
-            font-family: Arial, sans-serif; /* Fuente estándar para PS3 */
+            font-family: Arial, sans-serif;
             line-height: 1.5;
             padding: 20px 0;
             min-height: 100vh;
@@ -22,7 +22,7 @@
         }
 
         .main-container {
-            width: 1000px; /* Reducido para mejor visualización en TV */
+            width: 1400px; /* Recuperada la anchura horizontal anterior */
             margin: 0 auto;
             text-align: left;
         }
@@ -35,7 +35,7 @@
         }
 
         .logo-img {
-            height: 80px;
+            height: 100px;
             width: auto;
             float: left;
             display: block;
@@ -45,14 +45,14 @@
         .social-container {
             float: right;
             background: #0a1a2a;
-            padding: 10px 20px;
-            border-radius: 30px;
+            padding: 10px 30px;
+            border-radius: 60px;
             border: 2px solid #ff6b35;
         }
 
         .social-icon {
-            width: 48px;
-            height: 48px;
+            width: 64px;
+            height: 64px;
             margin: 0 5px;
             display: inline-block;
             vertical-align: middle;
@@ -60,8 +60,8 @@
 
         .toolbar {
             background: #0a1a2a;
-            padding: 15px;
-            border-radius: 40px;
+            padding: 16px 25px;
+            border-radius: 60px;
             margin: 0 0 30px 0;
             border-left: 5px solid #ff6b35;
             overflow: hidden;
@@ -72,50 +72,51 @@
         }
 
         .search-wrapper input {
-            width: 200px;
-            padding: 10px 15px;
+            width: 250px;
+            padding: 14px 18px;
             background: #0b1a2a;
             border: 2px solid #1e3b4f;
-            border-radius: 20px;
+            border-radius: 60px;
             color: white;
+            font-size: 1rem;
             vertical-align: middle;
         }
 
         .dice-btn {
             display: inline-block;
-            width: 42px;
-            height: 42px;
+            width: 52px;
+            height: 52px;
             margin-left: 8px;
             background: #1e3b4f;
             border: 2px solid #ff6b35;
             border-radius: 50%;
             text-align: center;
-            line-height: 42px;
+            line-height: 52px;
             cursor: pointer;
             vertical-align: middle;
         }
 
         .dice-img {
-            width: 24px;
-            height: 24px;
+            width: 32px;
+            height: 32px;
             vertical-align: middle;
         }
 
         .sort-buttons {
             float: left;
-            margin-left: 15px;
+            margin-left: 20px;
         }
 
         .sort-btn {
-            background: #1e3b4f;
-            border: 1px solid #ff6b35;
+            background: transparent;
+            border: 2px solid #1e3b4f;
             color: #c9d9e8;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-weight: 600;
             cursor: pointer;
             display: inline-block;
-            margin-right: 5px;
-            font-size: 14px;
+            margin-right: 8px;
         }
 
         .sort-btn.active {
@@ -123,13 +124,26 @@
             color: #0b0f17;
         }
 
-        .btn-adult { border-color: #ff3535; color: #ff9b9b; }
-        .btn-adult.active { background: #ff3535; color: white; }
+        /* Botón de género activo */
+        .btn-genre-active {
+            background: #1e3b4f;
+            border-color: #ffb28c;
+            color: #ffb28c;
+        }
+
+        .btn-adult {
+            border-color: #ff3535;
+            color: #ff9b9b;
+        }
+        .btn-adult.active {
+            background: #ff3535;
+            color: white;
+        }
 
         .stats {
             float: right;
             color: #9ab8d9;
-            line-height: 42px;
+            line-height: 52px;
         }
 
         .grid {
@@ -138,14 +152,14 @@
         }
 
         .theme-card {
-            width: 230px; /* Más compacto para PS3 */
+            width: 290px;
             background: #0e1727;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
             border: 1px solid #1f3a4c;
             display: inline-block;
             vertical-align: top;
-            margin: 8px;
+            margin: 15px;
             text-align: left;
         }
 
@@ -153,9 +167,9 @@
             width: 100%;
             background: #03070f;
             text-align: center;
-            border-bottom: 2px solid #ff6b35;
-            height: 180px;
-            line-height: 180px;
+            border-bottom: 3px solid #ff6b35;
+            height: 300px;
+            line-height: 300px;
         }
 
         .preview img {
@@ -164,26 +178,34 @@
             vertical-align: middle;
         }
 
-        .card-info { padding: 12px; }
+        .card-info {
+            padding: 18px 15px;
+        }
 
         .theme-name {
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 1.1rem;
             color: #fff;
-            height: 3em;
+            height: 2.8em;
             overflow: hidden;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .theme-genre {
             background: #122b3b;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
             color: #ffb28c;
-            margin-bottom: 12px;
+            margin-bottom: 18px;
             display: inline-block;
             border: 1px solid #ff6b3540;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .theme-genre:hover {
+            background: #1e3f55;
+            border-color: #ff6b35;
         }
 
         .download-btn {
@@ -191,40 +213,48 @@
             color: #0b0f17;
             text-decoration: none;
             font-weight: bold;
-            padding: 10px;
-            border-radius: 20px;
+            padding: 14px;
+            border-radius: 50px;
             text-align: center;
             display: block;
-            font-size: 13px;
+            text-transform: uppercase;
         }
 
-        .load-more { text-align: center; margin: 30px 0; clear: both; }
+        .load-more {
+            text-align: center;
+            margin: 30px 0;
+            clear: both;
+        }
 
         .btn-primary {
             background: #ff6b35;
             color: #0b0f17;
-            padding: 12px 40px;
-            border-radius: 30px;
+            padding: 15px 60px;
+            border-radius: 60px;
             font-weight: bold;
             cursor: pointer;
         }
 
         .footer {
-            margin: 40px 0;
-            border-top: 1px solid #ff6b3540;
-            padding-top: 20px;
+            margin: 60px 0 30px 0;
+            border-top: 3px solid #ff6b3540;
+            padding-top: 25px;
             color: #b0c8e0;
-            font-size: 18px;
+            font-size: 1.4rem;
         }
 
-        .clearfix::after { content: ""; display: table; clear: both; }
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     </style>
 </head>
 <body>
 
 <div class="main-container">
     <div class="header clearfix">
-        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" id="logoPrincipal" onclick="volverInicio()">
+        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onclick="volverInicio()">
         <div class="social-container">
             <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon"></a>
             <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon"></a>
@@ -234,7 +264,7 @@
 
     <div class="toolbar clearfix">
         <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="buscarTemas()">
+            <input type="text" id="searchInput" placeholder="Buscar tema..." onkeyup="buscarTemas()">
             <div class="dice-btn" onclick="modoAleatorio()">
                 <img src="recursos/dado.png" alt="D" class="dice-img">
             </div>
@@ -243,16 +273,17 @@
             <button class="sort-btn" id="sortAZ" onclick="ordenarAZ()">A-Z</button>
             <button class="sort-btn" id="sortZA" onclick="ordenarZA()">Z-A</button>
             <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
+            <button class="sort-btn btn-genre-active" id="genreActiveBtn" style="display:none;" onclick="volverInicio()"></button>
         </div>
         <div class="stats" id="stats">...</div>
     </div>
 
     <div id="themeGrid" class="grid">
-        <div style="padding:50px; color:#ffb28c;">Cargando base de datos...</div>
+        <div style="padding:50px; color:#ffb28c; font-size:20px;">Cargando temas...</div>
     </div>
 
     <div class="load-more" id="loadMoreContainer" style="display: none;">
-        <button class="btn-primary" onclick="cargarMas()">Ver más temas</button>
+        <button class="btn-primary" onclick="cargarMas()">+ Cargar más temas</button>
     </div>
 
     <div class="footer clearfix">
@@ -262,17 +293,15 @@
 </div>
 
 <script>
-    // CONFIGURACIÓN
     var JSON_URL = 'temas_ps3_conlinks.json';
-    var PAGE_SIZE = 12; // Reducido para RAM de PS3
-    var PALABRAS_ADULTO = ['adult','18+','girls/adult','girl','sexy','ecchi','hentai','babes','harem'];
+    var PAGE_SIZE = 12; // Mantenemos 12 para que la PS3 no se sature
+    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'girl', 'sexy', 'ecchi', 'hentai', 'babes', 'harem'];
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud1/main/previews4/'
     ];
 
-    // VARIABLES GLOBALES
     var allThemes = [];
     var filteredThemes = [];
     var currentSort = 'none';
@@ -280,14 +309,13 @@
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
 
-    // Elementos DOM
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
     var loadMoreContainer = document.getElementById('loadMoreContainer');
     var searchInput = document.getElementById('searchInput');
     var adultBtn = document.getElementById('adultBtn');
+    var genreActiveBtn = document.getElementById('genreActiveBtn');
 
-    // Inicialización segura de preferencia
     try {
         var pref = localStorage.getItem('ps3_adult_filter');
         mostrarContenidoAdulto = (pref === 'true');
@@ -303,39 +331,27 @@
         }
     }
 
-    // CARGA DE DATOS (AJAX COMPATIBLE)
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200 || xhr.status === 0) {
-                try {
-                    var data;
-                    if (window.JSON && window.JSON.parse) {
-                        data = JSON.parse(xhr.responseText);
-                    } else {
-                        data = eval('(' + xhr.responseText + ')');
-                    }
-                    
-                    allThemes = [];
-                    for(var i=0; i<data.length; i++) {
-                        var item = data[i];
-                        allThemes.push({
-                            archivo: item.archivo,
-                            descarga: item.descarga,
-                            genero: item.genero || 'Otro',
-                            nombre: item.archivo.replace(/\.p3t$/i, ''),
-                            preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
-                        });
-                    }
-                    actualizarInterfazBoton();
-                    aplicarFiltros();
-                } catch (e) {
-                    grid.innerHTML = '<div style="color:red;">Error de datos.</div>';
-                }
-            } else {
-                grid.innerHTML = '<div style="color:red;">No se pudo cargar el JSON.</div>';
-            }
+        if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 0)) {
+            try {
+                var data;
+                if (window.JSON) { data = JSON.parse(xhr.responseText); } 
+                else { data = eval('(' + xhr.responseText + ')'); }
+                
+                allThemes = data.map(function(item) {
+                    return {
+                        archivo: item.archivo,
+                        descarga: item.descarga,
+                        genero: item.genero || 'Otro',
+                        nombre: item.archivo.replace(/\.p3t$/i, ''),
+                        preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
+                    };
+                });
+                actualizarInterfazBoton();
+                aplicarFiltros();
+            } catch (e) { grid.innerHTML = 'Error en JSON.'; }
         }
     };
     xhr.send();
@@ -358,9 +374,17 @@
     }
 
     function aplicarFiltros() {
-        var search = searchInput.value.toLowerCase();
+        var search = searchInput.value.toLowerCase().trim();
         filteredThemes = [];
         
+        // Mostrar/Ocultar botón de género activo
+        if (currentGenre !== '') {
+            genreActiveBtn.innerHTML = currentGenre.toUpperCase() + " ✕";
+            genreActiveBtn.style.display = 'inline-block';
+        } else {
+            genreActiveBtn.style.display = 'none';
+        }
+
         for (var i = 0; i < allThemes.length; i++) {
             var tema = allThemes[i];
             var genLower = tema.genero.toLowerCase();
@@ -384,9 +408,9 @@
         }
 
         if (currentSort === 'az') {
-            filteredThemes.sort(function(a, b) { return a.nombre < b.nombre ? -1 : 1; });
+            filteredThemes.sort(function(a, b) { return a.nombre.localeCompare(b.nombre); });
         } else if (currentSort === 'za') {
-            filteredThemes.sort(function(a, b) { return a.nombre > b.nombre ? -1 : 1; });
+            filteredThemes.sort(function(a, b) { return b.nombre.localeCompare(a.nombre); });
         }
         currentPage = 0;
         render(true);
@@ -395,24 +419,24 @@
     function render(reset) {
         if (reset) grid.innerHTML = '';
         var start = currentPage * PAGE_SIZE;
-        var end = (start + PAGE_SIZE > filteredThemes.length) ? filteredThemes.length : start + PAGE_SIZE;
+        var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
         var html = '';
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            var imgName = encodeURI(t.nombre + '.png').replace(/'/g, "%27").replace(/&/g, "%26");
+            var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27").replace(/&/g, "%26");
             var startIdx = t.preview_idx;
             var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
-            var nombreVisible = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
+            var nombreVisible = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "").trim();
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
-                            '<img src="' + folderBase + imgName + '" ' +
-                            'onerror="intentarSiguienteCarpeta(this, ' + startIdx + ', \'' + imgName + '\')">' +
+                            '<img src="' + folderBase + img + '" ' +
+                            'onerror="intentarSiguienteCarpeta(this, ' + startIdx + ', \'' + img + '\')">' +
                         '</div>' +
                         '<div class="card-info">' +
                             '<div class="theme-name">' + nombreVisible + '</div>' +
-                            '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.genero + '\')">' + t.genero + '</div>' +
+                            '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.genero.replace(/'/g, "\\'") + '\')">' + t.genero + '</div>' +
                             '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
                         '</div>' +
                     '</div>';
