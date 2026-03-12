@@ -456,7 +456,8 @@
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27");
+            // SOLUCIÓN: Agregamos .replace(/&/g, "%26") para que los nombres con '&' carguen correctamente
+            var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27").replace(/&/g, "%26");
             var startIdx = t.preview_idx;
             var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
 
@@ -518,4 +519,3 @@
 </script>
 </body>
 </html>
-
