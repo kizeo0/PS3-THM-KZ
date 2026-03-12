@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
     <style>
-        /* RESET SEGURO PARA PS3 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: #0b0f17;
@@ -17,12 +12,11 @@
             font-family: Arial, sans-serif;
             line-height: 1.5;
             padding: 20px 0;
-            min-height: 100vh;
             text-align: center;
         }
 
         .main-container {
-            width: 1400px; /* Recuperada la anchura horizontal anterior */
+            width: 1400px; /* Ancho extendido solicitado */
             margin: 0 auto;
             text-align: left;
         }
@@ -36,9 +30,7 @@
 
         .logo-img {
             height: 100px;
-            width: auto;
             float: left;
-            display: block;
             cursor: pointer;
         }
 
@@ -54,7 +46,6 @@
             width: 64px;
             height: 64px;
             margin: 0 5px;
-            display: inline-block;
             vertical-align: middle;
         }
 
@@ -62,14 +53,12 @@
             background: #0a1a2a;
             padding: 16px 25px;
             border-radius: 60px;
-            margin: 0 0 30px 0;
+            margin-bottom: 30px;
             border-left: 5px solid #ff6b35;
             overflow: hidden;
         }
 
-        .search-wrapper {
-            float: left;
-        }
+        .search-wrapper { float: left; }
 
         .search-wrapper input {
             width: 250px;
@@ -78,7 +67,6 @@
             border: 2px solid #1e3b4f;
             border-radius: 60px;
             color: white;
-            font-size: 1rem;
             vertical-align: middle;
         }
 
@@ -96,16 +84,9 @@
             vertical-align: middle;
         }
 
-        .dice-img {
-            width: 32px;
-            height: 32px;
-            vertical-align: middle;
-        }
+        .dice-img { width: 32px; vertical-align: middle; }
 
-        .sort-buttons {
-            float: left;
-            margin-left: 20px;
-        }
+        .sort-buttons { float: left; margin-left: 20px; }
 
         .sort-btn {
             background: transparent;
@@ -113,43 +94,27 @@
             color: #c9d9e8;
             padding: 12px 20px;
             border-radius: 40px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
-            display: inline-block;
             margin-right: 8px;
         }
 
-        .sort-btn.active {
-            background: #ff6b35;
-            color: #0b0f17;
-        }
+        .sort-btn.active { background: #ff6b35; color: #0b0f17; }
 
         /* Botón de género activo */
         .btn-genre-active {
             background: #1e3b4f;
             border-color: #ffb28c;
             color: #ffb28c;
+            display: none;
         }
 
-        .btn-adult {
-            border-color: #ff3535;
-            color: #ff9b9b;
-        }
-        .btn-adult.active {
-            background: #ff3535;
-            color: white;
-        }
+        .btn-adult { border-color: #ff3535; color: #ff9b9b; }
+        .btn-adult.active { background: #ff3535; color: white; }
 
-        .stats {
-            float: right;
-            color: #9ab8d9;
-            line-height: 52px;
-        }
+        .stats { float: right; color: #9ab8d9; line-height: 52px; }
 
-        .grid {
-            margin: 20px 0;
-            text-align: center;
-        }
+        .grid { text-align: center; }
 
         .theme-card {
             width: 290px;
@@ -168,27 +133,20 @@
             background: #03070f;
             text-align: center;
             border-bottom: 3px solid #ff6b35;
-            height: 300px;
-            line-height: 300px;
+            height: 250px;
+            line-height: 250px;
         }
 
-        .preview img {
-            max-width: 100%;
-            max-height: 100%;
-            vertical-align: middle;
-        }
+        .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
 
-        .card-info {
-            padding: 18px 15px;
-        }
+        .card-info { padding: 18px 15px; }
 
         .theme-name {
-            font-weight: 600;
+            font-weight: bold;
             font-size: 1.1rem;
             color: #fff;
             height: 2.8em;
             overflow: hidden;
-            margin-bottom: 12px;
         }
 
         .theme-genre {
@@ -197,34 +155,26 @@
             border-radius: 30px;
             font-size: 0.8rem;
             color: #ffb28c;
-            margin-bottom: 18px;
+            margin: 10px 0;
             display: inline-block;
             border: 1px solid #ff6b3540;
             cursor: pointer;
-            transition: 0.2s;
         }
-        .theme-genre:hover {
-            background: #1e3f55;
-            border-color: #ff6b35;
-        }
+
+        .theme-genre:hover { border-color: #ff6b35; background: #1e3f55; }
 
         .download-btn {
             background: #ff6b35;
             color: #0b0f17;
             text-decoration: none;
             font-weight: bold;
-            padding: 14px;
+            padding: 12px;
             border-radius: 50px;
             text-align: center;
             display: block;
-            text-transform: uppercase;
         }
 
-        .load-more {
-            text-align: center;
-            margin: 30px 0;
-            clear: both;
-        }
+        .load-more { text-align: center; margin: 30px 0; clear: both; }
 
         .btn-primary {
             background: #ff6b35;
@@ -236,54 +186,50 @@
         }
 
         .footer {
-            margin: 60px 0 30px 0;
+            margin-top: 60px;
             border-top: 3px solid #ff6b3540;
-            padding-top: 25px;
+            padding: 25px 0;
             color: #b0c8e0;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
         }
 
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
+        .clearfix::after { content: ""; display: table; clear: both; }
     </style>
 </head>
 <body>
 
 <div class="main-container">
     <div class="header clearfix">
-        <img src="recursos/titulo.png" alt="PS3 Themes" class="logo-img" onclick="volverInicio()">
+        <img src="recursos/titulo.png" alt="PS3" class="logo-img" onclick="volverInicio()">
         <div class="social-container">
-            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" alt="YT" class="social-icon"></a>
-            <a href="https://github.com/kizeo0"><img src="recursos/git.png" alt="Git" class="social-icon"></a>
-            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" alt="X" class="social-icon"></a>
+            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" class="social-icon"></a>
+            <a href="https://github.com/kizeo0"><img src="recursos/git.png" class="social-icon"></a>
+            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" class="social-icon"></a>
         </div>
     </div>
 
     <div class="toolbar clearfix">
         <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Buscar tema..." onkeyup="buscarTemas()">
+            <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="buscarTemas()">
             <div class="dice-btn" onclick="modoAleatorio()">
-                <img src="recursos/dado.png" alt="D" class="dice-img">
+                <img src="recursos/dado.png" class="dice-img">
             </div>
         </div>
         <div class="sort-buttons">
             <button class="sort-btn" id="sortAZ" onclick="ordenarAZ()">A-Z</button>
             <button class="sort-btn" id="sortZA" onclick="ordenarZA()">Z-A</button>
             <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
-            <button class="sort-btn btn-genre-active" id="genreActiveBtn" style="display:none;" onclick="volverInicio()"></button>
+            <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
         <div class="stats" id="stats">...</div>
     </div>
 
     <div id="themeGrid" class="grid">
-        <div style="padding:50px; color:#ffb28c; font-size:20px;">Cargando temas...</div>
+        <div style="padding:50px; color:#ffb28c; font-size:18px;">Cargando temas...</div>
     </div>
 
     <div class="load-more" id="loadMoreContainer" style="display: none;">
-        <button class="btn-primary" onclick="cargarMas()">+ Cargar más temas</button>
+        <button class="btn-primary" onclick="cargarMas()">Ver más temas</button>
     </div>
 
     <div class="footer clearfix">
@@ -294,7 +240,7 @@
 
 <script>
     var JSON_URL = 'temas_ps3_conlinks.json';
-    var PAGE_SIZE = 12; // Mantenemos 12 para que la PS3 no se sature
+    var PAGE_SIZE = 12; 
     var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'girl', 'sexy', 'ecchi', 'hentai', 'babes', 'harem'];
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
@@ -316,10 +262,43 @@
     var adultBtn = document.getElementById('adultBtn');
     var genreActiveBtn = document.getElementById('genreActiveBtn');
 
-    try {
-        var pref = localStorage.getItem('ps3_adult_filter');
-        mostrarContenidoAdulto = (pref === 'true');
-    } catch(e) {}
+    // Carga de datos ultra-compatible
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', JSON_URL, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 0) {
+                try {
+                    var rawText = xhr.responseText;
+                    // Limpieza de posibles bytes de orden de bomba (BOM)
+                    rawText = rawText.replace(/^\uFEFF/, '');
+                    
+                    var data;
+                    if (window.JSON && window.JSON.parse) {
+                        data = JSON.parse(rawText);
+                    } else {
+                        data = eval('(' + rawText + ')');
+                    }
+                    
+                    allThemes = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var item = data[i];
+                        allThemes.push({
+                            archivo: item.archivo,
+                            descarga: item.descarga,
+                            genero: item.genero || 'Otro',
+                            nombre: item.archivo.replace(/\.p3t$/i, ''),
+                            preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
+                        });
+                    }
+                    aplicarFiltros();
+                } catch (e) {
+                    grid.innerHTML = '<div style="color:red;">Error al procesar JSON. Revisa el formato.</div>';
+                }
+            }
+        }
+    };
+    xhr.send();
 
     function intentarSiguienteCarpeta(imgElement, currentIndex, imgName) {
         var nextIndex = currentIndex + 1;
@@ -331,53 +310,17 @@
         }
     }
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', JSON_URL, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 0)) {
-            try {
-                var data;
-                if (window.JSON) { data = JSON.parse(xhr.responseText); } 
-                else { data = eval('(' + xhr.responseText + ')'); }
-                
-                allThemes = data.map(function(item) {
-                    return {
-                        archivo: item.archivo,
-                        descarga: item.descarga,
-                        genero: item.genero || 'Otro',
-                        nombre: item.archivo.replace(/\.p3t$/i, ''),
-                        preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
-                    };
-                });
-                actualizarInterfazBoton();
-                aplicarFiltros();
-            } catch (e) { grid.innerHTML = 'Error en JSON.'; }
-        }
-    };
-    xhr.send();
-
     window.toggleAdulto = function() {
         mostrarContenidoAdulto = !mostrarContenidoAdulto;
-        try { localStorage.setItem('ps3_adult_filter', mostrarContenidoAdulto); } catch(e) {}
-        actualizarInterfazBoton();
+        adultBtn.innerHTML = mostrarContenidoAdulto ? "+18 ON" : "+18 OFF";
+        adultBtn.className = mostrarContenidoAdulto ? "sort-btn btn-adult active" : "sort-btn btn-adult";
         aplicarFiltros();
     };
 
-    function actualizarInterfazBoton() {
-        if (mostrarContenidoAdulto) {
-            adultBtn.innerHTML = "+18 ON";
-            adultBtn.className = "sort-btn btn-adult active";
-        } else {
-            adultBtn.innerHTML = "+18 OFF";
-            adultBtn.className = "sort-btn btn-adult";
-        }
-    }
-
     function aplicarFiltros() {
-        var search = searchInput.value.toLowerCase().trim();
+        var search = searchInput.value.toLowerCase();
         filteredThemes = [];
         
-        // Mostrar/Ocultar botón de género activo
         if (currentGenre !== '') {
             genreActiveBtn.innerHTML = currentGenre.toUpperCase() + " ✕";
             genreActiveBtn.style.display = 'inline-block';
@@ -389,6 +332,7 @@
             var tema = allThemes[i];
             var genLower = tema.genero.toLowerCase();
 
+            // Filtro adulto
             var esTemaAdulto = false;
             for (var j = 0; j < PALABRAS_ADULTO.length; j++) {
                 if (genLower.indexOf(PALABRAS_ADULTO[j]) !== -1) {
@@ -396,22 +340,23 @@
                     break;
                 }
             }
-
             if (!mostrarContenidoAdulto && esTemaAdulto) continue;
 
-            var nombreMatch = tema.nombre.toLowerCase().indexOf(search) !== -1;
-            var generoMatch = (currentGenre === '') || (genLower === currentGenre.toLowerCase());
+            // Filtro búsqueda y género
+            var matchBusqueda = tema.nombre.toLowerCase().indexOf(search) !== -1;
+            var matchGenero = (currentGenre === '') || (genLower === currentGenre.toLowerCase());
             
-            if (nombreMatch && generoMatch) {
+            if (matchBusqueda && matchGenero) {
                 filteredThemes.push(tema);
             }
         }
 
         if (currentSort === 'az') {
-            filteredThemes.sort(function(a, b) { return a.nombre.localeCompare(b.nombre); });
+            filteredThemes.sort(function(a, b) { return a.nombre < b.nombre ? -1 : 1; });
         } else if (currentSort === 'za') {
-            filteredThemes.sort(function(a, b) { return b.nombre.localeCompare(a.nombre); });
+            filteredThemes.sort(function(a, b) { return a.nombre > b.nombre ? -1 : 1; });
         }
+        
         currentPage = 0;
         render(true);
     }
@@ -419,7 +364,7 @@
     function render(reset) {
         if (reset) grid.innerHTML = '';
         var start = currentPage * PAGE_SIZE;
-        var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
+        var end = (start + PAGE_SIZE > filteredThemes.length) ? filteredThemes.length : start + PAGE_SIZE;
         var html = '';
 
         for (var i = start; i < end; i++) {
@@ -427,7 +372,7 @@
             var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27").replace(/&/g, "%26");
             var startIdx = t.preview_idx;
             var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
-            var nombreVisible = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "").trim();
+            var nombreLimpio = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
@@ -435,8 +380,8 @@
                             'onerror="intentarSiguienteCarpeta(this, ' + startIdx + ', \'' + img + '\')">' +
                         '</div>' +
                         '<div class="card-info">' +
-                            '<div class="theme-name">' + nombreVisible + '</div>' +
-                            '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.genero.replace(/'/g, "\\'") + '\')">' + t.genero + '</div>' +
+                            '<div class="theme-name">' + nombreLimpio + '</div>' +
+                            '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.genero + '\')">' + t.genero + '</div>' +
                             '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
                         '</div>' +
                     '</div>';
