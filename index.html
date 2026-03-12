@@ -129,12 +129,12 @@
             color: #0b0f17;
         }
 
-        /* Estilo especial para el botón +18 */
-        .btn-18 {
+        /* Estilo para el botón de filtro adultos */
+        .btn-adult {
             border-color: #ff3535;
             color: #ff9b9b;
         }
-        .btn-18.active {
+        .btn-adult.active {
             background: #ff3535;
             color: white;
         }
@@ -278,13 +278,13 @@
         <div class="sort-buttons">
             <button class="sort-btn" id="sortAZ" onclick="ordenarAZ()">A-Z</button>
             <button class="sort-btn" id="sortZA" onclick="ordenarZA()">Z-A</button>
-            <button class="sort-btn btn-18" id="toggleAdult" onclick="toggleAdult()">🔞 OFF</button>
+            <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
         </div>
         <div class="stats" id="stats">...</div>
     </div>
 
     <div id="themeGrid" class="grid">
-        <div style="text-align:center; padding:50px; color:#ffb28c; font-size:20px;">⌛ Cargando temas para PS3...</div>
+        <div style="text-align:center; padding:50px; color:#ffb28c; font-size:20px;">Cargando temas para PS3...</div>
     </div>
 
     <div class="load-more" id="loadMoreContainer" style="display: none;">
@@ -298,8 +298,34 @@
 </div>
 
 <script>
-    // CONFIGURACIÓN
+    // ==========================================
+    // SECCIÓN DE CONFIGURACIÓN (FÁCIL DE EDITAR)
+    // ==========================================
+    
     var JSON_URL = 'temas_ps3_conlinks.json';
+    
+    // Agrega aquí todas las palabras que quieras que activen el filtro +18
+    var PALABRAS_ADULTO = [
+        'adult', 
+        '18+', 
+        'girls/adult', 
+        'girl', 
+        'harem', 
+        'sexy', 
+        'ecchi', 
+        'hentai',
+        'Gilr',
+        'Girls',
+        'Babes',
+        'babes',
+        'People',
+        'Harem',
+        'Comics/Harem',
+        'Sexy',
+        'sexy',
+    ];
+
+    var PAGE_SIZE = 16;
 
     var PREVIEW_FOLDERS = [
         'previews1/', 
@@ -309,7 +335,9 @@
         '', '', '', '', '', ''
     ];
 
-    var PAGE_SIZE = 16;
+    // ==========================================
+    // LÓGICA DEL SISTEMA
+    // ==========================================
 
     var allThemes = [];
     var filteredThemes = [];
@@ -317,8 +345,8 @@
     var currentPage = 0;
     var currentGenre = '';
     
-    // Nueva variable para controlar el filtro +18 (Carga de localStorage)
-    var showAdult = localStorage.getItem('ps3_showAdult') === 'true';
+    // Cargar preferencia del usuario (por defecto oculto)
+    var mostrarContenidoAdulto = localStorage.getItem('ps3_adult_filter') === 'true';
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
@@ -326,65 +354,58 @@
     var searchInput = document.getElementById('searchInput');
     var sortAZ = document.getElementById('sortAZ');
     var sortZA = document.getElementById('sortZA');
-    var btnAdult = document.getElementById('toggleAdult');
+    var adultBtn = document.getElementById('adultBtn');
 
     function intentarSiguienteCarpeta(imgElement, currentIndex, imgName) {
         var nextIndex = currentIndex + 1;
         if (nextIndex < PREVIEW_FOLDERS.length && PREVIEW_FOLDERS[nextIndex] !== "") {
             imgElement.src = PREVIEW_FOLDERS[nextIndex] + imgName;
-            imgElement.onerror = function() { 
-                intentarSiguienteCarpeta(imgElement, nextIndex, imgName); 
-            };
+            imgElement.onerror = function() { intentarSiguienteCarpeta(imgElement, nextIndex, imgName); };
         } else {
             imgElement.style.display = 'none';
         }
     }
 
-    // Carga del JSON
+    // Carga inicial
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                try {
-                    var data = eval('(' + xhr.responseText + ')');
-                    allThemes = data.map(function(item) {
-                        return {
-                            archivo: item.archivo,
-                            descarga: item.descarga,
-                            genero: item.genero || 'Otro',
-                            nombre: item.archivo.replace(/\.p3t$/i, ''),
-                            preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
-                        };
-                    });
-                    // Inicializar el estado visual del botón adulto
-                    actualizarBotonAdulto();
-                    aplicarFiltros();
-                } catch (e) {
-                    grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar el archivo de temas.</div>';
-                }
-            } else {
-                grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">No se pudo cargar la lista de temas.</div>';
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var data = eval('(' + xhr.responseText + ')');
+                allThemes = data.map(function(item) {
+                    return {
+                        archivo: item.archivo,
+                        descarga: item.descarga,
+                        genero: item.genero || 'Otro',
+                        nombre: item.archivo.replace(/\.p3t$/i, ''),
+                        preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
+                    };
+                });
+                actualizarInterfazBoton();
+                aplicarFiltros();
+            } catch (e) {
+                grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar el JSON.</div>';
             }
         }
     };
     xhr.send();
 
-    // Nueva función para alternar contenido adulto
-    window.toggleAdult = function() {
-        showAdult = !showAdult;
-        localStorage.setItem('ps3_showAdult', showAdult);
-        actualizarBotonAdulto();
+    // Función para alternar el filtro
+    window.toggleAdulto = function() {
+        mostrarContenidoAdulto = !mostrarContenidoAdulto;
+        localStorage.setItem('ps3_adult_filter', mostrarContenidoAdulto);
+        actualizarInterfazBoton();
         aplicarFiltros();
     };
 
-    function actualizarBotonAdulto() {
-        if (showAdult) {
-            btnAdult.innerHTML = "+18 ON";
-            btnAdult.className = "sort-btn btn-18 active";
+    function actualizarInterfazBoton() {
+        if (mostrarContenidoAdulto) {
+            adultBtn.innerHTML = "🔞 ON";
+            adultBtn.className = "sort-btn btn-adult active";
         } else {
-            btnAdult.innerHTML = "+18 OFF";
-            btnAdult.className = "sort-btn btn-18";
+            adultBtn.innerHTML = "🔞 OFF";
+            adultBtn.className = "sort-btn btn-adult";
         }
     }
 
@@ -396,12 +417,17 @@
             var tema = allThemes[i];
             var genLower = tema.genero.toLowerCase();
 
-            // LÓGICA FILTRADO +18
-            // Se considera adulto si el género contiene "adult" o "18+"
-            var esAdulto = (genLower.indexOf('adult') !== -1) || (genLower.indexOf('18+') !== -1);
+            // Detectar si el tema es adulto basado en la lista de arriba
+            var esTemaAdulto = false;
+            for (var j = 0; j < PALABRAS_ADULTO.length; j++) {
+                if (genLower.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) {
+                    esTemaAdulto = true;
+                    break;
+                }
+            }
 
-            // Si el switch está en OFF y el tema es adulto, lo saltamos
-            if (!showAdult && esAdulto) {
+            // Si el filtro está apagado y es un tema adulto, lo saltamos
+            if (!mostrarContenidoAdulto && esTemaAdulto) {
                 continue;
             }
 
@@ -452,6 +478,7 @@
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
+    // Funciones globales de navegación
     window.filtrarPorGenero = function(genero) {
         currentGenre = genero;
         searchInput.value = '';
@@ -471,13 +498,6 @@
     };
 
     window.modoAleatorio = function() {
-        searchInput.value = '';
-        currentGenre = '';
-        currentSort = 'none';
-        sortAZ.className = 'sort-btn';
-        sortZA.className = 'sort-btn';
-        
-        // Aplicamos filtros primero y luego desordenamos
         aplicarFiltros();
         var shuffled = filteredThemes.slice();
         for (var i = shuffled.length - 1; i > 0; i--) {
@@ -491,29 +511,10 @@
         render(true);
     };
 
-    window.cargarMas = function() { 
-        currentPage++; 
-        render(false); 
-    };
-
-    window.buscarTemas = function() { 
-        currentGenre = ''; 
-        aplicarFiltros(); 
-    };
-
-    window.ordenarAZ = function() { 
-        currentSort = 'az'; 
-        sortAZ.className = 'sort-btn active'; 
-        sortZA.className = 'sort-btn'; 
-        aplicarFiltros(); 
-    };
-
-    window.ordenarZA = function() { 
-        currentSort = 'za'; 
-        sortZA.className = 'sort-btn active'; 
-        sortAZ.className = 'sort-btn'; 
-        aplicarFiltros(); 
-    };
+    window.cargarMas = function() { currentPage++; render(false); };
+    window.buscarTemas = function() { currentGenre = ''; aplicarFiltros(); };
+    window.ordenarAZ = function() { currentSort = 'az'; sortAZ.className = 'sort-btn active'; sortZA.className = 'sort-btn'; aplicarFiltros(); };
+    window.ordenarZA = function() { currentSort = 'za'; sortZA.className = 'sort-btn active'; sortAZ.className = 'sort-btn'; aplicarFiltros(); };
 </script>
 </body>
 </html>
