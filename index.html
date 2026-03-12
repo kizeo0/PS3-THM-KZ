@@ -129,6 +129,16 @@
             color: #0b0f17;
         }
 
+        /* Estilo especial para el botón +18 */
+        .btn-18 {
+            border-color: #ff3535;
+            color: #ff9b9b;
+        }
+        .btn-18.active {
+            background: #ff3535;
+            color: white;
+        }
+
         .stats {
             float: right;
             color: #9ab8d9;
@@ -268,6 +278,7 @@
         <div class="sort-buttons">
             <button class="sort-btn" id="sortAZ" onclick="ordenarAZ()">A-Z</button>
             <button class="sort-btn" id="sortZA" onclick="ordenarZA()">Z-A</button>
+            <button class="sort-btn btn-18" id="toggleAdult" onclick="toggleAdult()">🔞 OFF</button>
         </div>
         <div class="stats" id="stats">...</div>
     </div>
@@ -290,18 +301,12 @@
     // CONFIGURACIÓN
     var JSON_URL = 'temas_ps3_conlinks.json';
 
-    // SECCIÓN DE ENLACES: Aquí puedes gestionar tus carpetas de previews (locales o GitHub)
     var PREVIEW_FOLDERS = [
-        'previews1/',                                                                 // Índice 0 (Local)
-        'previews2/',                                                                 // Índice 1 (Local)
-        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',    // Índice 2 (GitHub Cloud 1)
-        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud1/main/previews4/', // Espacio para preview4 (Índice 3)
-        '', // Espacio para preview5 (Índice 4)
-        '', // Espacio para preview6 (Índice 5)
-        '', // Espacio para preview7 (Índice 6)
-        '', // Espacio para preview8 (Índice 7)
-        '', // Espacio para preview9 (Índice 8)
-        ''  // Espacio para preview10 (Índice 9)
+        'previews1/', 
+        'previews2/', 
+        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
+        'https://raw.githubusercontent.com/kizeocloud1/ps3cloud1/main/previews4/',
+        '', '', '', '', '', ''
     ];
 
     var PAGE_SIZE = 16;
@@ -311,6 +316,9 @@
     var currentSort = 'none';
     var currentPage = 0;
     var currentGenre = '';
+    
+    // Nueva variable para controlar el filtro +18 (Carga de localStorage)
+    var showAdult = localStorage.getItem('ps3_showAdult') === 'true';
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
@@ -318,19 +326,16 @@
     var searchInput = document.getElementById('searchInput');
     var sortAZ = document.getElementById('sortAZ');
     var sortZA = document.getElementById('sortZA');
+    var btnAdult = document.getElementById('toggleAdult');
 
-    // Función de ayuda para buscar la imagen en otras carpetas si falla
     function intentarSiguienteCarpeta(imgElement, currentIndex, imgName) {
         var nextIndex = currentIndex + 1;
-        // Solo intentamos si hay más carpetas definidas y no están vacías
         if (nextIndex < PREVIEW_FOLDERS.length && PREVIEW_FOLDERS[nextIndex] !== "") {
             imgElement.src = PREVIEW_FOLDERS[nextIndex] + imgName;
-            // Si vuelve a fallar, llamamos a esta misma función con el siguiente índice
             imgElement.onerror = function() { 
                 intentarSiguienteCarpeta(imgElement, nextIndex, imgName); 
             };
         } else {
-            // Si ya no hay más carpetas, ocultamos la imagen
             imgElement.style.display = 'none';
         }
     }
@@ -349,12 +354,12 @@
                             descarga: item.descarga,
                             genero: item.genero || 'Otro',
                             nombre: item.archivo.replace(/\.p3t$/i, ''),
-                            // preview_idx viene desde el script de Python (por defecto 0)
                             preview_idx: (item.preview_idx !== undefined) ? item.preview_idx : 0
                         };
                     });
-                    filteredThemes = allThemes.slice();
-                    render(true);
+                    // Inicializar el estado visual del botón adulto
+                    actualizarBotonAdulto();
+                    aplicarFiltros();
                 } catch (e) {
                     grid.innerHTML = '<div style="color:#ff6b35; padding:20px;">Error al procesar el archivo de temas.</div>';
                 }
@@ -365,18 +370,49 @@
     };
     xhr.send();
 
-    // Función que aplica filtros (búsqueda y género) y ordenación
+    // Nueva función para alternar contenido adulto
+    window.toggleAdult = function() {
+        showAdult = !showAdult;
+        localStorage.setItem('ps3_showAdult', showAdult);
+        actualizarBotonAdulto();
+        aplicarFiltros();
+    };
+
+    function actualizarBotonAdulto() {
+        if (showAdult) {
+            btnAdult.innerHTML = "+18 ON";
+            btnAdult.className = "sort-btn btn-18 active";
+        } else {
+            btnAdult.innerHTML = "+18 OFF";
+            btnAdult.className = "sort-btn btn-18";
+        }
+    }
+
     function aplicarFiltros() {
         var search = searchInput.value.toLowerCase();
         filteredThemes = [];
+        
         for (var i = 0; i < allThemes.length; i++) {
             var tema = allThemes[i];
+            var genLower = tema.genero.toLowerCase();
+
+            // LÓGICA FILTRADO +18
+            // Se considera adulto si el género contiene "adult" o "18+"
+            var esAdulto = (genLower.indexOf('adult') !== -1) || (genLower.indexOf('18+') !== -1);
+
+            // Si el switch está en OFF y el tema es adulto, lo saltamos
+            if (!showAdult && esAdulto) {
+                continue;
+            }
+
             var nombreMatch = tema.nombre.toLowerCase().indexOf(search) !== -1;
-            var generoMatch = (currentGenre === '') || (tema.genero.toLowerCase() === currentGenre.toLowerCase());
+            var generoMatch = (currentGenre === '') || (genLower === currentGenre.toLowerCase());
+            
             if (nombreMatch && generoMatch) {
                 filteredThemes.push(tema);
             }
         }
+
         if (currentSort === 'az') {
             filteredThemes.sort(function(a, b) { return a.nombre.localeCompare(b.nombre); });
         } else if (currentSort === 'za') {
@@ -386,7 +422,6 @@
         render(true);
     }
 
-    // Renderizado de las tarjetas
     function render(reset) {
         if (reset) { grid.innerHTML = ''; }
         var start = currentPage * PAGE_SIZE;
@@ -395,10 +430,7 @@
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            // Codificamos el nombre del archivo y escapamos comillas simples para el onerror
             var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27");
-            
-            // Usamos el índice específico del tema o el 0 por defecto
             var startIdx = t.preview_idx;
             var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
 
@@ -420,7 +452,6 @@
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
-    // Funciones globales (usadas en onclick)
     window.filtrarPorGenero = function(genero) {
         currentGenre = genero;
         searchInput.value = '';
@@ -436,9 +467,7 @@
         currentSort = 'none';
         sortAZ.className = 'sort-btn';
         sortZA.className = 'sort-btn';
-        filteredThemes = allThemes.slice();
-        currentPage = 0;
-        render(true);
+        aplicarFiltros();
     };
 
     window.modoAleatorio = function() {
@@ -447,7 +476,10 @@
         currentSort = 'none';
         sortAZ.className = 'sort-btn';
         sortZA.className = 'sort-btn';
-        var shuffled = allThemes.slice();
+        
+        // Aplicamos filtros primero y luego desordenamos
+        aplicarFiltros();
+        var shuffled = filteredThemes.slice();
         for (var i = shuffled.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
             var temp = shuffled[i];
@@ -485,5 +517,3 @@
 </script>
 </body>
 </html>
-
-
