@@ -456,10 +456,14 @@
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            // SOLUCIÓN: Agregamos .replace(/&/g, "%26") para que los nombres con '&' carguen correctamente
+            // La variable 'img' mantiene el nombre original para no romper el enlace con la preview
             var img = encodeURI(t.nombre + '.png').replace(/'/g, "%27").replace(/&/g, "%26");
             var startIdx = t.preview_idx;
             var folderBase = PREVIEW_FOLDERS[startIdx] || PREVIEW_FOLDERS[0];
+
+            // CREACIÓN DEL NOMBRE LIMPIO (Solo para mostrar en pantalla)
+            // Esto elimina "(nombre igual)", "PKG" y "pkg" del texto visible
+            var nombreVisible = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
 
             html += '<div class="theme-card">' +
                         '<div class="preview">' +
@@ -467,7 +471,7 @@
                             'onerror="intentarSiguienteCarpeta(this, ' + startIdx + ', \'' + img + '\')">' +
                         '</div>' +
                         '<div class="card-info">' +
-                            '<div class="theme-name">' + t.nombre + '</div>' +
+                            '<div class="theme-name">' + nombreVisible + '</div>' +
                             '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.genero.replace(/'/g, "\\'") + '\')">' + t.genero + '</div>' +
                             '<a href="' + t.descarga + '" class="download-btn">Descargar</a>' +
                         '</div>' +
