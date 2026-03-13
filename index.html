@@ -33,10 +33,30 @@
 
         .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
 
+        /* Botón VERSION PKG */
+        .pkg-link { 
+            float: right; 
+            background: #ff6b35; 
+            color: #0b0f17; 
+            text-decoration: none; 
+            font-weight: bold; 
+            padding: 0 25px; 
+            border-radius: 40px; 
+            height: 56px; 
+            line-height: 56px; 
+            margin-right: 20px; 
+            font-size: 15px; 
+            display: inline-block; 
+        }
+        .pkg-link:hover { opacity: 0.9; }
+
         .grid { text-align: center; clear: both; }
 
         /* Tarjetas de temas escaladas */
         .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
+        /* Estilo especial para los destacados */
+        .theme-card.featured { border: 2px solid #ff6b35; box-shadow: 0 0 15px rgba(255, 107, 53, 0.3); }
+
         .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
         .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
 
@@ -78,6 +98,7 @@
             <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
         <div class="stats" id="stats">...</div>
+        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="pkg-link">VERSION PKG</a>
     </div>
 
     <div id="themeGrid" class="grid">
@@ -104,14 +125,11 @@
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud1/main/previews4/',
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud2/main/previews5/'
-
-
-        
     ];
 
     var allThemes = [];
     var filteredThemes = [];
-    var currentSort = 'none';
+    var currentSort = 'az'; // Cambiado a A-Z por defecto para cumplir con tu petición
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
@@ -178,7 +196,7 @@
 
     function aplicarFiltros() {
         var query = searchInput.value.toLowerCase();
-        filteredThemes = [];
+        var tempFiltered = [];
         
         if(currentGenre !== '') {
             genreActiveBtn.style.display = 'inline-block';
@@ -187,6 +205,7 @@
             genreActiveBtn.style.display = 'none';
         }
 
+        // Filtro base (búsqueda, género y contenido adulto)
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
             var genNormalizado = t.genero.toLowerCase();
@@ -206,12 +225,36 @@
             var coincideGenero = (currentGenre === '' || genNormalizado === currentGenre.toLowerCase());
 
             if(coincideBusqueda && coincideGenero) {
-                filteredThemes.push(t);
+                tempFiltered.push(t);
             }
         }
 
-        if(currentSort === 'az') filteredThemes.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
-        if(currentSort === 'za') filteredThemes.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
+        // Lógica de temas al azar de AnimugenZ al principio
+        if (query === '' && currentGenre === '' && currentSort === 'az') {
+            var animugenz = tempFiltered.filter(function(t) { return t.genero.toLowerCase() === 'animugenz'; });
+            var otros = tempFiltered.filter(function(t) { return t.genero.toLowerCase() !== 'animugenz'; });
+            
+            // Elegir 2 al azar de AnimugenZ
+            animugenz.sort(function() { return 0.5 - Math.random(); });
+            var destacados = animugenz.slice(0, 2);
+            var restoAnimugenz = animugenz.slice(2);
+            
+            // Juntar el resto y ordenar A-Z
+            var poolResto = otros.concat(restoAnimugenz);
+            poolResto.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
+            
+            // Marcar destacados para estilo visual
+            destacados.forEach(function(t) { t.esDestacado = true; });
+            poolResto.forEach(function(t) { t.esDestacado = false; });
+
+            filteredThemes = destacados.concat(poolResto);
+        } else {
+            // Orden normal
+            if(currentSort === 'az') tempFiltered.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
+            if(currentSort === 'za') tempFiltered.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
+            tempFiltered.forEach(function(t) { t.esDestacado = false; });
+            filteredThemes = tempFiltered;
+        }
 
         currentPage = 0;
         render(true);
@@ -230,11 +273,11 @@
             var nombreDisp = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
 
             var card = document.createElement('div');
-            card.className = 'theme-card';
+            card.className = t.esDestacado ? 'theme-card featured' : 'theme-card';
             card.innerHTML = 
                 '<div class="preview"><img src="' + folder + imgName + '" onerror="proximaCarpeta(this,'+t.preview_idx+',\''+imgName+'\')"></div>' +
                 '<div class="card-info">' +
-                    '<div class="theme-name">' + nombreDisp + '</div>' +
+                    '<div class="theme-name">' + nombreDisp + (t.esDestacado ? ' ⭐' : '') + '</div>' +
                     '<div class="theme-genre" onclick="filtrarPorGenero(\''+t.genero+'\')">' + t.genero + '</div>' +
                     '<a href="' + t.descarga + '" class="download-btn">DESCARGAR</a>' +
                 '</div>';
@@ -256,12 +299,14 @@
     };
 
     window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; aplicarFiltros(); };
-    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'none'; aplicarFiltros(); };
+    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'az'; aplicarFiltros(); };
     window.cargarMas = function() { currentPage++; render(false); };
     window.ordenarAZ = function() { currentSort = 'az'; aplicarFiltros(); };
     window.ordenarZA = function() { currentSort = 'za'; aplicarFiltros(); };
     window.modoAleatorio = function() {
+        currentSort = 'none';
         filteredThemes.sort(function() { return 0.5 - Math.random(); });
+        filteredThemes.forEach(function(t) { t.esDestacado = false; });
         currentPage = 0; render(true);
     };
 </script>
