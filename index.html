@@ -243,8 +243,8 @@
 <script>
     var JSON_URL = 'temas_ps3_conlinks.json';
     var PAGE_SIZE = 12; 
-    // He actualizado la lista a minúsculas para que el buscador la detecte correctamente
-    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'girl', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols'];
+    // He ajustado la lista para ser más específica y evitar bloqueos accidentales
+    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols'];
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
@@ -305,29 +305,43 @@
     };
 
     function aplicarFiltros() {
-        var query = searchInput.value.toLowerCase();
+        var query = searchInput.value.toLowerCase().trim();
         filteredThemes = [];
         
+        // CORRECCIÓN: Quitamos .toUpperCase() para respetar el nombre original del género
         genreActiveBtn.style.display = (currentGenre !== '') ? 'inline-block' : 'none';
-        if(currentGenre !== '') genreActiveBtn.innerHTML = currentGenre.toUpperCase() + " X";
+        if(currentGenre !== '') genreActiveBtn.innerHTML = currentGenre + " X";
 
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
-            var gen = t.genero.toLowerCase();
+            // Normalizamos para la comparación interna eliminando espacios accidentales
+            var genNormalizado = t.genero.toLowerCase().trim();
+            var nombreNormalizado = t.nombre.toLowerCase().trim();
 
+            // Lógica de detección +18 mejorada
             var isAdult = false;
             for(var j=0; j<PALABRAS_ADULTO.length; j++) {
-                if(gen.indexOf(PALABRAS_ADULTO[j]) !== -1) { isAdult = true; break; }
+                if(genNormalizado.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { 
+                    isAdult = true; 
+                    break; 
+                }
             }
+
+            // Si el switch está OFF y es adulto, saltar
             if(!mostrarContenidoAdulto && isAdult) continue;
 
-            if(t.nombre.toLowerCase().indexOf(query) !== -1 && (currentGenre === '' || gen === currentGenre.toLowerCase())) {
+            // Filtro por búsqueda y por género (ignorando espacios y mayúsculas)
+            var coincideBusqueda = nombreNormalizado.indexOf(query) !== -1;
+            var coincideGenero = (currentGenre === '' || genNormalizado === currentGenre.toLowerCase().trim());
+
+            if(coincideBusqueda && coincideGenero) {
                 filteredThemes.push(t);
             }
         }
 
-        if(currentSort === 'az') filteredThemes.sort(function(a,b){ return a.nombre < b.nombre ? -1 : 1; });
-        if(currentSort === 'za') filteredThemes.sort(function(a,b){ return a.nombre > b.nombre ? -1 : 1; });
+        // Ordenar resultados
+        if(currentSort === 'az') filteredThemes.sort(function(a,b){ return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; });
+        if(currentSort === 'za') filteredThemes.sort(function(a,b){ return a.nombre.toLowerCase() > b.nombre.toLowerCase() ? -1 : 1; });
 
         currentPage = 0;
         render(true);
