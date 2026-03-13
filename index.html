@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
     <style>
-        /* Estilos originales mantenidos */
+        /* Estilos originales de tu index.html */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 20px 0; text-align: center; }
         .main-container { width: 1750px; margin: 0 auto; text-align: left; } 
@@ -34,7 +34,6 @@
         .grid { text-align: center; clear: both; }
 
         .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
-        /* Resalte para los destacados */
         .theme-card.featured { border-color: #ff6b35; border-width: 3px; }
 
         .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
@@ -108,7 +107,7 @@
 
     var allThemes = [];
     var filteredThemes = [];
-    var currentSort = 'none'; // IMPORTANTE: Empezamos sin orden forzado (orden del JSON)
+    var currentSort = 'none'; 
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
@@ -171,7 +170,7 @@
             genreActiveBtn.style.display = 'none';
         }
 
-        // 1. Filtrar temas (esto mantiene el orden del JSON original)
+        // 1. Filtrar (Mantiene el orden original del JSON)
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
             t.esDestacado = false;
@@ -190,15 +189,14 @@
             }
         }
 
-        // 2. Solo ordenar si el usuario presionó A-Z o Z-A explícitamente
+        // 2. Ordenar solo si se solicita
         if(currentSort === 'az') {
             temp.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
         } else if(currentSort === 'za') {
             temp.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
         }
 
-        // 3. Lógica de 2 AnimugenZ al azar arriba (SOLO EN EL INICIO)
-        // Solo ocurre si no hay búsqueda, ni filtro de género, y el orden es el del JSON ('none')
+        // 3. Extraer 2 de AnimugenZ al azar para el inicio
         if (query === '' && currentGenre === '' && currentSort === 'none') {
             var animugenzIndices = [];
             for (var k = 0; k < temp.length; k++) {
@@ -208,7 +206,6 @@
             }
 
             if (animugenzIndices.length >= 2) {
-                // Elegir 2 índices al azar de los que son AnimugenZ
                 var idx1 = animugenzIndices.splice(Math.floor(Math.random() * animugenzIndices.length), 1)[0];
                 var idx2 = animugenzIndices.splice(Math.floor(Math.random() * animugenzIndices.length), 1)[0];
                 
@@ -217,13 +214,11 @@
                 item1.esDestacado = true;
                 item2.esDestacado = true;
 
-                // Quitarlos de sus posiciones originales (quitando el de mayor índice primero)
                 var posMax = Math.max(idx1, idx2);
                 var posMin = Math.min(idx1, idx2);
                 temp.splice(posMax, 1);
                 temp.splice(posMin, 1);
 
-                // Ponerlos al puro principio
                 temp.unshift(item2);
                 temp.unshift(item1);
             }
@@ -256,7 +251,9 @@
                 '</div>';
             grid.appendChild(card);
         }
-        statsDiv.innerHTML = filteredThemes.length + ' Temas';
+        
+        // AQUÍ ESTÁ EL TEXTO VERSION PKG QUE FALTABA
+        statsDiv.innerHTML = filteredThemes.length + ' Temas VERSION PKG';
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
