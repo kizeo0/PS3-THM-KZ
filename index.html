@@ -17,7 +17,7 @@
         }
 
         .main-container {
-            width: 1400px; /* Tu ancho preferido */
+            width: 1400px; 
             margin: 0 auto;
             text-align: left;
         }
@@ -151,16 +151,20 @@
             margin-bottom: 5px;
         }
 
+        /* --- ESTILO DE GÉNERO MEJORADO --- */
         .theme-genre {
-            background: #122b3b;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
+            background: #1e3b4f; /* Color un poco más claro para resaltar */
+            padding: 6px 14px;
+            border-radius: 8px; /* Menos redondo para un look más moderno */
+            font-size: 13px;
+            font-weight: bold;
             color: #ffb28c;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: inline-block;
-            border: 1px solid #ff6b3540;
+            border: 2px solid #ff6b35; /* Borde sólido naranja */
             cursor: pointer;
+            text-transform: uppercase; /* En mayúsculas para mayor impacto */
+            letter-spacing: 0.5px;
         }
 
         .download-btn {
@@ -241,7 +245,7 @@
 
 <script>
     var JSON_URL = 'temas_ps3_conlinks.json';
-    var PAGE_SIZE = 12; // Bajamos a 8 para que la PS3 no colapse al cargar imágenes
+    var PAGE_SIZE = 12; 
     var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'girl', 'sexy', 'ecchi', 'hentai', 'babes', 'harem'];
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
@@ -255,7 +259,7 @@
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
-    var searchTimer = null; // Para el debounce
+    var searchTimer = null; 
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
@@ -264,7 +268,6 @@
     var adultBtn = document.getElementById('adultBtn');
     var genreActiveBtn = document.getElementById('genreActiveBtn');
 
-    // Cargar JSON
     var xhr = new XMLHttpRequest();
     xhr.open('GET', JSON_URL, true);
     xhr.onreadystatechange = function() {
@@ -288,13 +291,12 @@
     };
     xhr.send();
 
-    // FUNCIÓN DE RETRASO (Crucial para PS3)
     window.buscarConRetraso = function() {
         clearTimeout(searchTimer);
         searchTimer = setTimeout(function() {
             currentGenre = '';
             aplicarFiltros();
-        }, 500); // Espera medio segundo antes de buscar
+        }, 500);
     };
 
     window.toggleAdulto = function() {
@@ -315,14 +317,12 @@
             var t = allThemes[i];
             var gen = t.genero.toLowerCase();
 
-            // Filtro Adulto
             var isAdult = false;
             for(var j=0; j<PALABRAS_ADULTO.length; j++) {
                 if(gen.indexOf(PALABRAS_ADULTO[j]) !== -1) { isAdult = true; break; }
             }
             if(!mostrarContenidoAdulto && isAdult) continue;
 
-            // Filtro Texto y Género
             if(t.nombre.toLowerCase().indexOf(query) !== -1 && (currentGenre === '' || gen === currentGenre.toLowerCase())) {
                 filteredThemes.push(t);
             }
@@ -337,7 +337,6 @@
 
     function render(reset) {
         if (reset) {
-            // Antes de resetear, quitamos los src de las imágenes para liberar RAM
             var imgs = grid.getElementsByTagName('img');
             for(var i=0; i<imgs.length; i++) imgs[i].src = '';
             grid.innerHTML = '';
@@ -345,7 +344,6 @@
 
         var start = currentPage * PAGE_SIZE;
         var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
-        var container = document.createElement('div');
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
@@ -391,4 +389,3 @@
 </script>
 </body>
 </html>
-
