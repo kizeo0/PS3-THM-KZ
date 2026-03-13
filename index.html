@@ -31,27 +31,11 @@
 
         .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
 
-        /* Botón PKG */
-        .pkg-btn { 
-            float: right; 
-            background: #ff6b35; 
-            color: #0b0f17; 
-            text-decoration: none; 
-            font-weight: bold; 
-            padding: 0 25px; 
-            border-radius: 40px; 
-            height: 56px; 
-            line-height: 56px; 
-            margin-right: 20px; 
-            font-size: 15px; 
-            display: inline-block; 
-        }
-
         .grid { text-align: center; clear: both; }
 
         .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
-        /* Estilo para los destacados */
-        .theme-card.featured { border-color: #ff6b35; box-shadow: 0 0 10px rgba(255,107,53,0.2); }
+        /* Estilo sutil para los 2 destacados */
+        .theme-card.featured { border-color: #ff6b35; }
 
         .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
         .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
@@ -94,7 +78,6 @@
             <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
         <div class="stats" id="stats">...</div>
-        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="pkg-btn">VERSION PKG</a>
     </div>
 
     <div id="themeGrid" class="grid">
@@ -125,7 +108,7 @@
 
     var allThemes = [];
     var filteredThemes = [];
-    var currentSort = 'az'; // Por defecto A-Z para mantener el orden
+    var currentSort = 'az'; // Empezamos en A-Z por defecto
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
@@ -158,7 +141,7 @@
                         });
                     }
                     aplicarFiltros();
-                } catch(e) { grid.innerHTML = '<div style="color:red">Error al cargar datos.</div>'; }
+                } catch(e) { grid.innerHTML = '<div style="color:red">Error al cargar JSON.</div>'; }
             }
         };
         xhr.send();
@@ -179,9 +162,9 @@
 
     function aplicarFiltros() {
         var query = searchInput.value.toLowerCase();
-        var tempFiltered = [];
+        var temp = [];
         
-        // UI de Género
+        // 1. FILTRADO POR BÚSQUEDA / GÉNERO / ADULTO
         if(currentGenre !== '') {
             genreActiveBtn.style.display = 'inline-block';
             genreActiveBtn.innerHTML = currentGenre + " X";
@@ -189,76 +172,84 @@
             genreActiveBtn.style.display = 'none';
         }
 
-        // 1. FILTRADO BASE (Búsqueda, Género, Adultos)
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
-            t.esDestacado = false; // Resetear siempre
-            var genNormalizado = t.genero.toLowerCase();
-            var nombreNormalizado = t.nombre.toLowerCase();
+            t.esDestacado = false; 
+            var genLow = t.genero.toLowerCase();
+            var nomLow = t.nombre.toLowerCase();
 
             var isAdult = false;
             for(var j=0; j<PALABRAS_ADULTO.length; j++) {
-                if(genNormalizado.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { isAdult = true; break; }
+                if(genLow.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { isAdult = true; break; }
             }
 
             if(!mostrarContenidoAdulto && isAdult) continue;
 
-            if(nombreNormalizado.indexOf(query) !== -1 && (currentGenre === '' || genNormalizado === currentGenre.toLowerCase())) {
-                tempFiltered.push(t);
+            if(nomLow.indexOf(query) !== -1 && (currentGenre === '' || genLow === currentGenre.toLowerCase())) {
+                temp.push(t);
             }
         }
 
-        // 2. ORDEN ALFABÉTICO (Se aplica a toda la lista filtrada)
-        if(currentSort === 'az') {
-            tempFiltered.sort(function(a,b){ return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; });
-        } else if(currentSort === 'za') {
-            tempFiltered.sort(function(a,b){ return a.nombre.toLowerCase() > b.nombre.toLowerCase() ? -1 : 1; });
+        // 2. ORDENAR TODA LA LISTA ALFABÉTICAMENTE (A-Z o Z-A)
+        if (currentSort === 'az') {
+            temp.sort(function(a, b) {
+                var na = a.nombre.toLowerCase();
+                var nb = b.nombre.toLowerCase();
+                return (na < nb) ? -1 : (na > nb) ? 1 : 0;
+            });
+        } else if (currentSort === 'za') {
+            temp.sort(function(a, b) {
+                var na = a.nombre.toLowerCase();
+                var nb = b.nombre.toLowerCase();
+                return (na > nb) ? -1 : (na < nb) ? 1 : 0;
+            });
         }
 
-        // 3. LÓGICA ANIMUGENZ (Solo en página principal: sin búsqueda y sin filtro de género)
-        if (query === '' && currentGenre === '' && currentSort !== 'none') {
-            var poolAnimugenZ = [];
-            var poolResto = [];
-            
-            // Separamos los de AnimugenZ para elegir al azar
-            for (var k = 0; k < tempFiltered.length; k++) {
-                if (tempFiltered[k].genero.toLowerCase() === 'animugenz') {
-                    poolAnimugenZ.push(tempFiltered[k]);
+        // 3. LÓGICA DE LOS 2 ANIMUGENZ ARRIBA (Solo en el Inicio)
+        // Se activa solo si no hay búsqueda, ni género seleccionado, y no estamos en modo aleatorio total
+        if (query === '' && currentGenre === '' && currentSort !== 'random') {
+            var animugenzPool = [];
+            var restoPool = [];
+
+            // Separamos los de AnimugenZ
+            for (var k = 0; k < temp.length; k++) {
+                if (temp[k].genero.toLowerCase() === 'animugenz') {
+                    animugenzPool.push(temp[k]);
                 } else {
-                    poolResto.push(tempFiltered[k]);
+                    restoPool.push(temp[k]);
                 }
             }
 
-            if (poolAnimugenZ.length > 0) {
-                // Mezclamos SOLO el pool de AnimugenZ para elegir 2 al azar
-                poolAnimugenZ.sort(function() { return 0.5 - Math.random(); });
+            if (animugenzPool.length > 0) {
+                // Mezclamos el pool de AnimugenZ para elegir 2 distintos cada vez
+                animugenzPool.sort(function() { return 0.5 - Math.random(); });
                 
-                var seleccionados = [];
-                var noSeleccionados = [];
-                
-                for (var l = 0; l < poolAnimugenZ.length; l++) {
+                var elegidos = [];
+                var noElegidos = [];
+
+                for (var l = 0; l < animugenzPool.length; l++) {
                     if (l < 2) {
-                        poolAnimugenZ[l].esDestacado = true;
-                        seleccionados.push(poolAnimugenZ[l]);
+                        animugenzPool[l].esDestacado = true;
+                        elegidos.push(animugenzPool[l]);
                     } else {
-                        noSeleccionados.push(poolAnimugenZ[l]);
+                        noElegidos.push(animugenzPool[l]);
                     }
                 }
 
-                // El resto de la lista (incluyendo los AnimugenZ no elegidos) se vuelve a unir y ordenar
-                var listaFinalResto = poolResto.concat(noSeleccionados);
-                if(currentSort === 'az') {
-                    listaFinalResto.sort(function(a,b){ return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; });
-                } else {
-                    listaFinalResto.sort(function(a,b){ return a.nombre.toLowerCase() > b.nombre.toLowerCase() ? -1 : 1; });
+                // El resto de AnimugenZ vuelve a la lista general y se re-ordena para no perder el orden A-Z
+                var listaFinalResto = restoPool.concat(noElegidos);
+                if (currentSort === 'az') {
+                    listaFinalResto.sort(function(a, b) { return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; });
+                } else if (currentSort === 'za') {
+                    listaFinalResto.sort(function(a, b) { return a.nombre.toLowerCase() > b.nombre.toLowerCase() ? -1 : 1; });
                 }
 
-                filteredThemes = seleccionados.concat(listaFinalResto);
+                filteredThemes = elegidos.concat(listaFinalResto);
             } else {
-                filteredThemes = tempFiltered;
+                filteredThemes = temp;
             }
         } else {
-            filteredThemes = tempFiltered;
+            filteredThemes = temp;
         }
 
         currentPage = 0;
@@ -305,7 +296,7 @@
     window.ordenarAZ = function() { currentSort = 'az'; aplicarFiltros(); };
     window.ordenarZA = function() { currentSort = 'za'; aplicarFiltros(); };
     window.modoAleatorio = function() {
-        currentSort = 'none';
+        currentSort = 'random';
         filteredThemes.sort(function() { return 0.5 - Math.random(); });
         currentPage = 0; render(true);
     };
