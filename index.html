@@ -34,8 +34,8 @@
         .grid { text-align: center; clear: both; }
 
         .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
-        /* Estilo sutil para los 2 destacados */
-        .theme-card.featured { border-color: #ff6b35; }
+        /* Resalte para los destacados */
+        .theme-card.featured { border-color: #ff6b35; border-width: 3px; }
 
         .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
         .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
@@ -108,7 +108,7 @@
 
     var allThemes = [];
     var filteredThemes = [];
-    var currentSort = 'az'; // Empezamos en A-Z por defecto
+    var currentSort = 'none'; // IMPORTANTE: Empezamos sin orden forzado (orden del JSON)
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
@@ -141,7 +141,7 @@
                         });
                     }
                     aplicarFiltros();
-                } catch(e) { grid.innerHTML = '<div style="color:red">Error al cargar JSON.</div>'; }
+                } catch(e) { grid.innerHTML = '<div style="color:red">Error al cargar datos.</div>'; }
             }
         };
         xhr.send();
@@ -164,7 +164,6 @@
         var query = searchInput.value.toLowerCase();
         var temp = [];
         
-        // 1. FILTRADO POR BÚSQUEDA / GÉNERO / ADULTO
         if(currentGenre !== '') {
             genreActiveBtn.style.display = 'inline-block';
             genreActiveBtn.innerHTML = currentGenre + " X";
@@ -172,9 +171,10 @@
             genreActiveBtn.style.display = 'none';
         }
 
+        // 1. Filtrar temas (esto mantiene el orden del JSON original)
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
-            t.esDestacado = false; 
+            t.esDestacado = false;
             var genLow = t.genero.toLowerCase();
             var nomLow = t.nombre.toLowerCase();
 
@@ -190,68 +190,46 @@
             }
         }
 
-        // 2. ORDENAR TODA LA LISTA ALFABÉTICAMENTE (A-Z o Z-A)
-        if (currentSort === 'az') {
-            temp.sort(function(a, b) {
-                var na = a.nombre.toLowerCase();
-                var nb = b.nombre.toLowerCase();
-                return (na < nb) ? -1 : (na > nb) ? 1 : 0;
-            });
-        } else if (currentSort === 'za') {
-            temp.sort(function(a, b) {
-                var na = a.nombre.toLowerCase();
-                var nb = b.nombre.toLowerCase();
-                return (na > nb) ? -1 : (na < nb) ? 1 : 0;
-            });
+        // 2. Solo ordenar si el usuario presionó A-Z o Z-A explícitamente
+        if(currentSort === 'az') {
+            temp.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
+        } else if(currentSort === 'za') {
+            temp.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
         }
 
-        // 3. LÓGICA DE LOS 2 ANIMUGENZ ARRIBA (Solo en el Inicio)
-        // Se activa solo si no hay búsqueda, ni género seleccionado, y no estamos en modo aleatorio total
-        if (query === '' && currentGenre === '' && currentSort !== 'random') {
-            var animugenzPool = [];
-            var restoPool = [];
-
-            // Separamos los de AnimugenZ
+        // 3. Lógica de 2 AnimugenZ al azar arriba (SOLO EN EL INICIO)
+        // Solo ocurre si no hay búsqueda, ni filtro de género, y el orden es el del JSON ('none')
+        if (query === '' && currentGenre === '' && currentSort === 'none') {
+            var animugenzIndices = [];
             for (var k = 0; k < temp.length; k++) {
                 if (temp[k].genero.toLowerCase() === 'animugenz') {
-                    animugenzPool.push(temp[k]);
-                } else {
-                    restoPool.push(temp[k]);
+                    animugenzIndices.push(k);
                 }
             }
 
-            if (animugenzPool.length > 0) {
-                // Mezclamos el pool de AnimugenZ para elegir 2 distintos cada vez
-                animugenzPool.sort(function() { return 0.5 - Math.random(); });
+            if (animugenzIndices.length >= 2) {
+                // Elegir 2 índices al azar de los que son AnimugenZ
+                var idx1 = animugenzIndices.splice(Math.floor(Math.random() * animugenzIndices.length), 1)[0];
+                var idx2 = animugenzIndices.splice(Math.floor(Math.random() * animugenzIndices.length), 1)[0];
                 
-                var elegidos = [];
-                var noElegidos = [];
+                var item1 = temp[idx1];
+                var item2 = temp[idx2];
+                item1.esDestacado = true;
+                item2.esDestacado = true;
 
-                for (var l = 0; l < animugenzPool.length; l++) {
-                    if (l < 2) {
-                        animugenzPool[l].esDestacado = true;
-                        elegidos.push(animugenzPool[l]);
-                    } else {
-                        noElegidos.push(animugenzPool[l]);
-                    }
-                }
+                // Quitarlos de sus posiciones originales (quitando el de mayor índice primero)
+                var posMax = Math.max(idx1, idx2);
+                var posMin = Math.min(idx1, idx2);
+                temp.splice(posMax, 1);
+                temp.splice(posMin, 1);
 
-                // El resto de AnimugenZ vuelve a la lista general y se re-ordena para no perder el orden A-Z
-                var listaFinalResto = restoPool.concat(noElegidos);
-                if (currentSort === 'az') {
-                    listaFinalResto.sort(function(a, b) { return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; });
-                } else if (currentSort === 'za') {
-                    listaFinalResto.sort(function(a, b) { return a.nombre.toLowerCase() > b.nombre.toLowerCase() ? -1 : 1; });
-                }
-
-                filteredThemes = elegidos.concat(listaFinalResto);
-            } else {
-                filteredThemes = temp;
+                // Ponerlos al puro principio
+                temp.unshift(item2);
+                temp.unshift(item1);
             }
-        } else {
-            filteredThemes = temp;
         }
 
+        filteredThemes = temp;
         currentPage = 0;
         render(true);
     }
@@ -291,7 +269,7 @@
     };
 
     window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; aplicarFiltros(); };
-    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'az'; aplicarFiltros(); };
+    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'none'; aplicarFiltros(); };
     window.cargarMas = function() { currentPage++; render(false); };
     window.ordenarAZ = function() { currentSort = 'az'; aplicarFiltros(); };
     window.ordenarZA = function() { currentSort = 'za'; aplicarFiltros(); };
