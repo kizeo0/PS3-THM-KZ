@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
     <style>
-        /* Estilos base del original */
+        /* Estilos originales mantenidos */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 20px 0; text-align: center; }
         .main-container { width: 1750px; margin: 0 auto; text-align: left; } 
@@ -31,7 +31,7 @@
 
         .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
 
-        /* Estilo del botón VERSION PKG respetando la estética */
+        /* Botón PKG */
         .pkg-btn { 
             float: right; 
             background: #ff6b35; 
@@ -49,10 +49,10 @@
 
         .grid { text-align: center; clear: both; }
 
-        /* Tarjetas de temas */
         .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
-        .theme-card.featured { border-color: #ff6b35; } /* Resaltar ligeramente los 2 al azar */
-        
+        /* Estilo para los destacados */
+        .theme-card.featured { border-color: #ff6b35; box-shadow: 0 0 10px rgba(255,107,53,0.2); }
+
         .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
         .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
 
@@ -125,7 +125,7 @@
 
     var allThemes = [];
     var filteredThemes = [];
-    var currentSort = 'none';
+    var currentSort = 'az'; // Por defecto A-Z para mantener el orden
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
@@ -141,46 +141,33 @@
     function cargarJSON() {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', JSON_URL + '?v=' + new Date().getTime(), true);
-        
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200 || xhr.status === 0) {
-                    try {
-                        var texto = xhr.responseText;
-                        if (!texto) throw "Vacío";
-                        var data = (window.JSON && window.JSON.parse) ? JSON.parse(texto) : eval('(' + texto + ')');
-                        
-                        allThemes = [];
-                        for (var i = 0; i < data.length; i++) {
-                            var item = data[i];
-                            allThemes.push({
-                                archivo: item.archivo,
-                                descarga: item.descarga,
-                                genero: item.genero || 'Otro',
-                                nombre: item.archivo.replace(/\.p3t$/i, ''),
-                                preview_idx: item.preview_idx || 0
-                            });
-                        }
-                        aplicarFiltros();
-                    } catch(e) { 
-                        grid.innerHTML = '<div style="color:red">Error al procesar JSON.</div>'; 
+            if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 0)) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    allThemes = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var item = data[i];
+                        allThemes.push({
+                            archivo: item.archivo,
+                            descarga: item.descarga,
+                            genero: item.genero || 'Otro',
+                            nombre: item.archivo.replace(/\.p3t$/i, ''),
+                            preview_idx: item.preview_idx || 0,
+                            esDestacado: false
+                        });
                     }
-                } else {
-                    grid.innerHTML = '<div style="color:red">Error de conexión: ' + xhr.status + '</div>';
-                }
+                    aplicarFiltros();
+                } catch(e) { grid.innerHTML = '<div style="color:red">Error al cargar datos.</div>'; }
             }
         };
         xhr.send();
     }
-
     cargarJSON();
 
     window.buscarConRetraso = function() {
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(function() {
-            currentGenre = '';
-            aplicarFiltros();
-        }, 600);
+        searchTimer = setTimeout(function() { currentGenre = ''; aplicarFiltros(); }, 600);
     };
 
     window.toggleAdulto = function() {
@@ -194,6 +181,7 @@
         var query = searchInput.value.toLowerCase();
         var tempFiltered = [];
         
+        // UI de Género
         if(currentGenre !== '') {
             genreActiveBtn.style.display = 'inline-block';
             genreActiveBtn.innerHTML = currentGenre + " X";
@@ -201,76 +189,73 @@
             genreActiveBtn.style.display = 'none';
         }
 
-        // Primer paso: Filtrar por búsqueda y género
+        // 1. FILTRADO BASE (Búsqueda, Género, Adultos)
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
+            t.esDestacado = false; // Resetear siempre
             var genNormalizado = t.genero.toLowerCase();
             var nombreNormalizado = t.nombre.toLowerCase();
 
             var isAdult = false;
             for(var j=0; j<PALABRAS_ADULTO.length; j++) {
-                if(genNormalizado.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { 
-                    isAdult = true; 
-                    break; 
-                }
+                if(genNormalizado.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { isAdult = true; break; }
             }
 
             if(!mostrarContenidoAdulto && isAdult) continue;
 
-            var coincideBusqueda = nombreNormalizado.indexOf(query) !== -1;
-            var coincideGenero = (currentGenre === '' || genNormalizado === currentGenre.toLowerCase());
-
-            if(coincideBusqueda && coincideGenero) {
-                t.esDestacado = false; // Resetear bandera
+            if(nombreNormalizado.indexOf(query) !== -1 && (currentGenre === '' || genNormalizado === currentGenre.toLowerCase())) {
                 tempFiltered.push(t);
             }
         }
 
-        // Segundo paso: Ordenar A-Z o Z-A
+        // 2. ORDEN ALFABÉTICO (Se aplica a toda la lista filtrada)
         if(currentSort === 'az') {
-            tempFiltered.sort(function(a,b){ 
-                return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; 
-            });
+            tempFiltered.sort(function(a,b){ return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; });
         } else if(currentSort === 'za') {
-            tempFiltered.sort(function(a,b){ 
-                return a.nombre.toLowerCase() > b.nombre.toLowerCase() ? -1 : 1; 
-            });
+            tempFiltered.sort(function(a,b){ return a.nombre.toLowerCase() > b.nombre.toLowerCase() ? -1 : 1; });
         }
 
-        // Tercer paso: Lógica AnimugenZ (2 al azar al principio en vista general)
-        if (query === '' && currentGenre === '' && (currentSort === 'none' || currentSort === 'az')) {
-            var destacados = [];
-            var otrosTemas = [];
-            var animugenzPool = [];
-
+        // 3. LÓGICA ANIMUGENZ (Solo en página principal: sin búsqueda y sin filtro de género)
+        if (query === '' && currentGenre === '' && currentSort !== 'none') {
+            var poolAnimugenZ = [];
+            var poolResto = [];
+            
+            // Separamos los de AnimugenZ para elegir al azar
             for (var k = 0; k < tempFiltered.length; k++) {
                 if (tempFiltered[k].genero.toLowerCase() === 'animugenz') {
-                    animugenzPool.push(tempFiltered[k]);
+                    poolAnimugenZ.push(tempFiltered[k]);
                 } else {
-                    otrosTemas.push(tempFiltered[k]);
+                    poolResto.push(tempFiltered[k]);
                 }
             }
 
-            // Elegir 2 al azar de AnimugenZ
-            animugenzPool.sort(function() { return 0.5 - Math.random(); });
-
-            filteredThemes = [];
-            for (var l = 0; l < animugenzPool.length; l++) {
-                if (l < 2) {
-                    animugenzPool[l].esDestacado = true;
-                    filteredThemes.push(animugenzPool[l]);
-                } else {
-                    otrosTemas.push(animugenzPool[l]);
+            if (poolAnimugenZ.length > 0) {
+                // Mezclamos SOLO el pool de AnimugenZ para elegir 2 al azar
+                poolAnimugenZ.sort(function() { return 0.5 - Math.random(); });
+                
+                var seleccionados = [];
+                var noSeleccionados = [];
+                
+                for (var l = 0; l < poolAnimugenZ.length; l++) {
+                    if (l < 2) {
+                        poolAnimugenZ[l].esDestacado = true;
+                        seleccionados.push(poolAnimugenZ[l]);
+                    } else {
+                        noSeleccionados.push(poolAnimugenZ[l]);
+                    }
                 }
-            }
 
-            // El resto se ordena A-Z
-            otrosTemas.sort(function(a,b){ 
-                return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; 
-            });
+                // El resto de la lista (incluyendo los AnimugenZ no elegidos) se vuelve a unir y ordenar
+                var listaFinalResto = poolResto.concat(noSeleccionados);
+                if(currentSort === 'az') {
+                    listaFinalResto.sort(function(a,b){ return a.nombre.toLowerCase() < b.nombre.toLowerCase() ? -1 : 1; });
+                } else {
+                    listaFinalResto.sort(function(a,b){ return a.nombre.toLowerCase() > b.nombre.toLowerCase() ? -1 : 1; });
+                }
 
-            for (var m = 0; m < otrosTemas.length; m++) {
-                filteredThemes.push(otrosTemas[m]);
+                filteredThemes = seleccionados.concat(listaFinalResto);
+            } else {
+                filteredThemes = tempFiltered;
             }
         } else {
             filteredThemes = tempFiltered;
@@ -282,14 +267,11 @@
 
     function render(reset) {
         if (reset) grid.innerHTML = '';
-
         var start = currentPage * PAGE_SIZE;
         var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
 
         for (var i = start; i < end; i++) {
             var t = filteredThemes[i];
-            if (!t) continue;
-
             var imgName = encodeURIComponent(t.nombre + '.png');
             var folder = PREVIEW_FOLDERS[t.preview_idx] || PREVIEW_FOLDERS[0];
             var nombreDisp = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
@@ -305,7 +287,6 @@
                 '</div>';
             grid.appendChild(card);
         }
-
         statsDiv.innerHTML = filteredThemes.length + ' Temas';
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
@@ -315,13 +296,11 @@
         if(nIdx < PREVIEW_FOLDERS.length) {
             img.src = PREVIEW_FOLDERS[nIdx] + name;
             img.onerror = function() { proximaCarpeta(img, nIdx, name); };
-        } else {
-            img.style.display = 'none';
-        }
+        } else { img.style.display = 'none'; }
     };
 
     window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; aplicarFiltros(); };
-    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'none'; aplicarFiltros(); };
+    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'az'; aplicarFiltros(); };
     window.cargarMas = function() { currentPage++; render(false); };
     window.ordenarAZ = function() { currentSort = 'az'; aplicarFiltros(); };
     window.ordenarZA = function() { currentSort = 'za'; aplicarFiltros(); };
