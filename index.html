@@ -4,37 +4,51 @@
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
     <style>
-        /* Mantenemos tu CSS original intacto */
+        /* Estilos ajustados para efecto de escala 1.25x */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-        body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 15px 0; text-align: center; }
-        .main-container { width: 1400px; margin: 0 auto; text-align: left; } /* Reducido un poco para evitar scroll horizontal en 720p/1080i */
-        .header { overflow: hidden; margin-bottom: 20px; border-bottom: 4px solid #ff6b35; padding-bottom: 15px; }
-        .logo-img { height: 90px; float: left; cursor: pointer; }
-        .social-container { float: right; background: #0a1a2a; padding: 8px 25px; border-radius: 50px; border: 2px solid #ff6b35; }
-        .social-icon { width: 50px; height: 50px; margin: 0 5px; vertical-align: middle; }
-        .toolbar { background: #0a1a2a; padding: 12px 20px; border-radius: 50px; margin-bottom: 20px; border-left: 5px solid #ff6b35; overflow: hidden; }
+        body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 20px 0; text-align: center; }
+        
+        /* Contenedor principal más ancho para dar espacio a tarjetas más grandes */
+        .main-container { width: 1750px; margin: 0 auto; text-align: left; } 
+
+        .header { overflow: hidden; margin-bottom: 25px; border-bottom: 5px solid #ff6b35; padding-bottom: 20px; }
+        .logo-img { height: 115px; float: left; cursor: pointer; }
+
+        .social-container { float: right; background: #0a1a2a; padding: 10px 30px; border-radius: 60px; border: 3px solid #ff6b35; margin-top: 15px; }
+        .social-icon { width: 62px; height: 62px; margin: 0 7px; vertical-align: middle; }
+
+        .toolbar { background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; overflow: hidden; }
         .search-wrapper { float: left; }
-        .search-wrapper input { width: 250px; padding: 12px 18px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 40px; color: white; vertical-align: middle; }
-        .dice-btn { display: inline-block; width: 45px; height: 45px; margin-left: 8px; background: #1e3b4f; border: 2px solid #ff6b35; border-radius: 50%; text-align: center; line-height: 42px; cursor: pointer; vertical-align: middle; }
-        .dice-img { width: 28px; vertical-align: middle; }
-        .sort-buttons { float: left; margin-left: 20px; }
-        .sort-btn { background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 10px 18px; border-radius: 30px; font-weight: bold; cursor: pointer; margin-right: 5px; }
+        .search-wrapper input { width: 310px; padding: 15px 22px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 50px; color: white; vertical-align: middle; font-size: 16px; }
+
+        .dice-btn { display: inline-block; width: 56px; height: 56px; margin-left: 10px; background: #1e3b4f; border: 3px solid #ff6b35; border-radius: 50%; text-align: center; line-height: 52px; cursor: pointer; vertical-align: middle; }
+        .dice-img { width: 35px; vertical-align: middle; }
+
+        .sort-buttons { float: left; margin-left: 25px; }
+        .sort-btn { background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 12px 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; }
         .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
-        .btn-genre-active { background: #0b0f17; border-color: #ffb28c; color: #ffb28c; display: none; }
+        .btn-genre-active { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active { background: #ff3535; color: white; }
-        .stats { float: right; color: #9ab8d9; line-height: 45px; font-weight: bold; }
+
+        .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
+
         .grid { text-align: center; clear: both; }
-        .theme-card { width: 280px; background: #0e1727; border-radius: 15px; overflow: hidden; border: 1px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 10px; text-align: left; }
-        .preview { width: 100%; background: #000; text-align: center; border-bottom: 2px solid #ff6b35; height: 180px; line-height: 180px; overflow: hidden; }
+
+        /* Tarjetas de temas escaladas */
+        .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
+        .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
         .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
-        .card-info { padding: 15px; }
-        .theme-name { font-weight: bold; font-size: 15px; color: #fff; height: 36px; overflow: hidden; margin-bottom: 5px; }
-        .theme-genre { background: #1e3b4f; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; color: #ffb28c; margin-bottom: 12px; display: inline-block; border: 1px solid #ff6b35; cursor: pointer; }
-        .download-btn { background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 10px; border-radius: 30px; text-align: center; display: block; font-size: 13px; }
-        .load-more { text-align: center; margin: 20px 0; }
-        .btn-primary { background: #ff6b35; color: #0b0f17; padding: 15px 50px; border-radius: 40px; font-weight: bold; cursor: pointer; border: none; }
-        .footer { margin-top: 40px; border-top: 2px solid #ff6b3540; padding: 20px 0; color: #b0c8e0; }
+
+        .card-info { padding: 20px; }
+        .theme-name { font-weight: bold; font-size: 19px; color: #fff; height: 45px; overflow: hidden; margin-bottom: 8px; }
+        .theme-genre { background: #1e3b4f; padding: 6px 12px; border-radius: 10px; font-size: 14px; font-weight: bold; color: #ffb28c; margin-bottom: 15px; display: inline-block; border: 1px solid #ff6b35; cursor: pointer; }
+        .download-btn { background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 12px; border-radius: 40px; text-align: center; display: block; font-size: 15px; }
+
+        .load-more { text-align: center; margin: 30px 0; }
+        .btn-primary { background: #ff6b35; color: #0b0f17; padding: 18px 60px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; font-size: 18px; }
+
+        .footer { margin-top: 50px; border-top: 3px solid #ff6b3540; padding: 25px 0; color: #b0c8e0; font-size: 16px; }
         .clearfix::after { content: ""; display: table; clear: both; }
     </style>
 </head>
@@ -81,12 +95,10 @@
 </div>
 
 <script>
-    // URL del JSON: Asegúrate de que esté en la misma carpeta o un servidor HTTP (no HTTPS si es posible para PS3 vieja)
     var JSON_URL = 'temas_ps3_conlinks.json';
     var PAGE_SIZE = 12; 
     var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols', 'j-idol', 'people'];
     
-    // NOTA: PS3 suele fallar cargando desde raw.githubusercontent.com por el TLS 1.2
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
@@ -108,10 +120,8 @@
     var adultBtn = document.getElementById('adultBtn');
     var genreActiveBtn = document.getElementById('genreActiveBtn');
 
-    // Manejo de AJAX compatible con navegadores antiguos
     function cargarJSON() {
         var xhr = new XMLHttpRequest();
-        // Forzamos que no use caché para evitar errores de lectura
         xhr.open('GET', JSON_URL + '?v=' + new Date().getTime(), true);
         
         xhr.onreadystatechange = function() {
@@ -120,8 +130,6 @@
                     try {
                         var texto = xhr.responseText;
                         if (!texto) throw "Vacío";
-                        
-                        // En PS3, JSON.parse es más seguro que eval si existe
                         var data = (window.JSON && window.JSON.parse) ? JSON.parse(texto) : eval('(' + texto + ')');
                         
                         allThemes = [];
@@ -137,7 +145,7 @@
                         }
                         aplicarFiltros();
                     } catch(e) { 
-                        grid.innerHTML = '<div style="color:red">Error al procesar JSON. Revisa el formato o el SSL.</div>'; 
+                        grid.innerHTML = '<div style="color:red">Error al procesar JSON.</div>'; 
                     }
                 } else {
                     grid.innerHTML = '<div style="color:red">Error de conexión: ' + xhr.status + '</div>';
@@ -147,7 +155,6 @@
         xhr.send();
     }
 
-    // Iniciar carga
     cargarJSON();
 
     window.buscarConRetraso = function() {
@@ -238,7 +245,6 @@
         var nIdx = idx + 1;
         if(nIdx < PREVIEW_FOLDERS.length) {
             img.src = PREVIEW_FOLDERS[nIdx] + name;
-            // Limpiamos el error previo para evitar bucles infinitos
             img.onerror = function() { proximaCarpeta(img, nIdx, name); };
         } else {
             img.style.display = 'none';
@@ -257,4 +263,3 @@
 </script>
 </body>
 </html>
-
