@@ -151,7 +151,6 @@
             margin-bottom: 5px;
         }
 
-        /* --- ESTILO DE GÉNERO ACTUALIZADO --- */
         .theme-genre {
             background: #1e3b4f;
             padding: 6px 12px;
@@ -163,7 +162,6 @@
             display: inline-block;
             border: 2px solid #ff6b35;
             cursor: pointer;
-            /* Se eliminó text-transform para respetar el JSON original */
         }
 
         .download-btn {
@@ -245,7 +243,8 @@
 <script>
     var JSON_URL = 'temas_ps3_conlinks.json';
     var PAGE_SIZE = 12; 
-    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'girl', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'J-Idols', 'J-Idols'];
+    // He actualizado la lista a minúsculas para que el buscador la detecte correctamente
+    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'girl', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols'];
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
@@ -388,5 +387,3 @@
 </script>
 </body>
 </html>
-
-
