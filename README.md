@@ -28,7 +28,7 @@ Puedes acceder al repositorio de dos formas:
 🔗 **[bit.ly/ps3thmkz](https://bit.ly/ps3thmkz)**
 
 ### 2. Acceso Directo mediante PKG (Recomendado para PS3)
-Para una experiencia más integrada, puedes instalar el **PKG de acceso directo** que coloca un icono en tu XMB para entrar al sitio rápidamente.
+Para una experiencia más integrada, puedes instalar el **PKG de acceso directo** que coloca un icono en tu XMB.
 🔗 **[Descargar Versión PKG](https://bit.ly/ps3thmpkg)**
 
 ---
