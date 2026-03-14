@@ -24,8 +24,8 @@ Actualmente, el sitio se encuentra en fase de **pulido constante**. Se puede aun
 
 🌐 Cómo Acceder
 Puedes acceder al repositorio de dos formas:
-### 1.Sitio Web acortado bit.ly/ps3thmkz
-🔗 **[Desde el navegador de PS3](bit.ly/ps3thmkz)**
+### 1.Sitio Web acortado para colocar en el navegador de PS3
+🔗 **[bit.ly/ps3thmkz](bit.ly/ps3thmkz)**
 
 ### 2. Acceso Directo mediante PKG (Recomendado para PS3)
 Para una experiencia más integrada, puedes instalar el **PKG de acceso directo** que coloca un icono en tu XMB.
