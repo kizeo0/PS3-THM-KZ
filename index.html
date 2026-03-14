@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
     <style>
-        /* Estilos base para PS3 */
+        /* Estilos base para PS3 - Optimizados para NetFront */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 20px 0; text-align: center; }
         
@@ -16,21 +16,23 @@
         .social-container { float: right; background: #0a1a2a; padding: 10px 30px; border-radius: 60px; border: 3px solid #ff6b35; margin-top: 15px; }
         .social-icon { width: 62px; height: 62px; margin: 0 7px; vertical-align: middle; }
 
-        .toolbar { background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; overflow: hidden; }
-        .search-wrapper { float: left; }
-        .search-wrapper input { width: 310px; padding: 15px 22px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 50px; color: white; vertical-align: middle; font-size: 16px; }
+        .toolbar { background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; overflow: hidden; height: 86px; line-height: 56px; }
+        .search-wrapper { float: left; height: 56px; }
+        .search-wrapper input { width: 310px; height: 50px; padding: 0 22px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 50px; color: white; vertical-align: middle; font-size: 16px; }
 
-        .dice-btn { display: inline-block; width: 56px; height: 56px; margin-left: 10px; background: #1e3b4f; border: 3px solid #ff6b35; border-radius: 50%; text-align: center; line-height: 52px; cursor: pointer; vertical-align: middle; }
-        .dice-img { width: 35px; vertical-align: middle; }
+        /* AJUSTE 2: Botones con altura idéntica (50px) y centrado */
+        .dice-btn { display: inline-block; width: 50px; height: 50px; margin-left: 10px; background: #1e3b4f; border: 3px solid #ff6b35; border-radius: 50%; text-align: center; line-height: 44px; cursor: pointer; vertical-align: middle; }
+        .dice-img { width: 28px; vertical-align: middle; }
 
-        .sort-buttons { float: left; margin-left: 25px; }
-        .sort-btn { background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 12px 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; }
+        .sort-buttons { float: left; margin-left: 25px; height: 56px; }
+        .sort-btn { height: 50px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 0 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; vertical-align: middle; line-height: 46px; }
+        
         .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
         .btn-genre-active { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active { background: #ff3535; color: white; }
 
-        .btn-pkg { float: right; background: #ff6b35; color: #ffffff; text-decoration: none; font-weight: bold; padding: 0 25px; border-radius: 40px; height: 56px; line-height: 56px; font-size: 16px; margin-right: 20px; border: 2px solid #ff6b35; }
+        .btn-pkg { float: right; background: #ff6b35; color: #ffffff; text-decoration: none; font-weight: bold; padding: 0 25px; border-radius: 40px; height: 50px; line-height: 50px; font-size: 16px; margin-right: 20px; border: 2px solid #ff6b35; margin-top: 3px; }
 
         .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
 
@@ -45,9 +47,9 @@
         .theme-genre { background: #1e3b4f; padding: 6px 12px; border-radius: 10px; font-size: 14px; font-weight: bold; color: #ffb28c; margin-bottom: 15px; display: inline-block; border: 1px solid #ff6b35; cursor: pointer; }
         .download-btn { background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 12px; border-radius: 40px; text-align: center; display: block; font-size: 15px; }
 
-        /* Estilos Paginación */
+        /* AJUSTE 3: Paginación mejorada */
         .pagination-container { text-align: center; margin: 40px 0; }
-        .page-box { display: inline-block; width: 55px; height: 55px; line-height: 52px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 5px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 18px; text-decoration: none; }
+        .page-box { display: inline-block; width: 50px; height: 50px; line-height: 46px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 4px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; vertical-align: middle; }
         .page-box.active { background: #ff6b35; border-color: #ff6b35; color: #0b0f17; }
         .page-box:hover { border-color: #ff6b35; }
 
@@ -87,8 +89,7 @@
         <div style="padding:40px; color:#ffb28c;">Cargando base de datos...</div>
     </div>
 
-    <div class="pagination-container" id="pagination">
-        </div>
+    <div class="pagination-container" id="pagination"></div>
 
     <div class="footer clearfix">
         <span style="float:left">© PS3 THM KZ</span>
@@ -113,6 +114,7 @@
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
+    var esModoAleatorio = false; // AJUSTE 1: Flag para saber si estamos en modo azar
     var searchTimer = null; 
 
     var grid = document.getElementById('themeGrid');
@@ -156,6 +158,7 @@
         searchTimer = setTimeout(function() {
             currentGenre = '';
             currentPage = 0;
+            esModoAleatorio = false; // Desactiva azar al buscar
             aplicarFiltros();
         }, 600);
     };
@@ -212,8 +215,8 @@
     function render() {
         grid.innerHTML = '';
         
-        // Destacados AnimugenZ solo en pag 1
-        if (currentPage === 0 && currentGenre === '' && searchInput.value === '') {
+        // AJUSTE 1: Solo mostrar AnimugenZ si NO estamos en modo aleatorio, NO hay búsqueda y es pág 0
+        if (!esModoAleatorio && currentPage === 0 && currentGenre === '' && searchInput.value === '') {
             var pool = [];
             for(var a=0; a<allThemes.length; a++) if(allThemes[a].genero === 'AnimugenZ') pool.push(allThemes[a]);
             if(pool.length > 0) {
@@ -236,11 +239,15 @@
         paginationDiv.innerHTML = '';
         if(totalPages <= 1) return;
 
-        var startPage = Math.max(0, currentPage - 2);
-        var endPage = Math.min(totalPages - 1, startPage + 4);
+        // AJUSTE 3: Mostrar hasta 10 páginas
+        var visibleButtons = 10;
+        var half = Math.floor(visibleButtons / 2);
+        var startPage = Math.max(0, currentPage - half);
+        var endPage = Math.min(totalPages - 1, startPage + visibleButtons - 1);
         
-        // Ajuste si estamos al final
-        if (endPage - startPage < 4) startPage = Math.max(0, endPage - 4);
+        if (endPage - startPage < visibleButtons - 1) {
+            startPage = Math.max(0, endPage - (visibleButtons - 1));
+        }
 
         for (var p = startPage; p <= endPage; p++) {
             var btn = document.createElement('button');
@@ -261,11 +268,27 @@
         } else { img.style.display = 'none'; }
     };
 
-    window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; currentPage = 0; aplicarFiltros(); };
-    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentPage = 0; aplicarFiltros(); };
+    window.filtrarPorGenero = function(g) { 
+        currentGenre = g; 
+        searchInput.value = ''; 
+        currentPage = 0; 
+        esModoAleatorio = false; 
+        aplicarFiltros(); 
+    };
+
+    window.volverInicio = function() { 
+        searchInput.value = ''; 
+        currentGenre = ''; 
+        currentPage = 0; 
+        esModoAleatorio = false; 
+        aplicarFiltros(); 
+    };
+
     window.modoAleatorio = function() {
+        esModoAleatorio = true; // Activamos el flag de azar
         filteredThemes.sort(function() { return 0.5 - Math.random(); });
-        currentPage = 0; render();
+        currentPage = 0; 
+        render();
     };
 </script>
 </body>
