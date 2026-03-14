@@ -16,66 +16,85 @@
         .social-container { float: right; background: #0a1a2a; padding: 10px 30px; border-radius: 60px; border: 3px solid #ff6b35; margin-top: 15px; }
         .social-icon { width: 62px; height: 62px; margin: 0 7px; vertical-align: middle; }
 
-        .toolbar { background: #0a1a2a; padding: 20px; border-radius: 15px; margin-bottom: 30px; border: 2px solid #1e2a3a; display: block; overflow: hidden; }
+        .toolbar { background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; overflow: hidden; height: 86px; line-height: 56px; }
+        .search-wrapper { float: left; height: 56px; }
+        .search-wrapper input { width: 310px; height: 50px; padding: 0 22px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 50px; color: white; vertical-align: middle; font-size: 16px; }
+
+        /* AJUSTE 2: Botones con altura idéntica (50px) y centrado */
+        .dice-btn { display: inline-block; width: 50px; height: 50px; margin-left: 10px; background: #1e3b4f; border: 3px solid #ff6b35; border-radius: 50%; text-align: center; line-height: 44px; cursor: pointer; vertical-align: middle; }
+        .dice-img { width: 28px; vertical-align: middle; }
+
+        .sort-buttons { float: left; margin-left: 25px; height: 56px; }
+        .sort-btn { height: 50px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 0 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; vertical-align: middle; line-height: 46px; }
         
-        .search-box { width: 600px; height: 60px; background: #162435; border: 2px solid #ff6b35; border-radius: 10px; color: white; padding: 0 20px; font-size: 24px; float: left; }
-        
-        .nav-buttons { float: right; }
-        .sort-btn { background: #162435; border: 2px solid #3d4b5c; color: #b0b8c4; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; margin-left: 10px; }
-        .sort-btn:hover, .sort-btn.active { border-color: #ff6b35; color: white; background: #1e2a3a; }
-        .btn-adult.active { background: #8b0000; border-color: #ff4d4d; color: white; }
+        .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
+        .btn-genre-active { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
+        .btn-adult { border-color: #ff3535; color: #ff9b9b; }
+        .btn-adult.active { background: #ff3535; color: white; }
 
-        .genre-tag-active { display: none; background: #ff6b35; color: white; padding: 10px 20px; border-radius: 10px; margin-bottom: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .btn-pkg { float: right; background: #ff6b35; color: #ffffff; text-decoration: none; font-weight: bold; padding: 0 25px; border-radius: 40px; height: 50px; line-height: 50px; font-size: 16px; margin-right: 20px; border: 2px solid #ff6b35; margin-top: 3px; }
 
-        .grid { display: block; overflow: hidden; }
-        
-        .theme-card { width: 410px; background: #162435; border-radius: 15px; border: 2px solid #1e2a3a; margin: 0 13px 25px 13px; float: left; transition: transform 0.2s; position: relative; }
-        .theme-card:hover { border-color: #ff6b35; transform: translateY(-5px); }
+        .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
 
-        .preview { width: 100%; height: 230px; background: #0b0f17; border-radius: 13px 13px 0 0; overflow: hidden; display: table-cell; vertical-align: middle; text-align: center; }
-        .preview img { max-width: 100%; max-height: 100%; display: inline-block; }
+        .grid { text-align: center; clear: both; min-height: 600px; }
 
-        .card-info { padding: 15px; }
-        .theme-name { font-size: 20px; font-weight: bold; margin-bottom: 8px; color: white; height: 48px; overflow: hidden; }
-        .theme-genre { font-size: 14px; color: #ff6b35; margin-bottom: 15px; text-transform: uppercase; cursor: pointer; display: inline-block; }
-        
-        .download-btn { display: block; width: 100%; background: #ff6b35; color: white; text-align: center; padding: 12px 0; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 18px; }
-        .download-btn:hover { background: #ff8555; }
+        .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
+        .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
+        .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
 
-        .stats { margin-top: 20px; color: #6b7a8d; font-size: 16px; clear: both; padding: 20px 0; }
+        .card-info { padding: 20px; }
+        .theme-name { font-weight: bold; font-size: 19px; color: #fff; height: 45px; overflow: hidden; margin-bottom: 8px; }
+        .theme-genre { background: #1e3b4f; padding: 6px 12px; border-radius: 10px; font-size: 14px; font-weight: bold; color: #ffb28c; margin-bottom: 15px; display: inline-block; border: 1px solid #ff6b35; cursor: pointer; }
+        .download-btn { background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 12px; border-radius: 40px; text-align: center; display: block; font-size: 15px; }
 
-        .pagination { margin-top: 30px; padding-bottom: 50px; clear: both; }
-        .page-box { display: inline-block; padding: 10px 20px; background: #162435; border: 2px solid #3d4b5c; border-radius: 8px; color: white; margin: 0 5px; cursor: pointer; font-weight: bold; }
-        .page-box.active { border-color: #ff6b35; background: #ff6b35; }
+        /* AJUSTE 3: Paginación mejorada */
+        .pagination-container { text-align: center; margin: 40px 0; }
+        .page-box { display: inline-block; width: 50px; height: 50px; line-height: 46px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 4px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; vertical-align: middle; }
+        .page-box.active { background: #ff6b35; border-color: #ff6b35; color: #0b0f17; }
+        .page-box:hover { border-color: #ff6b35; }
+
+        .footer { margin-top: 50px; border-top: 3px solid #ff6b3540; padding: 25px 0; color: #b0c8e0; font-size: 16px; }
+        .clearfix::after { content: ""; display: table; clear: both; }
     </style>
 </head>
 <body>
 
 <div class="main-container">
-    <div class="header">
-        <img src="logo.png" class="logo-img" onclick="volverInicio()">
+    <div class="header clearfix">
+        <img src="recursos/titulo.png" alt="Logo" class="logo-img" onclick="volverInicio()">
         <div class="social-container">
-            <a href="#"><img src="youtube.png" class="social-icon"></a>
-            <a href="#"><img src="twitter.png" class="social-icon"></a>
-            <a href="#"><img src="discord.png" class="social-icon"></a>
+            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" class="social-icon"></a>
+            <a href="https://github.com/kizeo0"><img src="recursos/git.png" class="social-icon"></a>
+            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" class="social-icon"></a>
         </div>
     </div>
 
-    <div class="toolbar">
-        <input type="text" id="searchInput" class="search-box" placeholder="Buscar tema..." onkeyup="buscarConRetraso()">
-        <div class="nav-buttons">
-            <button class="sort-btn" onclick="modoAleatorio()">ALEATORIO</button>
+    <div class="toolbar clearfix">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="buscarConRetraso()">
+            <div class="dice-btn" onclick="modoAleatorio()">
+                <img src="recursos/dado.png" class="dice-img">
+            </div>
+        </div>
+        <div class="sort-buttons">
             <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
+            <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
+        
+        <div class="stats" id="stats">...</div>
+        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="btn-pkg">VERSION PKG</a>
     </div>
 
-    <div id="genreActiveBtn" class="genre-tag-active" onclick="volverInicio()"></div>
+    <div id="themeGrid" class="grid">
+        <div style="padding:40px; color:#ffb28c;">Cargando base de datos...</div>
+    </div>
 
-    <div class="grid" id="themeGrid">
-        </div>
+    <div class="pagination-container" id="pagination"></div>
 
-    <div id="stats" class="stats">Cargando...</div>
-    <div id="pagination" class="pagination"></div>
+    <div class="footer clearfix">
+        <span style="float:left">© PS3 THM KZ</span>
+        <span style="float:right">Youtube KiZeo</span>
+    </div>
 </div>
 
 <script>
@@ -95,7 +114,7 @@
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
-    var esModoAleatorio = false; 
+    var esModoAleatorio = false; // AJUSTE 1: Flag para saber si estamos en modo azar
     var searchTimer = null; 
 
     var grid = document.getElementById('themeGrid');
@@ -139,7 +158,7 @@
         searchTimer = setTimeout(function() {
             currentGenre = '';
             currentPage = 0;
-            esModoAleatorio = false; 
+            esModoAleatorio = false; // Desactiva azar al buscar
             aplicarFiltros();
         }, 600);
     };
@@ -180,18 +199,14 @@
     }
 
     function crearHTMLTarjeta(t, destacado) {
-        // CORRECCIÓN CRÍTICA: Convertimos caracteres especiales como ' y © en códigos seguros para la URL.
-        // Reemplazamos ' por %27 para que no rompa la función del atributo onerror.
-        var imgNameSafe = encodeURIComponent(t.nombre + '.png').replace(/'/g, "%27");
-        
+        var imgName = encodeURIComponent(t.nombre + '.png');
         var folder = PREVIEW_FOLDERS[t.preview_idx] || PREVIEW_FOLDERS[0];
         var estiloExtra = destacado ? ' style="border-color: #ffb28c; box-shadow: 0 0 15px rgba(255,178,140,0.3);"' : '';
-        
         return '<div class="theme-card"' + estiloExtra + '>' +
-                '<div class="preview"><img src="' + folder + imgNameSafe + '" onerror="proximaCarpeta(this,'+t.preview_idx+',\''+imgNameSafe+'\')"></div>' +
+                '<div class="preview"><img src="' + folder + imgName + '" onerror="proximaCarpeta(this,'+t.preview_idx+',\''+imgName+'\')"></div>' +
                 '<div class="card-info">' +
                     '<div class="theme-name">' + t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "") + '</div>' +
-                    '<div class="theme-genre" onclick="filtrarPorGenero(\''+t.genero.replace(/'/g, "\\'")+'\')">' + t.genero + '</div>' +
+                    '<div class="theme-genre" onclick="filtrarPorGenero(\''+t.genero+'\')">' + t.genero + '</div>' +
                     '<a href="' + t.descarga + '" class="download-btn">DESCARGAR</a>' +
                 '</div>' +
             '</div>';
@@ -200,6 +215,7 @@
     function render() {
         grid.innerHTML = '';
         
+        // AJUSTE 1: Solo mostrar AnimugenZ si NO estamos en modo aleatorio, NO hay búsqueda y es pág 0
         if (!esModoAleatorio && currentPage === 0 && currentGenre === '' && searchInput.value === '') {
             var pool = [];
             for(var a=0; a<allThemes.length; a++) if(allThemes[a].genero === 'AnimugenZ') pool.push(allThemes[a]);
@@ -223,6 +239,7 @@
         paginationDiv.innerHTML = '';
         if(totalPages <= 1) return;
 
+        // AJUSTE 3: Mostrar hasta 10 páginas
         var visibleButtons = 10;
         var half = Math.floor(visibleButtons / 2);
         var startPage = Math.max(0, currentPage - half);
@@ -268,7 +285,7 @@
     };
 
     window.modoAleatorio = function() {
-        esModoAleatorio = true; 
+        esModoAleatorio = true; // Activamos el flag de azar
         filteredThemes.sort(function() { return 0.5 - Math.random(); });
         currentPage = 0; 
         render();
