@@ -40,7 +40,8 @@
             padding: 12px 22px;
             border-radius: 40px;
             font-weight: bold;
-            margin-right: 15px;
+            margin-right: 0;  /* Sin margen derecho porque está junto al contador */
+            margin-left: 15px; /* Espacio a la izquierda para separarlo del contador */
             text-decoration: none;
             font-size: 15px;
             display: inline-block;
@@ -99,9 +100,10 @@
             <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
             <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
-        <!-- Botón VERSION PKG -->
-        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="version-btn" target="_blank">VERSION PKG</a>
+        <!-- Contador de temas (stats) primero para que flote más a la derecha -->
         <div class="stats" id="stats">...</div>
+        <!-- Botón VERSION PKG después del contador para que quede a su izquierda -->
+        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="version-btn" target="_blank">VERSION PKG</a>
     </div>
 
     <div id="themeGrid" class="grid">
@@ -121,7 +123,7 @@
 <script>
     // Parámetros optimizados para PS3
     var JSON_URL = 'temas_ps3_conlinks.json';
-    var PAGE_SIZE = 10; // Reducido de 12 a 10 para menor consumo de memoria
+    var PAGE_SIZE = 10; // Reducido para menor consumo de memoria
     var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols', 'j-idol', 'people', 'Girl', 'Girls'];
     
     var PREVIEW_FOLDERS = [
@@ -153,26 +155,23 @@
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
+                    var texto = xhr.responseText;
+                    if (!texto) {
+                        grid.innerHTML = '<div style="color:red">Error: JSON vacío.</div>';
+                        return;
+                    }
                     try {
-                        var texto = xhr.responseText;
-                        if (!texto) throw "Vacío";
-                        // Usar JSON.parse si está disponible, si no, eval (para compatibilidad PS3)
-                        var data = (window.JSON && window.JSON.parse) ? JSON.parse(texto) : eval('(' + texto + ')');
-                        
-                        allThemes = [];
-                        for (var i = 0; i < data.length; i++) {
-                            var item = data[i];
-                            allThemes.push({
-                                archivo: item.archivo,
-                                descarga: item.descarga,
-                                genero: item.genero || 'Otro',
-                                nombre: item.archivo.replace(/\.p3t$/i, ''),
-                                preview_idx: item.preview_idx || 0
-                            });
+                        // Primero intentar con JSON.parse (navegadores modernos)
+                        var data = JSON.parse(texto);
+                        procesarData(data);
+                    } catch (e) {
+                        // Si falla, intentar con eval (para compatibilidad PS3)
+                        try {
+                            var data = eval('(' + texto + ')');
+                            procesarData(data);
+                        } catch (e2) {
+                            grid.innerHTML = '<div style="color:red">Error al procesar JSON. Posible formato inválido.</div>';
                         }
-                        aplicarFiltros();
-                    } catch(e) { 
-                        grid.innerHTML = '<div style="color:red">Error al procesar JSON.</div>'; 
                     }
                 } else {
                     grid.innerHTML = '<div style="color:red">Error de conexión: ' + xhr.status + '</div>';
@@ -180,6 +179,21 @@
             }
         };
         xhr.send();
+    }
+
+    function procesarData(data) {
+        allThemes = [];
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            allThemes.push({
+                archivo: item.archivo,
+                descarga: item.descarga,
+                genero: item.genero || 'Otro',
+                nombre: item.archivo.replace(/\.p3t$/i, ''),
+                preview_idx: item.preview_idx || 0
+            });
+        }
+        aplicarFiltros();
     }
 
     cargarJSON();
@@ -264,8 +278,6 @@
                     animugenZ[rand] = temp;
                 }
                 var destacados = animugenZ.slice(0, Math.min(2, animugenZ.length));
-                // Quitar esos destacados de resto (por si acaso, aunque ya los separamos)
-                // No es necesario porque ya los tenemos en destacados y resto no los contiene
                 // Reconstruir filteredThemes: primero destacados, luego resto
                 filteredThemes = destacados.concat(resto);
             }
