@@ -16,33 +16,110 @@
         .social-container { float: right; background: #0a1a2a; padding: 10px 30px; border-radius: 60px; border: 3px solid #ff6b35; margin-top: 15px; }
         .social-icon { width: 62px; height: 62px; margin: 0 7px; vertical-align: middle; }
 
-        /* TOOLBAR: Ajuste de altura fija para PS3 */
-        .toolbar { background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; overflow: hidden; height: 86px; }
-        
-        /* BUSCADOR: Ajustado con margin-top para centrar verticalmente */
-        .search-wrapper { float: left; height: 50px; margin-top: 3px; }
-        .search-wrapper input { width: 310px; height: 50px; padding: 0 22px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 50px; color: white; vertical-align: middle; font-size: 16px; }
-
-        .dice-btn { display: inline-block; width: 50px; height: 50px; margin-left: 10px; background: #1e3b4f; border: 3px solid #ff6b35; border-radius: 50%; text-align: center; line-height: 44px; cursor: pointer; vertical-align: middle; }
-        .dice-img { width: 28px; vertical-align: middle; }
-
-        /* BOTONES DE FILTRO: Ajustado con margin-top para centrar verticalmente */
-        .sort-buttons { float: left; margin-left: 25px; height: 50px; margin-top: 3px; }
-        .sort-btn { height: 50px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 0 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; vertical-align: middle; line-height: 46px; }
-        
-        /* IMAGEN DE CRÉDITOS: Manteniendo su altura y margen para estar en el medio */
-        .credits-banner { height: 50px; float: left; margin-left: 200px; margin-top: 3px; }
+        /* ===== TOOLBAR CORREGIDO ===== */
+        .toolbar {
+            display: table;
+            width: 100%;
+            background: #0a1a2a;
+            padding: 15px 25px;
+            border-radius: 60px;
+            margin-bottom: 25px;
+            border-left: 6px solid #ff6b35;
+            height: 86px;
+            box-sizing: border-box;
+        }
+        .toolbar-left, .toolbar-right {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .toolbar-right {
+            text-align: right;
+        }
+        .search-wrapper {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .search-wrapper input {
+            width: 310px;
+            height: 50px;
+            padding: 0 22px;
+            background: #0b1a2a;
+            border: 2px solid #1e3b4f;
+            border-radius: 50px;
+            color: white;
+            font-size: 16px;
+            vertical-align: middle;
+        }
+        .dice-btn {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            margin-left: 10px;
+            background: #1e3b4f;
+            border: 3px solid #ff6b35;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 44px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+        .dice-img {
+            width: 28px;
+            vertical-align: middle;
+        }
+        .sort-buttons {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .sort-btn {
+            height: 50px;
+            background: #1e3b4f;
+            border: 2px solid #1e3b4f;
+            color: #c9d9e8;
+            padding: 0 22px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 7px;
+            font-size: 15px;
+            vertical-align: middle;
+            line-height: 46px;
+        }
+        .credits-banner {
+            height: 50px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .stats {
+            display: inline-block;
+            vertical-align: middle;
+            color: #9ab8d9;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 20px;
+        }
+        .btn-pkg {
+            display: inline-block;
+            background: #ff6b35;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0 25px;
+            border-radius: 40px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 16px;
+            border: 2px solid #ff6b35;
+            vertical-align: middle;
+        }
+        /* ===== FIN CORRECCIÓN ===== */
 
         .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
         .btn-genre-active { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active { background: #ff3535; color: white; }
-
-        /* BOTÓN PKG: Ajustado con line-height y margin-top */
-        .btn-pkg { float: right; background: #ff6b35; color: #ffffff; text-decoration: none; font-weight: bold; padding: 0 25px; border-radius: 40px; height: 50px; line-height: 50px; font-size: 16px; margin-right: 20px; border: 2px solid #ff6b35; margin-top: 3px; }
-
-        /* ESTADÍSTICAS: Ajustado con line-height y margin-top */
-        .stats { float: right; color: #9ab8d9; line-height: 50px; height: 50px; margin-top: 3px; font-weight: bold; font-size: 18px; margin-right: 15px; }
 
         .grid { text-align: center; clear: both; min-height: 600px; }
 
@@ -76,23 +153,25 @@
         </div>
     </div>
 
-    <div class="toolbar clearfix">
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="buscarConRetraso()">
-            <div class="dice-btn" onclick="modoAleatorio()">
-                <img src="recursos/dado.png" class="dice-img">
+    <!-- TOOLBAR CORREGIDO -->
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="buscarConRetraso()">
+                <div class="dice-btn" onclick="modoAleatorio()">
+                    <img src="recursos/dado.png" class="dice-img">
+                </div>
             </div>
+            <div class="sort-buttons">
+                <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
+                <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
+            </div>
+            <img src="recursos/credits.png" class="credits-banner">
         </div>
-
-        <div class="sort-buttons">
-            <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
-            <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
+        <div class="toolbar-right">
+            <span class="stats" id="stats">...</span>
+            <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="btn-pkg">VERSION PKG</a>
         </div>
-        
-        <img src="recursos/credits.png" class="credits-banner">
-
-        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="btn-pkg">VERSION PKG</a>
-        <div class="stats" id="stats">...</div>
     </div>
 
     <div id="themeGrid" class="grid">
