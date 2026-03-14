@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
     <style>
-        /* Estilos ajustados para efecto de escala 1.25x */
+        /* Estilos base para PS3 */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 20px 0; text-align: center; }
         
-        /* Contenedor principal más ancho para dar espacio a tarjetas más grandes */
         .main-container { width: 1750px; margin: 0 auto; text-align: left; } 
 
         .header { overflow: hidden; margin-bottom: 25px; border-bottom: 5px solid #ff6b35; padding-bottom: 20px; }
@@ -31,11 +30,12 @@
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active { background: #ff3535; color: white; }
 
+        .btn-pkg { float: right; background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 0 25px; border-radius: 40px; height: 56px; line-height: 56px; font-size: 16px; margin-right: 20px; border: 2px solid #ff6b35; }
+
         .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
 
-        .grid { text-align: center; clear: both; }
+        .grid { text-align: center; clear: both; min-height: 600px; }
 
-        /* Tarjetas de temas escaladas */
         .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
         .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
         .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
@@ -45,8 +45,11 @@
         .theme-genre { background: #1e3b4f; padding: 6px 12px; border-radius: 10px; font-size: 14px; font-weight: bold; color: #ffb28c; margin-bottom: 15px; display: inline-block; border: 1px solid #ff6b35; cursor: pointer; }
         .download-btn { background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 12px; border-radius: 40px; text-align: center; display: block; font-size: 15px; }
 
-        .load-more { text-align: center; margin: 30px 0; }
-        .btn-primary { background: #ff6b35; color: #0b0f17; padding: 18px 60px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; font-size: 18px; }
+        /* Estilos Paginación */
+        .pagination-container { text-align: center; margin: 40px 0; }
+        .page-box { display: inline-block; width: 55px; height: 55px; line-height: 52px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 5px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 18px; text-decoration: none; }
+        .page-box.active { background: #ff6b35; border-color: #ff6b35; color: #0b0f17; }
+        .page-box:hover { border-color: #ff6b35; }
 
         .footer { margin-top: 50px; border-top: 3px solid #ff6b3540; padding: 25px 0; color: #b0c8e0; font-size: 16px; }
         .clearfix::after { content: ""; display: table; clear: both; }
@@ -72,21 +75,20 @@
             </div>
         </div>
         <div class="sort-buttons">
-            <button class="sort-btn" id="sortAZ" onclick="ordenarAZ()">A-Z</button>
-            <button class="sort-btn" id="sortZA" onclick="ordenarZA()">Z-A</button>
             <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
             <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
+        
         <div class="stats" id="stats">...</div>
+        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="btn-pkg">VERSION PKG</a>
     </div>
 
     <div id="themeGrid" class="grid">
         <div style="padding:40px; color:#ffb28c;">Cargando base de datos...</div>
     </div>
 
-    <div class="load-more" id="loadMoreContainer" style="display: none;">
-        <button class="btn-primary" onclick="cargarMas()">Ver más temas</button>
-    </div>
+    <div class="pagination-container" id="pagination">
+        </div>
 
     <div class="footer clearfix">
         <span style="float:left">© PS3 THM KZ</span>
@@ -104,14 +106,10 @@
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud1/main/previews4/',
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud2/main/previews5/'
-
-
-        
     ];
 
     var allThemes = [];
     var filteredThemes = [];
-    var currentSort = 'none';
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
@@ -119,7 +117,7 @@
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
-    var loadMoreContainer = document.getElementById('loadMoreContainer');
+    var paginationDiv = document.getElementById('pagination');
     var searchInput = document.getElementById('searchInput');
     var adultBtn = document.getElementById('adultBtn');
     var genreActiveBtn = document.getElementById('genreActiveBtn');
@@ -127,15 +125,11 @@
     function cargarJSON() {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', JSON_URL + '?v=' + new Date().getTime(), true);
-        
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
                     try {
-                        var texto = xhr.responseText;
-                        if (!texto) throw "Vacío";
-                        var data = (window.JSON && window.JSON.parse) ? JSON.parse(texto) : eval('(' + texto + ')');
-                        
+                        var data = JSON.parse(xhr.responseText);
                         allThemes = [];
                         for (var i = 0; i < data.length; i++) {
                             var item = data[i];
@@ -148,11 +142,7 @@
                             });
                         }
                         aplicarFiltros();
-                    } catch(e) { 
-                        grid.innerHTML = '<div style="color:red">Error al procesar JSON.</div>'; 
-                    }
-                } else {
-                    grid.innerHTML = '<div style="color:red">Error de conexión: ' + xhr.status + '</div>';
+                    } catch(e) { grid.innerHTML = '<div style="color:red">Error al procesar JSON.</div>'; }
                 }
             }
         };
@@ -165,6 +155,7 @@
         clearTimeout(searchTimer);
         searchTimer = setTimeout(function() {
             currentGenre = '';
+            currentPage = 0;
             aplicarFiltros();
         }, 600);
     };
@@ -173,6 +164,7 @@
         mostrarContenidoAdulto = !mostrarContenidoAdulto;
         adultBtn.innerHTML = mostrarContenidoAdulto ? "+18 ON" : "+18 OFF";
         adultBtn.className = mostrarContenidoAdulto ? "sort-btn btn-adult active" : "sort-btn btn-adult";
+        currentPage = 0;
         aplicarFiltros();
     };
 
@@ -190,59 +182,75 @@
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
             var genNormalizado = t.genero.toLowerCase();
-            var nombreNormalizado = t.nombre.toLowerCase();
-
             var isAdult = false;
             for(var j=0; j<PALABRAS_ADULTO.length; j++) {
-                if(genNormalizado.indexOf(PALABRAS_ADULTO[j]) !== -1) { 
-                    isAdult = true; 
-                    break; 
-                }
+                if(genNormalizado.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { isAdult = true; break; }
             }
-
             if(!mostrarContenidoAdulto && isAdult) continue;
 
-            var coincideBusqueda = nombreNormalizado.indexOf(query) !== -1;
-            var coincideGenero = (currentGenre === '' || genNormalizado === currentGenre.toLowerCase());
-
-            if(coincideBusqueda && coincideGenero) {
+            if(t.nombre.toLowerCase().indexOf(query) !== -1 && (currentGenre === '' || genNormalizado === currentGenre.toLowerCase())) {
                 filteredThemes.push(t);
             }
         }
-
-        if(currentSort === 'az') filteredThemes.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
-        if(currentSort === 'za') filteredThemes.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
-
-        currentPage = 0;
-        render(true);
+        render();
     }
 
-    function render(reset) {
-        if (reset) grid.innerHTML = '';
+    function crearHTMLTarjeta(t, destacado) {
+        var imgName = encodeURIComponent(t.nombre + '.png');
+        var folder = PREVIEW_FOLDERS[t.preview_idx] || PREVIEW_FOLDERS[0];
+        var estiloExtra = destacado ? ' style="border-color: #ffb28c; box-shadow: 0 0 15px rgba(255,178,140,0.3);"' : '';
+        return '<div class="theme-card"' + estiloExtra + '>' +
+                '<div class="preview"><img src="' + folder + imgName + '" onerror="proximaCarpeta(this,'+t.preview_idx+',\''+imgName+'\')"></div>' +
+                '<div class="card-info">' +
+                    '<div class="theme-name">' + t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "") + '</div>' +
+                    '<div class="theme-genre" onclick="filtrarPorGenero(\''+t.genero+'\')">' + t.genero + '</div>' +
+                    '<a href="' + t.descarga + '" class="download-btn">DESCARGAR</a>' +
+                '</div>' +
+            '</div>';
+    }
+
+    function render() {
+        grid.innerHTML = '';
+        
+        // Destacados AnimugenZ solo en pag 1
+        if (currentPage === 0 && currentGenre === '' && searchInput.value === '') {
+            var pool = [];
+            for(var a=0; a<allThemes.length; a++) if(allThemes[a].genero === 'AnimugenZ') pool.push(allThemes[a]);
+            if(pool.length > 0) {
+                pool.sort(function() { return 0.5 - Math.random(); });
+                var dest = pool.slice(0, 2);
+                for(var d=0; d<dest.length; d++) grid.innerHTML += crearHTMLTarjeta(dest[d], true);
+            }
+        }
 
         var start = currentPage * PAGE_SIZE;
         var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
-
-        for (var i = start; i < end; i++) {
-            var t = filteredThemes[i];
-            var imgName = encodeURIComponent(t.nombre + '.png');
-            var folder = PREVIEW_FOLDERS[t.preview_idx] || PREVIEW_FOLDERS[0];
-            var nombreDisp = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
-
-            var card = document.createElement('div');
-            card.className = 'theme-card';
-            card.innerHTML = 
-                '<div class="preview"><img src="' + folder + imgName + '" onerror="proximaCarpeta(this,'+t.preview_idx+',\''+imgName+'\')"></div>' +
-                '<div class="card-info">' +
-                    '<div class="theme-name">' + nombreDisp + '</div>' +
-                    '<div class="theme-genre" onclick="filtrarPorGenero(\''+t.genero+'\')">' + t.genero + '</div>' +
-                    '<a href="' + t.descarga + '" class="download-btn">DESCARGAR</a>' +
-                '</div>';
-            grid.appendChild(card);
-        }
+        for (var i = start; i < end; i++) grid.innerHTML += crearHTMLTarjeta(filteredThemes[i], false);
 
         statsDiv.innerHTML = filteredThemes.length + ' Temas';
-        loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
+        dibujarPaginacion();
+    }
+
+    function dibujarPaginacion() {
+        var totalPages = Math.ceil(filteredThemes.length / PAGE_SIZE);
+        paginationDiv.innerHTML = '';
+        if(totalPages <= 1) return;
+
+        var startPage = Math.max(0, currentPage - 2);
+        var endPage = Math.min(totalPages - 1, startPage + 4);
+        
+        // Ajuste si estamos al final
+        if (endPage - startPage < 4) startPage = Math.max(0, endPage - 4);
+
+        for (var p = startPage; p <= endPage; p++) {
+            var btn = document.createElement('button');
+            btn.className = (p === currentPage) ? 'page-box active' : 'page-box';
+            btn.innerHTML = (p + 1);
+            btn.onclick = (function(page) {
+                return function() { currentPage = page; render(); window.scrollTo(0, 300); };
+            })(p);
+            paginationDiv.appendChild(btn);
+        }
     }
 
     window.proximaCarpeta = function(img, idx, name) {
@@ -250,19 +258,14 @@
         if(nIdx < PREVIEW_FOLDERS.length) {
             img.src = PREVIEW_FOLDERS[nIdx] + name;
             img.onerror = function() { proximaCarpeta(img, nIdx, name); };
-        } else {
-            img.style.display = 'none';
-        }
+        } else { img.style.display = 'none'; }
     };
 
-    window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; aplicarFiltros(); };
-    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'none'; aplicarFiltros(); };
-    window.cargarMas = function() { currentPage++; render(false); };
-    window.ordenarAZ = function() { currentSort = 'az'; aplicarFiltros(); };
-    window.ordenarZA = function() { currentSort = 'za'; aplicarFiltros(); };
+    window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; currentPage = 0; aplicarFiltros(); };
+    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentPage = 0; aplicarFiltros(); };
     window.modoAleatorio = function() {
         filteredThemes.sort(function() { return 0.5 - Math.random(); });
-        currentPage = 0; render(true);
+        currentPage = 0; render();
     };
 </script>
 </body>
