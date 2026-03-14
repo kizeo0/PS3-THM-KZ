@@ -16,17 +16,20 @@
         .social-container { float: right; background: #0a1a2a; padding: 10px 30px; border-radius: 60px; border: 3px solid #ff6b35; margin-top: 15px; }
         .social-icon { width: 62px; height: 62px; margin: 0 7px; vertical-align: middle; }
 
-        .toolbar { background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; overflow: hidden; height: 86px; line-height: 56px; }
-        .search-wrapper { float: left; height: 56px; }
+        /* TOOLBAR: Ajuste de altura para PS3 */
+        .toolbar { background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; overflow: hidden; height: 86px; }
+        
+        /* Ajuste manual de centrado vertical para NetFront (PS3) */
+        .search-wrapper { float: left; height: 50px; margin-top: 3px; }
         .search-wrapper input { width: 310px; height: 50px; padding: 0 22px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 50px; color: white; vertical-align: middle; font-size: 16px; }
 
         .dice-btn { display: inline-block; width: 50px; height: 50px; margin-left: 10px; background: #1e3b4f; border: 3px solid #ff6b35; border-radius: 50%; text-align: center; line-height: 44px; cursor: pointer; vertical-align: middle; }
         .dice-img { width: 28px; vertical-align: middle; }
 
-        .sort-buttons { float: left; margin-left: 25px; height: 56px; }
+        .sort-buttons { float: left; margin-left: 25px; height: 50px; margin-top: 3px; }
         .sort-btn { height: 50px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 0 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; vertical-align: middle; line-height: 46px; }
         
-        /* Estilo para la nueva imagen de créditos */
+        /* Banner de créditos alineado verticalmente */
         .credits-banner { height: 50px; float: left; margin-left: 200px; margin-top: 3px; }
 
         .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
@@ -34,9 +37,11 @@
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active { background: #ff3535; color: white; }
 
+        /* Botón PKG alineado verticalmente */
         .btn-pkg { float: right; background: #ff6b35; color: #ffffff; text-decoration: none; font-weight: bold; padding: 0 25px; border-radius: 40px; height: 50px; line-height: 50px; font-size: 16px; margin-right: 20px; border: 2px solid #ff6b35; margin-top: 3px; }
 
-        .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
+        /* Estadísticas alineadas verticalmente */
+        .stats { float: right; color: #9ab8d9; line-height: 50px; height: 50px; margin-top: 3px; font-weight: bold; font-size: 18px; margin-right: 15px; }
 
         .grid { text-align: center; clear: both; min-height: 600px; }
 
@@ -77,6 +82,7 @@
                 <img src="recursos/dado.png" class="dice-img">
             </div>
         </div>
+
         <div class="sort-buttons">
             <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
             <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
@@ -84,8 +90,8 @@
         
         <img src="recursos/credits.png" class="credits-banner">
 
-        <div class="stats" id="stats">...</div>
         <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="btn-pkg">VERSION PKG</a>
+        <div class="stats" id="stats">...</div>
     </div>
 
     <div id="themeGrid" class="grid">
