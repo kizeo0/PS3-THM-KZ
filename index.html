@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
     <style>
-        /* Estilos originales de tu index.html */
+        /* Estilos ajustados para efecto de escala 1.25x */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 20px 0; text-align: center; }
+        
+        /* Contenedor principal más ancho para dar espacio a tarjetas más grandes */
         .main-container { width: 1750px; margin: 0 auto; text-align: left; } 
 
         .header { overflow: hidden; margin-bottom: 25px; border-bottom: 5px solid #ff6b35; padding-bottom: 20px; }
@@ -29,13 +31,34 @@
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active { background: #ff3535; color: white; }
 
+        /* Botón VERSION PKG */
+        .version-btn {
+            float: right;
+            background: #1e3b4f;
+            border: 2px solid #ff6b35;
+            color: #ffb28c;
+            padding: 12px 22px;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            text-decoration: none;
+            font-size: 15px;
+            display: inline-block;
+            line-height: normal;
+            transition: background 0.2s;
+        }
+        .version-btn:hover {
+            background: #ff6b35;
+            color: #0b0f17;
+            border-color: #ff6b35;
+        }
+
         .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
 
         .grid { text-align: center; clear: both; }
 
+        /* Tarjetas de temas escaladas */
         .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
-        .theme-card.featured { border-color: #ff6b35; border-width: 3px; }
-
         .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
         .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
 
@@ -76,6 +99,8 @@
             <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
             <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
+        <!-- Botón VERSION PKG -->
+        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="version-btn" target="_blank">VERSION PKG</a>
         <div class="stats" id="stats">...</div>
     </div>
 
@@ -94,9 +119,10 @@
 </div>
 
 <script>
+    // Parámetros optimizados para PS3
     var JSON_URL = 'temas_ps3_conlinks.json';
-    var PAGE_SIZE = 12; 
-    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols', 'j-idol', 'people','Girl','Girls'];
+    var PAGE_SIZE = 10; // Reducido de 12 a 10 para menor consumo de memoria
+    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols', 'j-idol', 'people', 'Girl', 'Girls'];
     
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
@@ -107,11 +133,11 @@
 
     var allThemes = [];
     var filteredThemes = [];
-    var currentSort = 'none'; 
+    var currentSort = 'none';
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
-    var searchTimer = null; 
+    var searchTimer = null;
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
@@ -123,33 +149,47 @@
     function cargarJSON() {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', JSON_URL + '?v=' + new Date().getTime(), true);
+        
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 0)) {
-                try {
-                    var data = JSON.parse(xhr.responseText);
-                    allThemes = [];
-                    for (var i = 0; i < data.length; i++) {
-                        var item = data[i];
-                        allThemes.push({
-                            archivo: item.archivo,
-                            descarga: item.descarga,
-                            genero: item.genero || 'Otro',
-                            nombre: item.archivo.replace(/\.p3t$/i, ''),
-                            preview_idx: item.preview_idx || 0,
-                            esDestacado: false
-                        });
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200 || xhr.status === 0) {
+                    try {
+                        var texto = xhr.responseText;
+                        if (!texto) throw "Vacío";
+                        // Usar JSON.parse si está disponible, si no, eval (para compatibilidad PS3)
+                        var data = (window.JSON && window.JSON.parse) ? JSON.parse(texto) : eval('(' + texto + ')');
+                        
+                        allThemes = [];
+                        for (var i = 0; i < data.length; i++) {
+                            var item = data[i];
+                            allThemes.push({
+                                archivo: item.archivo,
+                                descarga: item.descarga,
+                                genero: item.genero || 'Otro',
+                                nombre: item.archivo.replace(/\.p3t$/i, ''),
+                                preview_idx: item.preview_idx || 0
+                            });
+                        }
+                        aplicarFiltros();
+                    } catch(e) { 
+                        grid.innerHTML = '<div style="color:red">Error al procesar JSON.</div>'; 
                     }
-                    aplicarFiltros();
-                } catch(e) { grid.innerHTML = '<div style="color:red">Error al cargar datos.</div>'; }
+                } else {
+                    grid.innerHTML = '<div style="color:red">Error de conexión: ' + xhr.status + '</div>';
+                }
             }
         };
         xhr.send();
     }
+
     cargarJSON();
 
     window.buscarConRetraso = function() {
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(function() { currentGenre = ''; aplicarFiltros(); }, 600);
+        searchTimer = setTimeout(function() {
+            currentGenre = '';
+            aplicarFiltros();
+        }, 600);
     };
 
     window.toggleAdulto = function() {
@@ -160,8 +200,8 @@
     };
 
     function aplicarFiltros() {
-        var query = searchInput.value.toLowerCase();
-        var temp = [];
+        var query = searchInput.value.toLowerCase().trim();
+        filteredThemes = [];
         
         if(currentGenre !== '') {
             genreActiveBtn.style.display = 'inline-block';
@@ -170,67 +210,76 @@
             genreActiveBtn.style.display = 'none';
         }
 
-        // 1. Filtrar (Mantiene el orden original del JSON)
+        // Filtrar según búsqueda, género y contenido adulto
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
-            t.esDestacado = false;
-            var genLow = t.genero.toLowerCase();
-            var nomLow = t.nombre.toLowerCase();
+            var genNormalizado = t.genero.toLowerCase();
+            var nombreNormalizado = t.nombre.toLowerCase();
 
             var isAdult = false;
             for(var j=0; j<PALABRAS_ADULTO.length; j++) {
-                if(genLow.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { isAdult = true; break; }
+                if(genNormalizado.indexOf(PALABRAS_ADULTO[j]) !== -1) { 
+                    isAdult = true; 
+                    break; 
+                }
             }
 
             if(!mostrarContenidoAdulto && isAdult) continue;
 
-            if(nomLow.indexOf(query) !== -1 && (currentGenre === '' || genLow === currentGenre.toLowerCase())) {
-                temp.push(t);
+            var coincideBusqueda = nombreNormalizado.indexOf(query) !== -1;
+            var coincideGenero = (currentGenre === '' || genNormalizado === currentGenre.toLowerCase());
+
+            if(coincideBusqueda && coincideGenero) {
+                filteredThemes.push(t);
             }
         }
 
-        // 2. Ordenar solo si se solicita
+        // Aplicar ordenamiento si no es 'none'
         if(currentSort === 'az') {
-            temp.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
+            filteredThemes.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
         } else if(currentSort === 'za') {
-            temp.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
+            filteredThemes.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
         }
 
-        // 3. Extraer 2 de AnimugenZ al azar para el inicio
-        if (query === '' && currentGenre === '' && currentSort === 'none') {
-            var animugenzIndices = [];
-            for (var k = 0; k < temp.length; k++) {
-                if (temp[k].genero.toLowerCase() === 'animugenz') {
-                    animugenzIndices.push(k);
+        // Si no hay filtros activos (sin búsqueda, sin género, sin orden), insertar destacados "AnimugenZ" al inicio
+        if (currentSort === 'none' && query === '' && currentGenre === '') {
+            // Extraer temas de género "AnimugenZ" (case insensitive)
+            var animugenZ = [];
+            var resto = [];
+            for (var k = 0; k < filteredThemes.length; k++) {
+                var tema = filteredThemes[k];
+                if (tema.genero.toLowerCase() === 'animugenz') {
+                    animugenZ.push(tema);
+                } else {
+                    resto.push(tema);
                 }
             }
-
-            if (animugenzIndices.length >= 2) {
-                var idx1 = animugenzIndices.splice(Math.floor(Math.random() * animugenzIndices.length), 1)[0];
-                var idx2 = animugenzIndices.splice(Math.floor(Math.random() * animugenzIndices.length), 1)[0];
-                
-                var item1 = temp[idx1];
-                var item2 = temp[idx2];
-                item1.esDestacado = true;
-                item2.esDestacado = true;
-
-                var posMax = Math.max(idx1, idx2);
-                var posMin = Math.min(idx1, idx2);
-                temp.splice(posMax, 1);
-                temp.splice(posMin, 1);
-
-                temp.unshift(item2);
-                temp.unshift(item1);
+            // Seleccionar hasta 2 aleatorios de animugenZ
+            if (animugenZ.length > 0) {
+                // Mezclar array y tomar hasta 2
+                for (var m = animugenZ.length - 1; m > 0; m--) {
+                    var rand = Math.floor(Math.random() * (m + 1));
+                    var temp = animugenZ[m];
+                    animugenZ[m] = animugenZ[rand];
+                    animugenZ[rand] = temp;
+                }
+                var destacados = animugenZ.slice(0, Math.min(2, animugenZ.length));
+                // Quitar esos destacados de resto (por si acaso, aunque ya los separamos)
+                // No es necesario porque ya los tenemos en destacados y resto no los contiene
+                // Reconstruir filteredThemes: primero destacados, luego resto
+                filteredThemes = destacados.concat(resto);
             }
         }
 
-        filteredThemes = temp;
         currentPage = 0;
         render(true);
     }
 
     function render(reset) {
-        if (reset) grid.innerHTML = '';
+        if (reset) {
+            grid.innerHTML = ''; // Limpia el grid y libera memoria
+        }
+
         var start = currentPage * PAGE_SIZE;
         var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
 
@@ -241,7 +290,7 @@
             var nombreDisp = t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "");
 
             var card = document.createElement('div');
-            card.className = t.esDestacado ? 'theme-card featured' : 'theme-card';
+            card.className = 'theme-card';
             card.innerHTML = 
                 '<div class="preview"><img src="' + folder + imgName + '" onerror="proximaCarpeta(this,'+t.preview_idx+',\''+imgName+'\')"></div>' +
                 '<div class="card-info">' +
@@ -251,9 +300,8 @@
                 '</div>';
             grid.appendChild(card);
         }
-        
-        // AQUÍ ESTÁ EL TEXTO VERSION PKG QUE FALTABA
-        statsDiv.innerHTML = filteredThemes.length + ' Temas VERSION PKG';
+
+        statsDiv.innerHTML = filteredThemes.length + ' Temas';
         loadMoreContainer.style.display = (end < filteredThemes.length) ? 'block' : 'none';
     }
 
@@ -262,18 +310,49 @@
         if(nIdx < PREVIEW_FOLDERS.length) {
             img.src = PREVIEW_FOLDERS[nIdx] + name;
             img.onerror = function() { proximaCarpeta(img, nIdx, name); };
-        } else { img.style.display = 'none'; }
+        } else {
+            img.style.display = 'none'; // Oculta la imagen si no se encuentra
+        }
     };
 
-    window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; aplicarFiltros(); };
-    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'none'; aplicarFiltros(); };
-    window.cargarMas = function() { currentPage++; render(false); };
-    window.ordenarAZ = function() { currentSort = 'az'; aplicarFiltros(); };
-    window.ordenarZA = function() { currentSort = 'za'; aplicarFiltros(); };
+    window.filtrarPorGenero = function(g) { 
+        currentGenre = g; 
+        searchInput.value = ''; 
+        aplicarFiltros(); 
+    };
+
+    window.volverInicio = function() { 
+        searchInput.value = ''; 
+        currentGenre = ''; 
+        currentSort = 'none'; 
+        aplicarFiltros(); 
+    };
+
+    window.cargarMas = function() { 
+        currentPage++; 
+        render(false); 
+    };
+
+    window.ordenarAZ = function() { 
+        currentSort = 'az'; 
+        aplicarFiltros(); 
+    };
+
+    window.ordenarZA = function() { 
+        currentSort = 'za'; 
+        aplicarFiltros(); 
+    };
+
     window.modoAleatorio = function() {
-        currentSort = 'random';
-        filteredThemes.sort(function() { return 0.5 - Math.random(); });
-        currentPage = 0; render(true);
+        // Modo aleatorio: mezcla todos los temas filtrados y resetea página
+        for (var i = filteredThemes.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = filteredThemes[i];
+            filteredThemes[i] = filteredThemes[j];
+            filteredThemes[j] = temp;
+        }
+        currentPage = 0;
+        render(true);
     };
 </script>
 </body>
