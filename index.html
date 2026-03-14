@@ -31,30 +31,7 @@
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active { background: #ff3535; color: white; }
 
-        /* Botón VERSION PKG */
-        .version-btn {
-            float: right;
-            background: #1e3b4f;
-            border: 2px solid #ff6b35;
-            color: #ffb28c;
-            padding: 12px 22px;
-            border-radius: 40px;
-            font-weight: bold;
-            margin-right: 0;
-            margin-left: 30px; /* Aumentado para separar más del contador */
-            text-decoration: none;
-            font-size: 15px;
-            display: inline-block;
-            line-height: normal;
-            transition: background 0.2s;
-        }
-        .version-btn:hover {
-            background: #ff6b35;
-            color: #0b0f17;
-            border-color: #ff6b35;
-        }
-
-        .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; margin-right: 5px; } /* Pequeño margen derecho */
+        .stats { float: right; color: #9ab8d9; line-height: 56px; font-weight: bold; font-size: 18px; }
 
         .grid { text-align: center; clear: both; }
 
@@ -100,10 +77,7 @@
             <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
             <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
-        <!-- Contador de temas (stats) primero para que flote más a la derecha -->
         <div class="stats" id="stats">...</div>
-        <!-- Botón VERSION PKG después del contador para que quede a su izquierda -->
-        <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="version-btn" target="_blank">VERSION PKG</a>
     </div>
 
     <div id="themeGrid" class="grid">
@@ -121,16 +95,18 @@
 </div>
 
 <script>
-    // Parámetros optimizados para PS3
     var JSON_URL = 'temas_ps3_conlinks.json';
-    var PAGE_SIZE = 10; // Reducido para menor consumo de memoria
-    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols', 'j-idol', 'people', 'Girl', 'Girls'];
+    var PAGE_SIZE = 12; 
+    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols', 'j-idol', 'people','Girl','Girls'];
     
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud/main/previews3/',
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud1/main/previews4/',
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud2/main/previews5/'
+
+
+        
     ];
 
     var allThemes = [];
@@ -139,7 +115,7 @@
     var currentPage = 0;
     var currentGenre = '';
     var mostrarContenidoAdulto = false;
-    var searchTimer = null;
+    var searchTimer = null; 
 
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
@@ -151,33 +127,29 @@
     function cargarJSON() {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', JSON_URL + '?v=' + new Date().getTime(), true);
-        // Forzar tipo MIME a texto para evitar problemas de interpretación en PS3
-        xhr.overrideMimeType('text/plain; charset=utf-8');
         
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
-                    var texto = xhr.responseText;
-                    if (!texto) {
-                        grid.innerHTML = '<div style="color:red">Error: JSON vacío.</div>';
-                        return;
-                    }
-                    // Intentar limpiar posibles caracteres BOM o espacios al inicio
-                    texto = texto.replace(/^\uFEFF/, ''); // Eliminar BOM
                     try {
-                        // Primero intentar con JSON.parse (navegadores modernos)
-                        var data = JSON.parse(texto);
-                        procesarData(data);
-                    } catch (e) {
-                        // Si falla, intentar con eval (para compatibilidad PS3)
-                        try {
-                            var data = eval('(' + texto + ')');
-                            procesarData(data);
-                        } catch (e2) {
-                            // Mostrar parte del texto para depurar
-                            var preview = texto.substring(0, 200) + '...';
-                            grid.innerHTML = '<div style="color:red">Error al procesar JSON. Asegúrate de que el archivo <b>' + JSON_URL + '</b> sea válido. Primeros 200 caracteres: <pre>' + preview + '</pre></div>';
+                        var texto = xhr.responseText;
+                        if (!texto) throw "Vacío";
+                        var data = (window.JSON && window.JSON.parse) ? JSON.parse(texto) : eval('(' + texto + ')');
+                        
+                        allThemes = [];
+                        for (var i = 0; i < data.length; i++) {
+                            var item = data[i];
+                            allThemes.push({
+                                archivo: item.archivo,
+                                descarga: item.descarga,
+                                genero: item.genero || 'Otro',
+                                nombre: item.archivo.replace(/\.p3t$/i, ''),
+                                preview_idx: item.preview_idx || 0
+                            });
                         }
+                        aplicarFiltros();
+                    } catch(e) { 
+                        grid.innerHTML = '<div style="color:red">Error al procesar JSON.</div>'; 
                     }
                 } else {
                     grid.innerHTML = '<div style="color:red">Error de conexión: ' + xhr.status + '</div>';
@@ -185,21 +157,6 @@
             }
         };
         xhr.send();
-    }
-
-    function procesarData(data) {
-        allThemes = [];
-        for (var i = 0; i < data.length; i++) {
-            var item = data[i];
-            allThemes.push({
-                archivo: item.archivo,
-                descarga: item.descarga,
-                genero: item.genero || 'Otro',
-                nombre: item.archivo.replace(/\.p3t$/i, ''),
-                preview_idx: item.preview_idx || 0
-            });
-        }
-        aplicarFiltros();
     }
 
     cargarJSON();
@@ -220,7 +177,7 @@
     };
 
     function aplicarFiltros() {
-        var query = searchInput.value.toLowerCase().trim();
+        var query = searchInput.value.toLowerCase();
         filteredThemes = [];
         
         if(currentGenre !== '') {
@@ -230,7 +187,6 @@
             genreActiveBtn.style.display = 'none';
         }
 
-        // Filtrar según búsqueda, género y contenido adulto
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
             var genNormalizado = t.genero.toLowerCase();
@@ -254,49 +210,15 @@
             }
         }
 
-        // Aplicar ordenamiento si no es 'none'
-        if(currentSort === 'az') {
-            filteredThemes.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
-        } else if(currentSort === 'za') {
-            filteredThemes.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
-        }
-
-        // Si no hay filtros activos (sin búsqueda, sin género, sin orden), insertar destacados "AnimugenZ" al inicio
-        if (currentSort === 'none' && query === '' && currentGenre === '') {
-            // Extraer temas de género "AnimugenZ" (case insensitive)
-            var animugenZ = [];
-            var resto = [];
-            for (var k = 0; k < filteredThemes.length; k++) {
-                var tema = filteredThemes[k];
-                if (tema.genero.toLowerCase() === 'animugenz') {
-                    animugenZ.push(tema);
-                } else {
-                    resto.push(tema);
-                }
-            }
-            // Seleccionar hasta 2 aleatorios de animugenZ
-            if (animugenZ.length > 0) {
-                // Mezclar array y tomar hasta 2
-                for (var m = animugenZ.length - 1; m > 0; m--) {
-                    var rand = Math.floor(Math.random() * (m + 1));
-                    var temp = animugenZ[m];
-                    animugenZ[m] = animugenZ[rand];
-                    animugenZ[rand] = temp;
-                }
-                var destacados = animugenZ.slice(0, Math.min(2, animugenZ.length));
-                // Reconstruir filteredThemes: primero destacados, luego resto
-                filteredThemes = destacados.concat(resto);
-            }
-        }
+        if(currentSort === 'az') filteredThemes.sort(function(a,b){ return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); });
+        if(currentSort === 'za') filteredThemes.sort(function(a,b){ return b.nombre.toLowerCase().localeCompare(a.nombre.toLowerCase()); });
 
         currentPage = 0;
         render(true);
     }
 
     function render(reset) {
-        if (reset) {
-            grid.innerHTML = ''; // Limpia el grid y libera memoria
-        }
+        if (reset) grid.innerHTML = '';
 
         var start = currentPage * PAGE_SIZE;
         var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
@@ -329,48 +251,18 @@
             img.src = PREVIEW_FOLDERS[nIdx] + name;
             img.onerror = function() { proximaCarpeta(img, nIdx, name); };
         } else {
-            img.style.display = 'none'; // Oculta la imagen si no se encuentra
+            img.style.display = 'none';
         }
     };
 
-    window.filtrarPorGenero = function(g) { 
-        currentGenre = g; 
-        searchInput.value = ''; 
-        aplicarFiltros(); 
-    };
-
-    window.volverInicio = function() { 
-        searchInput.value = ''; 
-        currentGenre = ''; 
-        currentSort = 'none'; 
-        aplicarFiltros(); 
-    };
-
-    window.cargarMas = function() { 
-        currentPage++; 
-        render(false); 
-    };
-
-    window.ordenarAZ = function() { 
-        currentSort = 'az'; 
-        aplicarFiltros(); 
-    };
-
-    window.ordenarZA = function() { 
-        currentSort = 'za'; 
-        aplicarFiltros(); 
-    };
-
+    window.filtrarPorGenero = function(g) { currentGenre = g; searchInput.value = ''; aplicarFiltros(); };
+    window.volverInicio = function() { searchInput.value = ''; currentGenre = ''; currentSort = 'none'; aplicarFiltros(); };
+    window.cargarMas = function() { currentPage++; render(false); };
+    window.ordenarAZ = function() { currentSort = 'az'; aplicarFiltros(); };
+    window.ordenarZA = function() { currentSort = 'za'; aplicarFiltros(); };
     window.modoAleatorio = function() {
-        // Modo aleatorio: mezcla todos los temas filtrados y resetea página
-        for (var i = filteredThemes.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = filteredThemes[i];
-            filteredThemes[i] = filteredThemes[j];
-            filteredThemes[j] = temp;
-        }
-        currentPage = 0;
-        render(true);
+        filteredThemes.sort(function() { return 0.5 - Math.random(); });
+        currentPage = 0; render(true);
     };
 </script>
 </body>
