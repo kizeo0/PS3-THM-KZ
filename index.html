@@ -26,6 +26,9 @@
         .sort-buttons { float: left; margin-left: 25px; height: 56px; }
         .sort-btn { height: 50px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 0 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; vertical-align: middle; line-height: 46px; }
         
+        /* Estilo para la nueva imagen de créditos */
+        .credits-banner { height: 50px; float: left; margin-left: 40px; margin-top: 3px; }
+
         .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
         .btn-genre-active { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
@@ -79,6 +82,8 @@
             <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
         </div>
         
+        <img src="recursos/credits.png" class="credits-banner">
+
         <div class="stats" id="stats">...</div>
         <a href="https://github.com/kizeo0/PS3-THM-KZ/releases/download/PKG/PS3.THM.KZ.pkg" class="btn-pkg">VERSION PKG</a>
     </div>
@@ -196,18 +201,14 @@
         render();
     }
 
-    // FUNCIÓN CLAVE: Codifica caracteres que rompen el navegador de PS3
     function limpiarParaJS(str) {
         return encodeURIComponent(str).replace(/'/g, "%27");
     }
 
     function crearHTMLTarjeta(t, destacado) {
-        // Codificamos el nombre del archivo para la URL, escapando comillas simples manualmente
         var imgName = limpiarParaJS(t.nombre + '.png');
         var folder = PREVIEW_FOLDERS[t.preview_idx] || PREVIEW_FOLDERS[0];
         var estiloExtra = destacado ? ' style="border-color: #ffb28c; box-shadow: 0 0 15px rgba(255,178,140,0.3);"' : '';
-        
-        // Usamos comillas dobles para los atributos HTML y escapamos comillas simples en los strings de JS
         var generoEscapado = t.genero.replace(/'/g, "\\'");
 
         return '<div class="theme-card"' + estiloExtra + '>' +
