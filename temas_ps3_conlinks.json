@@ -3311,7 +3311,7 @@
     },
     {
         "archivo": "hollow.p3t",
-        "genero": "customTheme",
+        "genero": "KiZeo",
         "descarga": "https://www.mediafire.com/file/6319643743dsq2c/hollow.p3t"
     },
     {
@@ -3651,7 +3651,7 @@
     },
     {
         "archivo": "kakashi.p3t",
-        "genero": "customTheme",
+        "genero": "KiZeo",
         "descarga": "https://www.mediafire.com/file/7xdqad6fx5wsff6/kakashi.p3t"
     },
     {
@@ -66101,6 +66101,12 @@
         "archivo": "Zenless Zone Zero - Yixuan And Ju Fufu.p3t",
         "genero": "AnimugenZ",
         "descarga": "https://www.mediafire.com/file/ifnddcxsh43ny2u/Zenless Zone Zero - Yixuan And Ju Fufu.p3t",
+        "preview_idx": 4
+    },
+    {
+        "archivo": "Akali Theme",
+        "genero": "KiZeo",
+        "descarga": "https://www.mediafire.com/file/blkewmoj1lzi8nu/Akali+Theme.p3t/file",
         "preview_idx": 4
     }
 ]
