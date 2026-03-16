@@ -10,13 +10,13 @@
         
         .main-container { width: 1750px; margin: 0 auto; text-align: left; } 
 
-        .header { overflow: hidden; margin-bottom: 25px; border-bottom: 5px solid #ff6b35; padding-bottom: 20px; }
+        .header { overflow: hidden; margin-bottom: 25px; border-bottom: 5px solid #ff6b35; padding-bottom: 20px; text-align: center; }
         .logo-img { height: 115px; float: left; cursor: pointer; }
 
         .social-container { float: right; background: #0a1a2a; padding: 10px 30px; border-radius: 60px; border: 3px solid #ff6b35; margin-top: 15px; }
         .social-icon { width: 62px; height: 62px; margin: 0 7px; vertical-align: middle; }
 
-        /* ===== TOOLBAR CORREGIDO ===== */
+        /* ===== TOOLBAR OPTIMIZADO ===== */
         .toolbar {
             display: table;
             width: 100%;
@@ -51,23 +51,26 @@
             font-size: 16px;
             vertical-align: middle;
         }
-        .dice-btn {
+        
+        /* BOTÓN ALEATORIO (ESTILO VERSION PKG) */
+        .btn-aleatorio {
             display: inline-block;
-            width: 50px;
+            background: #ff6b35;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0 20px;
+            border-radius: 40px;
             height: 50px;
-            margin-left: 10px;
-            background: #1e3b4f;
-            border: 3px solid #ff6b35;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 44px;
+            line-height: 50px;
+            font-size: 14px;
+            border: 2px solid #ff6b35;
+            vertical-align: middle;
             cursor: pointer;
-            vertical-align: middle;
+            margin-left: 10px;
+            text-transform: uppercase;
         }
-        .dice-img {
-            width: 28px;
-            vertical-align: middle;
-        }
+
         .sort-buttons {
             display: inline-block;
             vertical-align: middle;
@@ -87,11 +90,13 @@
             vertical-align: middle;
             line-height: 46px;
         }
+        /* CREDITOS MOVIDOS AL HEADER */
         .credits-banner {
-            height: 50px;
-            vertical-align: middle;
+            height: 42px;
             display: inline-block;
-            margin-left: 200px;   
+            margin-top: 73px;
+            margin-bottom: -20px;
+            vertical-align: bottom;
         }
         .stats {
             display: inline-block;
@@ -115,7 +120,6 @@
             border: 2px solid #ff6b35;
             vertical-align: middle;
         }
-        /* ===== FIN CORRECCIÓN ===== */
 
         .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
         .btn-genre-active { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
@@ -134,9 +138,8 @@
         .download-btn { background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 12px; border-radius: 40px; text-align: center; display: block; font-size: 15px; }
 
         .pagination-container { text-align: center; margin: 40px 0; }
-        .page-box { display: inline-block; width: 50px; height: 50px; line-height: 46px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 4px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; vertical-align: middle; }
+        .page-box { display: inline-block; width: 50px; height: 50px; line-height: 46px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 4px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; vertical-align: middle; border: 2px solid #1e3b4f; }
         .page-box.active { background: #ff6b35; border-color: #ff6b35; color: #0b0f17; }
-        .page-box:hover { border-color: #ff6b35; }
 
         .footer { margin-top: 50px; border-top: 3px solid #ff6b3540; padding: 25px 0; color: #b0c8e0; font-size: 16px; }
         .clearfix::after { content: ""; display: table; clear: both; }
@@ -147,6 +150,9 @@
 <div class="main-container">
     <div class="header clearfix">
         <img src="recursos/titulo.png" alt="Logo" class="logo-img" onclick="volverInicio()">
+        
+        <img src="recursos/credits.png" class="credits-banner">
+
         <div class="social-container">
             <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" class="social-icon"></a>
             <a href="https://github.com/kizeo0"><img src="recursos/git.png" class="social-icon"></a>
@@ -154,20 +160,16 @@
         </div>
     </div>
 
-    <!-- TOOLBAR CORREGIDO -->
     <div class="toolbar">
         <div class="toolbar-left">
             <div class="search-wrapper">
                 <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="buscarConRetraso()">
-                <div class="dice-btn" onclick="modoAleatorio()">
-                    <img src="recursos/dado.png" class="dice-img">
-                </div>
+                <button class="btn-aleatorio" onclick="modoAleatorio()">Aleatorio</button>
             </div>
             <div class="sort-buttons">
                 <button class="sort-btn btn-adult" id="adultBtn" onclick="toggleAdulto()">+18 OFF</button>
                 <button class="sort-btn btn-genre-active" id="genreActiveBtn" onclick="volverInicio()"></button>
             </div>
-            <img src="recursos/credits.png" class="credits-banner">
         </div>
         <div class="toolbar-right">
             <span class="stats" id="stats">...</span>
@@ -176,7 +178,7 @@
     </div>
 
     <div id="themeGrid" class="grid">
-        <div style="padding:40px; color:#ffb28c;">Cargando base de datos...</div>
+        <div id="loadingMsg" style="padding:40px; color:#ffb28c;">Cargando base de datos...</div>
     </div>
 
     <div class="pagination-container" id="pagination"></div>
@@ -188,9 +190,11 @@
 </div>
 
 <script>
+    // Variables de configuración
     var JSON_URL = 'temas_ps3_conlinks.json';
     var PAGE_SIZE = 12; 
     var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols', 'j-idol', 'people','Girl','Girls'];
+    var G_EMPTY_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     
     var PREVIEW_FOLDERS = [
         'previews1/', 'previews2/', 
@@ -199,6 +203,7 @@
         'https://raw.githubusercontent.com/kizeocloud1/ps3cloud2/main/previews5/'
     ];
 
+    // Variables de estado
     var allThemes = [];
     var filteredThemes = [];
     var currentPage = 0;
@@ -206,17 +211,25 @@
     var mostrarContenidoAdulto = false;
     var esModoAleatorio = false; 
     var searchTimer = null; 
+    var imageQueue = [];
 
+    // Elementos del DOM
     var grid = document.getElementById('themeGrid');
     var statsDiv = document.getElementById('stats');
     var paginationDiv = document.getElementById('pagination');
     var searchInput = document.getElementById('searchInput');
-    var adultBtn = document.getElementById('adultBtn');
-    var genreActiveBtn = document.getElementById('genreActiveBtn');
+
+    // Función de limpieza de espacios para PS3 (Reemplaza a .trim())
+    function ps3Trim(str) {
+        return str.replace(/^\s+|\s+$/g, '');
+    }
 
     function cargarJSON() {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', JSON_URL + '?v=' + new Date().getTime(), true);
+        // Añadimos timestamp para evitar caché agresivo de PS3
+        var url = JSON_URL + '?t=' + new Date().getTime();
+        
+        xhr.open('GET', url, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
@@ -234,14 +247,16 @@
                             });
                         }
                         aplicarFiltros();
-                    } catch(e) { grid.innerHTML = '<div style="color:red">Error al procesar JSON.</div>'; }
+                    } catch(e) { 
+                        grid.innerHTML = '<div style="color:red">Error de memoria o JSON inválido.</div>'; 
+                    }
+                } else {
+                    grid.innerHTML = '<div style="color:red">No se pudo cargar el archivo JSON (Error '+xhr.status+').</div>';
                 }
             }
         };
-        xhr.send();
+        xhr.send(null);
     }
-
-    cargarJSON();
 
     window.buscarConRetraso = function() {
         clearTimeout(searchTimer);
@@ -253,80 +268,105 @@
         }, 600);
     };
 
-    window.toggleAdulto = function() {
-        mostrarContenidoAdulto = !mostrarContenidoAdulto;
-        adultBtn.innerHTML = mostrarContenidoAdulto ? "+18 ON" : "+18 OFF";
-        adultBtn.className = mostrarContenidoAdulto ? "sort-btn btn-adult active" : "sort-btn btn-adult";
-        currentPage = 0;
-        aplicarFiltros();
-    };
-
     function aplicarFiltros() {
-        var query = searchInput.value.toLowerCase();
+        // Usamos ps3Trim para evitar que los espacios vacíos rompan la búsqueda
+        var query = ps3Trim(searchInput.value).toLowerCase();
         filteredThemes = [];
         
+        var genreBtn = document.getElementById('genreActiveBtn');
         if(currentGenre !== '') {
-            genreActiveBtn.style.display = 'inline-block';
-            genreActiveBtn.innerHTML = currentGenre + " X";
+            genreBtn.style.display = 'inline-block';
+            genreBtn.innerHTML = currentGenre + " X";
         } else {
-            genreActiveBtn.style.display = 'none';
+            genreBtn.style.display = 'none';
         }
 
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
             var genNormalizado = t.genero.toLowerCase();
+            
+            // Filtro Adulto
             var isAdult = false;
             for(var j=0; j<PALABRAS_ADULTO.length; j++) {
-                if(genNormalizado.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { isAdult = true; break; }
+                if(genNormalizado.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { 
+                    isAdult = true; 
+                    break; 
+                }
             }
             if(!mostrarContenidoAdulto && isAdult) continue;
 
-            if(t.nombre.toLowerCase().indexOf(query) !== -1 && (currentGenre === '' || genNormalizado === currentGenre.toLowerCase())) {
+            // Filtro Nombre y Género
+            if(t.nombre.toLowerCase().indexOf(query) !== -1 && 
+               (currentGenre === '' || genNormalizado === currentGenre.toLowerCase())) {
                 filteredThemes.push(t);
             }
         }
         render();
     }
 
-    function limpiarParaJS(str) {
-        return encodeURIComponent(str).replace(/'/g, "%27");
-    }
-
-    function crearHTMLTarjeta(t, destacado) {
-        var imgName = limpiarParaJS(t.nombre + '.png');
+    function crearHTMLTarjeta(t, index, esDestacado) {
+        var imgName = encodeURIComponent(t.nombre + '.png').replace(/'/g, "%27");
         var folder = PREVIEW_FOLDERS[t.preview_idx] || PREVIEW_FOLDERS[0];
-        var estiloExtra = destacado ? ' style="border-color: #ffb28c; box-shadow: 0 0 15px rgba(255,178,140,0.3);"' : '';
-        var generoEscapado = t.genero.replace(/'/g, "\\'");
+        var estiloExtra = esDestacado ? ' style="border-color: #ffb28c; box-shadow: 0 0 10px #ffb28c;"' : '';
+        
+        imageQueue.push({ id: 'img_' + index, src: folder + imgName, name: imgName, idx: t.preview_idx });
 
         return '<div class="theme-card"' + estiloExtra + '>' +
-                '<div class="preview"><img src="' + folder + imgName + '" onerror="proximaCarpeta(this,'+t.preview_idx+',\''+imgName+'\')"></div>' +
+                '<div class="preview"><img src="' + G_EMPTY_GIF + '" id="img_' + index + '"></div>' +
                 '<div class="card-info">' +
-                    '<div class="theme-name">' + t.nombre.replace(/\(nombre igual\)/gi, "").replace(/pkg/gi, "") + '</div>' +
-                    '<div class="theme-genre" onclick="filtrarPorGenero(\''+generoEscapado+'\')">' + t.genero + '</div>' +
+                    '<div class="theme-name">' + t.nombre + '</div>' +
+                    '<div class="theme-genre" onclick="filtrarPorGenero(\''+t.genero.replace(/'/g, "\\'")+'\')">' + t.genero + '</div>' +
                     '<a href="' + t.descarga + '" class="download-btn">DESCARGAR</a>' +
                 '</div>' +
             '</div>';
     }
 
-    function render() {
-        grid.innerHTML = '';
+    function procesarColaImagenes() {
+        if (imageQueue.length === 0) return;
         
-        if (!esModoAleatorio && currentPage === 0 && currentGenre === '' && searchInput.value === '') {
-            var pool = [];
-            for(var a=0; a<allThemes.length; a++) if(allThemes[a].genero === 'AnimugenZ') pool.push(allThemes[a]);
-            if(pool.length > 0) {
-                pool.sort(function() { return 0.5 - Math.random(); });
-                var dest = pool.slice(0, 2);
-                for(var d=0; d<dest.length; d++) grid.innerHTML += crearHTMLTarjeta(dest[d], true);
+        var item = imageQueue.shift();
+        var imgEl = document.getElementById(item.id);
+        
+        if (imgEl) {
+            imgEl.onload = function() { procesarColaImagenes(); };
+            imgEl.onerror = function() { 
+                window.proximaCarpeta(this, item.idx, item.name, function() {
+                    procesarColaImagenes();
+                });
+            };
+            imgEl.src = item.src;
+        } else {
+            procesarColaImagenes();
+        }
+    }
+
+    function render() {
+        imageQueue = [];
+        var html = "";
+        
+        // Destacados (Solo en página 1 sin búsqueda)
+        if (!esModoAleatorio && currentPage === 0 && currentGenre === '' && ps3Trim(searchInput.value) === '') {
+            var destacados = [];
+            for(var k=0; k<allThemes.length; k++) {
+                if(allThemes[k].genero === 'AnimugenZ') destacados.push(allThemes[k]);
+                if(destacados.length >= 2) break;
             }
+            for(var d=0; d<destacados.length; d++) html += crearHTMLTarjeta(destacados[d], 'dest_'+d, true);
         }
 
         var start = currentPage * PAGE_SIZE;
         var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
-        for (var i = start; i < end; i++) grid.innerHTML += crearHTMLTarjeta(filteredThemes[i], false);
+        
+        for (var i = start; i < end; i++) {
+            html += crearHTMLTarjeta(filteredThemes[i], i, false);
+        }
 
+        grid.innerHTML = html || '<div style="padding:40px;">No se encontraron resultados.</div>';
         statsDiv.innerHTML = filteredThemes.length + ' Temas';
+        
         dibujarPaginacion();
+        // Pequeño delay para que el navegador de PS3 respire antes de cargar imágenes
+        setTimeout(procesarColaImagenes, 100);
     }
 
     function dibujarPaginacion() {
@@ -334,42 +374,59 @@
         paginationDiv.innerHTML = '';
         if(totalPages <= 1) return;
 
-        var visibleButtons = 10;
-        var half = Math.floor(visibleButtons / 2);
-        var startPage = Math.max(0, currentPage - half);
-        var endPage = Math.min(totalPages - 1, startPage + visibleButtons - 1);
-        
-        if (endPage - startPage < visibleButtons - 1) {
-            startPage = Math.max(0, endPage - (visibleButtons - 1));
-        }
+        var startPage = Math.max(0, currentPage - 4);
+        var endPage = Math.min(totalPages - 1, startPage + 9);
 
         for (var p = startPage; p <= endPage; p++) {
             var btn = document.createElement('button');
             btn.className = (p === currentPage) ? 'page-box active' : 'page-box';
             btn.innerHTML = (p + 1);
             btn.onclick = (function(page) {
-                return function() { currentPage = page; render(); window.scrollTo(0, 300); };
+                return function() { 
+                    currentPage = page; 
+                    render(); 
+                    window.scrollTo(0, 300); 
+                };
             })(p);
             paginationDiv.appendChild(btn);
         }
     }
 
-    window.proximaCarpeta = function(img, idx, name) {
+    window.proximaCarpeta = function(img, idx, name, callback) {
         var nIdx = idx + 1;
         if(nIdx < PREVIEW_FOLDERS.length) {
+            img.onerror = function() { proximaCarpeta(img, nIdx, name, callback); };
+            img.onload = function() { if(callback) callback(); };
             img.src = PREVIEW_FOLDERS[nIdx] + name;
-            img.onerror = function() { proximaCarpeta(img, nIdx, name); };
-        } else { img.style.display = 'none'; }
+        } else { 
+            img.style.display = 'none'; 
+            if(callback) callback();
+        }
+    };
+
+    window.modoAleatorio = function() {
+        esModoAleatorio = true;
+        filteredThemes.sort(function() { return 0.5 - Math.random(); });
+        currentPage = 0;
+        render();
+    };
+
+    window.toggleAdulto = function() {
+        mostrarContenidoAdulto = !mostrarContenidoAdulto;
+        var btn = document.getElementById('adultBtn');
+        btn.innerHTML = mostrarContenidoAdulto ? "+18 ON" : "+18 OFF";
+        btn.className = mostrarContenidoAdulto ? "sort-btn btn-adult active" : "sort-btn btn-adult";
+        currentPage = 0;
+        aplicarFiltros();
     };
 
     window.filtrarPorGenero = function(g) { 
         currentGenre = g; 
         searchInput.value = ''; 
         currentPage = 0; 
-        esModoAleatorio = false; 
         aplicarFiltros(); 
     };
-
+    
     window.volverInicio = function() { 
         searchInput.value = ''; 
         currentGenre = ''; 
@@ -378,12 +435,16 @@
         aplicarFiltros(); 
     };
 
-    window.modoAleatorio = function() {
-        esModoAleatorio = true; 
-        filteredThemes.sort(function() { return 0.5 - Math.random(); });
-        currentPage = 0; 
-        render();
-    };
+    // Liberar memoria al salir (Importante en PS3)
+    window.addEventListener("unload", function() {
+        allThemes = null;
+        filteredThemes = null;
+        imageQueue = null;
+        grid.innerHTML = "";
+    });
+
+    // Iniciar con un ligero retraso para estabilidad
+    setTimeout(cargarJSON, 500);
 </script>
 </body>
 </html>
