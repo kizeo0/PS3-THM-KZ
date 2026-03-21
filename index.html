@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
     <style>
-        /* Estilos base para PS3 - Optimizados para NetFront */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 20px 0; text-align: center; }
-        
-        .main-container { width: 1750px; margin: 0 auto; text-align: left; } 
+
+        .main-container { width: 1750px; margin: 0 auto; text-align: left; }
 
         .header { overflow: hidden; margin-bottom: 25px; border-bottom: 5px solid #ff6b35; padding-bottom: 20px; text-align: center; }
         .logo-img { height: 115px; float: left; cursor: pointer; }
@@ -16,129 +15,54 @@
         .social-container { float: right; background: #0a1a2a; padding: 10px 30px; border-radius: 60px; border: 3px solid #ff6b35; margin-top: 15px; }
         .social-icon { width: 62px; height: 62px; margin: 0 7px; vertical-align: middle; }
 
-        /* ===== TOOLBAR OPTIMIZADO ===== */
-        .toolbar {
-            display: table;
-            width: 100%;
-            background: #0a1a2a;
-            padding: 15px 25px;
-            border-radius: 60px;
-            margin-bottom: 25px;
-            border-left: 6px solid #ff6b35;
-            height: 86px;
-            box-sizing: border-box;
-        }
-        .toolbar-left, .toolbar-right {
-            display: table-cell;
-            vertical-align: middle;
-        }
-        .toolbar-right {
-            text-align: right;
-        }
-        .search-wrapper {
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px;
-        }
-        .search-wrapper input {
-            width: 310px;
-            height: 50px;
-            padding: 0 22px;
-            background: #0b1a2a;
-            border: 2px solid #1e3b4f;
-            border-radius: 50px;
-            color: white;
-            font-size: 16px;
-            vertical-align: middle;
-        }
-        
-        /* BOTÓN ALEATORIO (ESTILO VERSION PKG) */
-        .btn-aleatorio {
-            display: inline-block;
-            background: #ff6b35;
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 0 20px;
-            border-radius: 40px;
-            height: 50px;
-            line-height: 50px;
-            font-size: 14px;
-            border: 2px solid #ff6b35;
-            vertical-align: middle;
-            cursor: pointer;
-            margin-left: 10px;
-            text-transform: uppercase;
-        }
+        .toolbar { display: table; width: 100%; background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; height: 86px; box-sizing: border-box; }
+        .toolbar-left, .toolbar-right { display: table-cell; vertical-align: middle; }
+        .toolbar-right { text-align: right; }
 
-        .sort-buttons {
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px;
-        }
-        .sort-btn {
-            height: 50px;
-            background: #1e3b4f;
-            border: 2px solid #1e3b4f;
-            color: #c9d9e8;
-            padding: 0 22px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-right: 7px;
-            font-size: 15px;
-            vertical-align: middle;
-            line-height: 46px;
-        }
-        /* CREDITOS MOVIDOS AL HEADER */
-        .credits-banner {
-            height: 42px;
-            display: inline-block;
-            margin-top: 73px;
-            margin-bottom: -20px;
-            vertical-align: bottom;
-        }
-        .stats {
-            display: inline-block;
-            vertical-align: middle;
-            color: #9ab8d9;
-            font-weight: bold;
-            font-size: 18px;
-            margin-right: 20px;
-        }
-        .btn-pkg {
-            display: inline-block;
-            background: #ff6b35;
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 0 25px;
-            border-radius: 40px;
-            height: 50px;
-            line-height: 50px;
-            font-size: 16px;
-            border: 2px solid #ff6b35;
-            vertical-align: middle;
-        }
+        .search-wrapper { display: inline-block; vertical-align: middle; margin-right: 10px; }
+        .search-wrapper input { width: 310px; height: 50px; padding: 0 22px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 50px; color: white; font-size: 16px; vertical-align: middle; }
+
+        .btn-aleatorio { display: inline-block; background: #ff6b35; color: #fff; text-decoration: none; font-weight: bold; padding: 0 20px; border-radius: 40px; height: 50px; line-height: 50px; font-size: 14px; border: 2px solid #ff6b35; vertical-align: middle; cursor: pointer; margin-left: 10px; text-transform: uppercase; }
+
+        .sort-buttons { display: inline-block; vertical-align: middle; margin-right: 10px; }
+        .sort-btn { height: 50px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 0 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; vertical-align: middle; line-height: 46px; }
+
+        .credits-banner { height: 42px; display: inline-block; margin-top: 73px; margin-bottom: -20px; vertical-align: bottom; }
+        .stats { display: inline-block; vertical-align: middle; color: #9ab8d9; font-weight: bold; font-size: 18px; margin-right: 20px; }
+        .btn-pkg { display: inline-block; background: #ff6b35; color: #fff; text-decoration: none; font-weight: bold; padding: 0 25px; border-radius: 40px; height: 50px; line-height: 50px; font-size: 16px; border: 2px solid #ff6b35; vertical-align: middle; }
 
         .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
         .btn-genre-active { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
         .btn-adult { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active { background: #ff3535; color: white; }
 
-        .grid { text-align: center; clear: both; min-height: 600px; }
+        /* ===== LAYOUT SIDEBAR + GRID ===== */
+        .body-layout { display: table; width: 100%; table-layout: fixed; }
+        .sidebar-cell { display: table-cell; width: 220px; vertical-align: top; padding-right: 18px; }
+        .content-cell { display: table-cell; vertical-align: top; }
 
+        /* ===== SIDEBAR ===== */
+        .genre-sidebar { background: #0a1a2a; border-radius: 18px; border: 2px solid #1e3b4f; border-left: 5px solid #ff6b35; overflow: hidden; }
+        .sidebar-title { background: #ff6b35; color: #0b0f17; font-weight: bold; font-size: 15px; padding: 13px 16px; text-transform: uppercase; letter-spacing: 1px; }
+        .genre-list { overflow: visible; }
+        .genre-item { display: block; width: 100%; padding: 11px 16px; background: transparent; border: none; border-bottom: 1px solid #0f2030; color: #b0c8e0; font-size: 14px; font-weight: bold; text-align: left; cursor: pointer; text-decoration: none; }
+        .genre-item:hover { background: #112030; color: #ffb28c; }
+        .genre-item.active { background: #1e3b4f; color: #ff6b35; border-left: 4px solid #ff6b35; padding-left: 12px; }
+        .todos-count { float: right; background: #0b1a2a; color: #5a7a90; font-size: 12px; padding: 2px 7px; border-radius: 8px; font-weight: normal; }
+        .genre-item.active .todos-count { background: #ff6b3530; color: #ffb28c; }
+
+        /* ===== GRID ===== */
+        .grid { text-align: center; min-height: 600px; }
         .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
         .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
         .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
-
         .card-info { padding: 20px; }
         .theme-name { font-weight: bold; font-size: 19px; color: #fff; height: 45px; overflow: hidden; margin-bottom: 8px; }
         .theme-genre { background: #1e3b4f; padding: 6px 12px; border-radius: 10px; font-size: 14px; font-weight: bold; color: #ffb28c; margin-bottom: 15px; display: inline-block; border: 1px solid #ff6b35; cursor: pointer; }
         .download-btn { background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 12px; border-radius: 40px; text-align: center; display: block; font-size: 15px; }
 
         .pagination-container { text-align: center; margin: 40px 0; }
-        .page-box { display: inline-block; width: 50px; height: 50px; line-height: 46px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 4px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; vertical-align: middle; border: 2px solid #1e3b4f; }
+        .page-box { display: inline-block; width: 50px; height: 50px; line-height: 46px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 4px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; vertical-align: middle; }
         .page-box.active { background: #ff6b35; border-color: #ff6b35; color: #0b0f17; }
 
         .footer { margin-top: 50px; border-top: 3px solid #ff6b3540; padding: 25px 0; color: #b0c8e0; font-size: 16px; }
@@ -150,13 +74,11 @@
 <div class="main-container">
     <div class="header clearfix">
         <img src="recursos/titulo.png" alt="Logo" class="logo-img" onclick="volverInicio()">
-        
         <img src="recursos/credits.png" class="credits-banner">
-
         <div class="social-container">
-            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" class="social-icon"></a>
-            <a href="https://github.com/kizeo0"><img src="recursos/git.png" class="social-icon"></a>
-            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" class="social-icon"></a>
+            <a href="https://www.youtube.com/@kizeo0/videos"><img src="recursos/yt.png" class="social-icon" width="62" height="62"></a>
+            <a href="https://github.com/kizeo0"><img src="recursos/git.png" class="social-icon" width="62" height="62"></a>
+            <a href="https://x.com/KiZeo0"><img src="recursos/x.png" class="social-icon" width="62" height="62"></a>
         </div>
     </div>
 
@@ -177,11 +99,22 @@
         </div>
     </div>
 
-    <div id="themeGrid" class="grid">
-        <div id="loadingMsg" style="padding:40px; color:#ffb28c;">Cargando base de datos...</div>
+    <div class="body-layout">
+        <div class="sidebar-cell">
+            <div class="genre-sidebar">
+                <div class="sidebar-title">Generos</div>
+                <div class="genre-list" id="genreList">
+                    <div style="padding:16px;color:#5a7a90;font-size:13px;">Cargando...</div>
+                </div>
+            </div>
+        </div>
+        <div class="content-cell">
+            <div id="themeGrid" class="grid">
+                <div style="padding:40px;color:#ffb28c;">Cargando base de datos...</div>
+            </div>
+            <div class="pagination-container" id="pagination"></div>
+        </div>
     </div>
-
-    <div class="pagination-container" id="pagination"></div>
 
     <div class="footer clearfix">
         <span style="float:left">© PS3 THM KZ</span>
@@ -190,255 +123,383 @@
 </div>
 
 <script>
-    // Variables de configuración
-    var JSON_URL = 'temas_ps3_conlinks.json';
-    var PAGE_SIZE = 12; 
-    var PALABRAS_ADULTO = ['adult', '18+', 'girls/adult', 'sexy', 'ecchi', 'hentai', 'babes', 'harem', 'j-idols', 'j-idol', 'people','Girl','Girls'];
-    var G_EMPTY_GIF = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-    
-    // RUTAS FIJAS: Ahora solo se usan las imágenes comprimidas para todos los dispositivos
-    var baseCompresed = 'https://raw.githubusercontent.com/kizeocloud1/Previews-compresed/main/';
-    var PREVIEW_FOLDERS = [
-        baseCompresed + 'previews1/',
-        baseCompresed + 'previews2/', 
-        baseCompresed + 'previews3/',
-        baseCompresed + 'previews4/',
-        baseCompresed + 'previews5/',
-        baseCompresed + 'previews6/'
+    /* ── CONFIGURACION ───────────────────────────────────────────── */
+    var JSON_URL      = 'temas_ps3_conlinks.json';
+    var PAGE_SIZE     = 12;
+    var CHUNK_SIZE    = 400;   /* items por tick al procesar el JSON */
+    var IMG_PARALLEL  = 2;     /* imagenes cargando al mismo tiempo  */
+    var SEARCH_DELAY  = 600;   /* ms de debounce en el buscador      */
+
+    var ADULTO_KEYS = ['adult','18+','girls/adult','sexy','ecchi','hentai',
+                       'babes','harem','j-idols','j-idol','people','girl','girls'];
+
+    var G_EMPTY = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+    var BASE = 'https://raw.githubusercontent.com/kizeocloud1/Previews-compresed/main/';
+    var FOLDERS = [
+        BASE+'previews1/', BASE+'previews2/', BASE+'previews3/',
+        BASE+'previews4/', BASE+'previews5/', BASE+'previews6/'
     ];
 
-    // Variables de estado
-    var allThemes = [];
+    /* ── ESTADO ──────────────────────────────────────────────────── */
+    var allThemes      = [];   /* todos los temas con campos pre-computados */
+    var genresCache    = [];   /* lista ordenada de generos unicos           */
     var filteredThemes = [];
-    var currentPage = 0;
-    var currentGenre = '';
-    var mostrarContenidoAdulto = false;
-    var esModoAleatorio = false; 
-    var searchTimer = null; 
-    var imageQueue = [];
+    var currentPage    = 0;
+    var currentGenre   = '';
+    var mostrarAdulto  = false;
+    var esModoAleatorio = false;
+    var searchTimer    = null;
+    var imageQueue     = [];
+    var imgActivos     = 0;
 
-    // Elementos del DOM
-    var grid = document.getElementById('themeGrid');
-    var statsDiv = document.getElementById('stats');
-    var paginationDiv = document.getElementById('pagination');
+    /* ── REFERENCIAS DOM (una sola vez) ──────────────────────────── */
+    var grid       = document.getElementById('themeGrid');
+    var statsDiv   = document.getElementById('stats');
+    var pagDiv     = document.getElementById('pagination');
     var searchInput = document.getElementById('searchInput');
+    var genreList  = document.getElementById('genreList');
+    var genreBtn   = document.getElementById('genreActiveBtn');
 
-    function ps3Trim(str) {
-        return str.replace(/^\s+|\s+$/g, '');
+    /* ── UTILIDADES ──────────────────────────────────────────────── */
+    function trim(s) { return s.replace(/^\s+|\s+$/g, ''); }
+
+    /* Pre-computa si un string de genero es adulto (se llama UNA vez por tema) */
+    function calcIsAdult(gen) {
+        var g = gen.toLowerCase();
+        for (var i = 0; i < ADULTO_KEYS.length; i++) {
+            if (g.indexOf(ADULTO_KEYS[i]) !== -1) return true;
+        }
+        return false;
     }
 
+    /* ── CARGA DEL JSON ──────────────────────────────────────────── */
     function cargarJSON() {
         var xhr = new XMLHttpRequest();
-        var url = JSON_URL + '?t=' + new Date().getTime();
-        
-        xhr.open('GET', url, true);
+        xhr.open('GET', JSON_URL + '?t=' + (new Date().getTime()), true);
         xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200 || xhr.status === 0) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        allThemes = [];
-                        for (var i = 0; i < data.length; i++) {
-                            var item = data[i];
-                            allThemes.push({
-                                archivo: item.archivo,
-                                descarga: item.descarga,
-                                genero: item.genero || 'Otro',
-                                nombre: item.archivo.replace(/\.p3t$/i, ''),
-                                preview_idx: item.preview_idx || 0
-                            });
-                        }
-                        aplicarFiltros();
-                    } catch(e) { 
-                        grid.innerHTML = '<div style="color:red">Error de memoria o JSON inválido.</div>'; 
-                    }
-                } else {
-                    grid.innerHTML = '<div style="color:red">No se pudo cargar el archivo JSON (Error '+xhr.status+').</div>';
+            if (xhr.readyState !== 4) return;
+            if (xhr.status === 200 || xhr.status === 0) {
+                var raw;
+                try { raw = JSON.parse(xhr.responseText); }
+                catch(e) {
+                    grid.innerHTML = '<div style="color:red">Error: JSON invalido.</div>';
+                    return;
                 }
+                xhr = null; /* liberar referencia XHR */
+                procesarChunk(raw, 0);
+            } else {
+                grid.innerHTML = '<div style="color:red">Error al cargar JSON (' + xhr.status + ').</div>';
             }
         };
         xhr.send(null);
     }
 
+    /*
+     * Procesa el array raw en bloques de CHUNK_SIZE usando setTimeout
+     * para ceder el hilo al navegador entre chunks y evitar que la
+     * pagina se congele durante el parseo de 12k+ items.
+     */
+    function procesarChunk(raw, offset) {
+        var fin = Math.min(offset + CHUNK_SIZE, raw.length);
+
+        for (var i = offset; i < fin; i++) {
+            var item   = raw[i];
+            var nombre = item.archivo.replace(/\.p3t$/i, '');
+            var genero = item.genero || 'Otro';
+            /* Todos los campos costosos se pre-calculan aqui, una sola vez */
+            allThemes.push({
+                descarga:    item.descarga,
+                genero:      genero,
+                nombre:      nombre,
+                nombreLower: nombre.toLowerCase(),
+                generoLower: genero.toLowerCase(),
+                isAdult:     calcIsAdult(genero),
+                imgName:     encodeURIComponent(nombre + '.png').replace(/'/g, '%27'),
+                safeGenre:   genero.replace(/'/g, '&#39;'),
+                preview_idx: item.preview_idx || 0
+            });
+        }
+
+        /* Mostrar progreso mientras carga */
+        grid.innerHTML = '<div style="padding:40px;color:#ffb28c;">Cargando... '
+                         + fin + ' / ' + raw.length + '</div>';
+
+        if (fin < raw.length) {
+            /* Ceder hilo al navegador y continuar en el siguiente tick */
+            setTimeout(function() { procesarChunk(raw, fin); }, 20);
+        } else {
+            raw = null; /* liberar el array JSON crudo de memoria */
+            construirCacheGeneros();
+            construirSidebar();
+            aplicarFiltros();
+        }
+    }
+
+    /* ── CACHE DE GENEROS ────────────────────────────────────────── */
+    /*
+     * Se llama una sola vez al terminar la carga y cada vez que
+     * cambia mostrarAdulto. Genera genresCache: lista ordenada de
+     * generos visibles segun el estado +18.
+     */
+    function construirCacheGeneros() {
+        var seen   = {};
+        var result = [];
+        for (var i = 0; i < allThemes.length; i++) {
+            var g = allThemes[i].genero;
+            if (!seen[g] && (!allThemes[i].isAdult || mostrarAdulto)) {
+                seen[g]  = true;
+                result.push(g);
+            }
+        }
+        result.sort(function(a, b) { return a < b ? -1 : a > b ? 1 : 0; });
+        genresCache = result;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────────────────────── */
+    function construirSidebar() {
+        /* Contar temas visibles para el boton Todos */
+        var total = 0;
+        for (var i = 0; i < allThemes.length; i++) {
+            if (!allThemes[i].isAdult || mostrarAdulto) total++;
+        }
+
+        /* Construir HTML con array + join (mas rapido que += en PS3) */
+        var parts = [];
+        var activeTodos = (currentGenre === '') ? ' active' : '';
+        parts.push('<button class="genre-item' + activeTodos + '" id="genre-btn-todos" onclick="volverInicio()">');
+        parts.push('Todos <span class="todos-count">' + total + '</span></button>');
+
+        for (var j = 0; j < genresCache.length; j++) {
+            var gn = genresCache[j];
+            var activeG = (gn === currentGenre) ? ' active' : '';
+            var safeG   = gn.replace(/'/g, '&#39;');
+            parts.push('<button class="genre-item' + activeG + '" onclick="filtrarPorGenero(\'' + safeG + '\')">' + gn + '</button>');
+        }
+
+        genreList.innerHTML = parts.join('');
+    }
+
+    /* Actualiza solo la clase activa en el sidebar sin reconstruirlo */
+    function actualizarSidebarActivo() {
+        var items = genreList.getElementsByTagName('button');
+        for (var i = 0; i < items.length; i++) {
+            var btn  = items[i];
+            var span = btn.getElementsByTagName('span');
+            /* Obtener el texto del boton sin el span del contador */
+            var label = span.length > 0
+                ? btn.innerHTML.replace(span[0].outerHTML, '')
+                : btn.innerHTML;
+            label = trim(label);
+            var isActive = (currentGenre === '' && label === 'Todos') ||
+                           (currentGenre !== '' && label === currentGenre);
+            btn.className = isActive ? 'genre-item active' : 'genre-item';
+        }
+    }
+
+    /* ── FILTRADO ────────────────────────────────────────────────── */
     window.buscarConRetraso = function() {
         clearTimeout(searchTimer);
         searchTimer = setTimeout(function() {
-            currentGenre = '';
-            currentPage = 0;
-            esModoAleatorio = false; 
+            currentGenre    = '';
+            currentPage     = 0;
+            esModoAleatorio = false;
+            actualizarSidebarActivo();
             aplicarFiltros();
-        }, 600);
+        }, SEARCH_DELAY);
     };
 
     function aplicarFiltros() {
-        var query = ps3Trim(searchInput.value).toLowerCase();
-        filteredThemes = [];
-        
-        var genreBtn = document.getElementById('genreActiveBtn');
-        if(currentGenre !== '') {
+        var query          = trim(searchInput.value).toLowerCase();
+        var hayQuery       = query !== '';
+        var hayGenre       = currentGenre !== '';
+        var genreLower     = currentGenre.toLowerCase(); /* pre-calculo fuera del loop */
+        filteredThemes     = [];
+
+        /* Boton de genero activo en toolbar */
+        if (hayGenre) {
             genreBtn.style.display = 'inline-block';
-            genreBtn.innerHTML = currentGenre + " X";
+            genreBtn.innerHTML     = currentGenre + ' X';
         } else {
             genreBtn.style.display = 'none';
         }
 
+        /* Loop unico y eficiente usando campos pre-computados */
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
-            var genNormalizado = t.genero.toLowerCase();
-            
-            var isAdult = false;
-            for(var j=0; j<PALABRAS_ADULTO.length; j++) {
-                if(genNormalizado.indexOf(PALABRAS_ADULTO[j].toLowerCase()) !== -1) { 
-                    isAdult = true; 
-                    break; 
-                }
-            }
-            if(!mostrarContenidoAdulto && isAdult) continue;
-
-            if(t.nombre.toLowerCase().indexOf(query) !== -1 && 
-               (currentGenre === '' || genNormalizado === currentGenre.toLowerCase())) {
-                filteredThemes.push(t);
-            }
+            if (!mostrarAdulto && t.isAdult)                         continue;
+            if (hayQuery  && t.nombreLower.indexOf(query) === -1)    continue;
+            if (hayGenre  && t.generoLower !== genreLower)           continue;
+            filteredThemes.push(t);
         }
         render();
     }
 
-    function crearHTMLTarjeta(t, index, esDestacado) {
-        var imgName = encodeURIComponent(t.nombre + '.png').replace(/'/g, "%27");
-        var folder = PREVIEW_FOLDERS[t.preview_idx] || PREVIEW_FOLDERS[0];
-        var estiloExtra = esDestacado ? ' style="border-color: #ffb28c; box-shadow: 0 0 10px #ffb28c;"' : '';
-        
-        imageQueue.push({ id: 'img_' + index, src: folder + imgName, name: imgName, idx: t.preview_idx });
+    /* ── RENDERIZADO ─────────────────────────────────────────────── */
+    function crearTarjeta(t, id, destacado) {
+        var extra = destacado ? ' style="border-color:#ffb28c;"' : '';
+        var folder = FOLDERS[t.preview_idx] || FOLDERS[0];
+        imageQueue.push({ id: 'img_' + id, src: folder + t.imgName, name: t.imgName, idx: t.preview_idx });
 
-        return '<div class="theme-card"' + estiloExtra + '>' +
-                '<div class="preview"><img src="' + G_EMPTY_GIF + '" id="img_' + index + '"></div>' +
-                '<div class="card-info">' +
-                    '<div class="theme-name">' + t.nombre + '</div>' +
-                    '<div class="theme-genre" onclick="filtrarPorGenero(\''+t.genero.replace(/'/g, "\\'")+'\')">' + t.genero + '</div>' +
-                    '<a href="' + t.descarga + '" class="download-btn">DESCARGAR</a>' +
-                '</div>' +
-            '</div>';
-    }
-
-    function procesarColaImagenes() {
-        if (imageQueue.length === 0) return;
-        
-        var item = imageQueue.shift();
-        var imgEl = document.getElementById(item.id);
-        
-        if (imgEl) {
-            imgEl.onload = function() { procesarColaImagenes(); };
-            imgEl.onerror = function() { 
-                window.proximaCarpeta(this, item.idx, item.name, function() {
-                    procesarColaImagenes();
-                });
-            };
-            imgEl.src = item.src;
-        } else {
-            procesarColaImagenes();
-        }
+        return '<div class="theme-card"' + extra + '>'
+             + '<div class="preview"><img src="' + G_EMPTY + '" id="img_' + id + '" width="350" height="225"></div>'
+             + '<div class="card-info">'
+             + '<div class="theme-name">' + t.nombre + '</div>'
+             + '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.safeGenre + '\')">' + t.genero + '</div>'
+             + '<a href="' + t.descarga + '" class="download-btn">DESCARGAR</a>'
+             + '</div></div>';
     }
 
     function render() {
         imageQueue = [];
-        var html = "";
-        
-        if (!esModoAleatorio && currentPage === 0 && currentGenre === '' && ps3Trim(searchInput.value) === '') {
-            var destacados = [];
-            for(var k=0; k<allThemes.length; k++) {
-                if(allThemes[k].genero === 'AnimugenZ') destacados.push(allThemes[k]);
-                if(destacados.length >= 2) break;
+        imgActivos = 0;
+        var parts  = [];
+
+        /* Tarjetas destacadas (AnimugenZ) solo en portada */
+        if (!esModoAleatorio && currentPage === 0 && !currentGenre && !trim(searchInput.value)) {
+            var n = 0;
+            for (var k = 0; k < allThemes.length && n < 2; k++) {
+                if (allThemes[k].genero === 'AnimugenZ') {
+                    parts.push(crearTarjeta(allThemes[k], 'dest_' + n, true));
+                    n++;
+                }
             }
-            for(var d=0; d<destacados.length; d++) html += crearHTMLTarjeta(destacados[d], 'dest_'+d, true);
         }
 
         var start = currentPage * PAGE_SIZE;
-        var end = Math.min(start + PAGE_SIZE, filteredThemes.length);
-        
+        var end   = Math.min(start + PAGE_SIZE, filteredThemes.length);
         for (var i = start; i < end; i++) {
-            html += crearHTMLTarjeta(filteredThemes[i], i, false);
+            parts.push(crearTarjeta(filteredThemes[i], i, false));
         }
 
-        grid.innerHTML = html || '<div style="padding:40px;">No se encontraron resultados.</div>';
+        /* Una sola escritura al DOM */
+        grid.innerHTML   = parts.length ? parts.join('') : '<div style="padding:40px;">No se encontraron resultados.</div>';
         statsDiv.innerHTML = filteredThemes.length + ' Temas';
-        
+
         dibujarPaginacion();
-        setTimeout(procesarColaImagenes, 100);
+        setTimeout(procesarColaImagenes, 80);
     }
 
+    /* ── PAGINACION ──────────────────────────────────────────────── */
     function dibujarPaginacion() {
-        var totalPages = Math.ceil(filteredThemes.length / PAGE_SIZE);
-        paginationDiv.innerHTML = '';
-        if(totalPages <= 1) return;
+        var total = Math.ceil(filteredThemes.length / PAGE_SIZE);
+        pagDiv.innerHTML = '';
+        if (total <= 1) return;
 
-        var startPage = Math.max(0, currentPage - 4);
-        var endPage = Math.min(totalPages - 1, startPage + 9);
+        var startP = Math.max(0, currentPage - 4);
+        var endP   = Math.min(total - 1, startP + 9);
 
-        for (var p = startPage; p <= endPage; p++) {
+        for (var p = startP; p <= endP; p++) {
             var btn = document.createElement('button');
             btn.className = (p === currentPage) ? 'page-box active' : 'page-box';
-            btn.innerHTML = (p + 1);
-            btn.onclick = (function(page) {
-                return function() { 
-                    currentPage = page; 
-                    render(); 
-                    window.scrollTo(0, 300); 
-                };
+            btn.innerHTML = p + 1;
+            btn.onclick   = (function(pg) {
+                return function() { currentPage = pg; render(); window.scrollTo(0, 300); };
             })(p);
-            paginationDiv.appendChild(btn);
+            pagDiv.appendChild(btn);
         }
     }
 
-    window.proximaCarpeta = function(img, idx, name, callback) {
+    /* ── COLA DE IMAGENES (carga paralela limitada) ───────────────── */
+    function procesarColaImagenes() {
+        while (imageQueue.length > 0 && imgActivos < IMG_PARALLEL) {
+            var item  = imageQueue.shift();
+            var imgEl = document.getElementById(item.id);
+            if (!imgEl) continue;
+            imgActivos++;
+            (function(el, it) {
+                el.onload = function() {
+                    el.onload = null; el.onerror = null;
+                    imgActivos--;
+                    procesarColaImagenes();
+                };
+                el.onerror = function() {
+                    el.onload = null; el.onerror = null;
+                    proximaCarpeta(el, it.idx, it.name);
+                };
+                el.src = it.src;
+            })(imgEl, item);
+        }
+    }
+
+    window.proximaCarpeta = function(img, idx, name) {
         var nIdx = idx + 1;
-        if(nIdx < PREVIEW_FOLDERS.length) {
-            img.onerror = function() { proximaCarpeta(img, nIdx, name, callback); };
-            img.onload = function() { if(callback) callback(); };
-            img.src = PREVIEW_FOLDERS[nIdx] + name;
-        } else { 
-            img.style.display = 'none'; 
-            if(callback) callback();
+        if (nIdx < FOLDERS.length) {
+            img.onerror = function() {
+                img.onload = null; img.onerror = null;
+                proximaCarpeta(img, nIdx, name);
+            };
+            img.onload = function() {
+                img.onload = null; img.onerror = null;
+                imgActivos--;
+                procesarColaImagenes();
+            };
+            img.src = FOLDERS[nIdx] + name;
+        } else {
+            img.style.display = 'none';
+            imgActivos--;
+            procesarColaImagenes();
         }
     };
 
+    /* ── ACCIONES ────────────────────────────────────────────────── */
     window.modoAleatorio = function() {
         esModoAleatorio = true;
-        filteredThemes.sort(function() { return 0.5 - Math.random(); });
+        /* Fisher-Yates shuffle: mas uniforme que sort(random) */
+        for (var i = filteredThemes.length - 1; i > 0; i--) {
+            var j   = Math.floor(Math.random() * (i + 1));
+            var tmp = filteredThemes[i];
+            filteredThemes[i] = filteredThemes[j];
+            filteredThemes[j] = tmp;
+        }
         currentPage = 0;
         render();
     };
 
     window.toggleAdulto = function() {
-        mostrarContenidoAdulto = !mostrarContenidoAdulto;
+        mostrarAdulto = !mostrarAdulto;
         var btn = document.getElementById('adultBtn');
-        btn.innerHTML = mostrarContenidoAdulto ? "+18 ON" : "+18 OFF";
-        btn.className = mostrarContenidoAdulto ? "sort-btn btn-adult active" : "sort-btn btn-adult";
+        btn.innerHTML = mostrarAdulto ? '+18 ON' : '+18 OFF';
+        btn.className = mostrarAdulto ? 'sort-btn btn-adult active' : 'sort-btn btn-adult';
+        /* Si el genero activo era adulto y se oculta, resetear */
+        if (!mostrarAdulto && currentGenre !== '') {
+            for (var i = 0; i < allThemes.length; i++) {
+                if (allThemes[i].genero === currentGenre && allThemes[i].isAdult) {
+                    currentGenre = '';
+                    break;
+                }
+            }
+        }
         currentPage = 0;
+        construirCacheGeneros();
+        construirSidebar();
         aplicarFiltros();
     };
 
-    window.filtrarPorGenero = function(g) { 
-        currentGenre = g; 
-        searchInput.value = ''; 
-        currentPage = 0; 
-        aplicarFiltros(); 
-    };
-    
-    window.volverInicio = function() { 
-        searchInput.value = ''; 
-        currentGenre = ''; 
-        currentPage = 0; 
-        esModoAleatorio = false; 
-        aplicarFiltros(); 
+    window.filtrarPorGenero = function(g) {
+        currentGenre    = g;
+        searchInput.value = '';
+        currentPage     = 0;
+        actualizarSidebarActivo();
+        aplicarFiltros();
     };
 
-    window.addEventListener("unload", function() {
-        allThemes = null;
-        filteredThemes = null;
-        imageQueue = null;
-        grid.innerHTML = "";
+    window.volverInicio = function() {
+        searchInput.value = '';
+        currentGenre    = '';
+        currentPage     = 0;
+        esModoAleatorio = false;
+        actualizarSidebarActivo();
+        aplicarFiltros();
+    };
+
+    /* Liberar memoria al abandonar la pagina */
+    window.addEventListener('unload', function() {
+        allThemes = filteredThemes = imageQueue = genresCache = null;
+        grid.innerHTML = '';
     });
 
+    /* Dar tiempo al navegador para pintar antes de arrancar la carga */
     setTimeout(cargarJSON, 500);
 </script>
 </body>
