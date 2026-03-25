@@ -3,75 +3,597 @@
 <head>
     <meta charset="UTF-8">
     <title>PS3 THM KZ</title>
+    <script>
+        /* ── DETECCION PS3 ── ejecutar ANTES del render ──────────── */
+        var isPS3 = /PS3|PlayStation 3|NetFront/i.test(navigator.userAgent)
+                 || window.location.search.indexOf('mode=ps3') > -1;
+
+        /* Igual que la referencia: forzar ventana a pantalla completa */
+        if (isPS3) {
+            try { window.resizeTo(screen.width, screen.height); } catch(e) {}
+        }
+
+        /* Clase en <html> disponible para CSS desde el primer píxel */
+        document.documentElement.className = isPS3 ? 'is-ps3' : 'is-pc';
+    </script>
     <style>
+        /* ── RESET ────────────────────────────────────────────────── */
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-        body { background: #0b0f17; color: #e0e5f0; font-family: Arial, sans-serif; line-height: 1.2; padding: 20px 0; text-align: center; }
 
-        .main-container { width: 1750px; margin: 0 auto; text-align: left; }
+        /*
+         * PRINCIPIO CLAVE DE LA REFERENCIA:
+         * En PS3 no existe contenedor de ancho fijo.
+         * Todo es fluido: width:100%, left:0/right:0, posiciones fijas.
+         * Esto hace que la página se adapte SOLA a 4:3 o 16:9
+         * sin necesitar detectar el ratio de pantalla.
+         */
 
-        .header { overflow: hidden; margin-bottom: 25px; border-bottom: 5px solid #ff6b35; padding-bottom: 20px; text-align: center; }
-        .logo-img { height: 115px; float: left; cursor: pointer; }
+        /* ── BODY ─────────────────────────────────────────────────── */
+        body {
+            background: #0b0f17;
+            color: #e0e5f0;
+            font-family: Arial, sans-serif;
+            line-height: 1.2;
+            text-align: center;
+        }
 
-        .social-container { float: right; background: #0a1a2a; padding: 10px 30px; border-radius: 60px; border: 3px solid #ff6b35; margin-top: 15px; }
-        .social-icon { width: 62px; height: 62px; margin: 0 7px; vertical-align: middle; }
+        .is-pc body {
+            padding: 20px 0;
+            overflow-x: hidden;
+        }
 
-        .toolbar { display: table; width: 100%; background: #0a1a2a; padding: 15px 25px; border-radius: 60px; margin-bottom: 25px; border-left: 6px solid #ff6b35; height: 86px; box-sizing: border-box; }
-        .toolbar-left, .toolbar-right { display: table-cell; vertical-align: middle; }
+        /* PS3: sin scroll en body, la página es fullscreen */
+        .is-ps3 body {
+            overflow: hidden;
+            height: 100%;
+            padding: 0;
+        }
+
+        /* PS3: desactivar transiciones y animaciones para ahorrar CPU */
+        .is-ps3 * {
+            -webkit-transition: none !important;
+            transition: none !important;
+            -webkit-animation: none !important;
+            animation: none !important;
+        }
+
+        /* ── CONTENEDOR PRINCIPAL ─────────────────────────────────── */
+        /* PC: ancho fijo centrado, igual que antes */
+        .is-pc .main-container {
+            width: 1750px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 0 10px;
+        }
+
+        /*
+         * PS3: 100% fluido, sin ancho fijo, ocupa toda la pantalla.
+         * Funciona igual en 16:9 que en 4:3 porque no hay anchura fija.
+         */
+        .is-ps3 .main-container {
+            width: 100%;
+            margin: 0;
+            text-align: left;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        /* ── HEADER ───────────────────────────────────────────────── */
+        .header {
+            overflow: hidden;
+            border-bottom: 5px solid #ff6b35;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+
+        .is-pc .header {
+            margin-bottom: 25px;
+            padding-top: 20px;
+        }
+
+        /*
+         * PS3: header fijo en la parte superior, ancho total.
+         * Exactamente como en la referencia.
+         */
+        .is-ps3 .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            background: #0b0f17;
+            padding: 8px 10px;
+            margin: 0;
+        }
+
+        .logo-img {
+            height: 115px;
+            float: left;
+            cursor: pointer;
+        }
+
+        .is-ps3 .logo-img { height: 58px; }
+
+        .social-container {
+            float: right;
+            background: #0a1a2a;
+            padding: 10px 30px;
+            border-radius: 60px;
+            border: 3px solid #ff6b35;
+            margin-top: 15px;
+        }
+
+        .is-ps3 .social-container {
+            padding: 5px 12px;
+            border-radius: 30px;
+            margin-top: 5px;
+            border-width: 2px;
+        }
+
+        .social-icon {
+            width: 62px;
+            height: 62px;
+            margin: 0 7px;
+            vertical-align: middle;
+        }
+
+        .is-ps3 .social-icon { width: 34px; height: 34px; margin: 0 3px; }
+
+        /* Banner de créditos: oculto en PS3 */
+        .credits-banner {
+            height: 42px;
+            display: inline-block;
+            margin-top: 73px;
+            margin-bottom: -20px;
+            vertical-align: bottom;
+        }
+
+        .is-ps3 .credits-banner { display: none; }
+
+        /* ── TOOLBAR ──────────────────────────────────────────────── */
+        .toolbar {
+            display: table;
+            width: 100%;
+            background: #0a1a2a;
+            padding: 15px 25px;
+            border-radius: 60px;
+            margin-bottom: 25px;
+            border-left: 6px solid #ff6b35;
+            height: 86px;
+            box-sizing: border-box;
+        }
+
+        /*
+         * PS3: toolbar fija debajo del header (~78px).
+         * position:fixed + left:0/right:0 = se adapta a cualquier ancho.
+         */
+        .is-ps3 .toolbar {
+            position: fixed;
+            top: 78px;
+            left: 0;
+            right: 0;
+            z-index: 19;
+            border-radius: 0;
+            margin: 0;
+            padding: 5px 8px;
+            height: auto;
+            border-left: none;
+            border-top: 2px solid #ff6b35;
+            display: block;
+            background: #0a1a2a;
+        }
+
+        .toolbar-left, .toolbar-right {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
         .toolbar-right { text-align: right; }
 
-        .search-wrapper { display: inline-block; vertical-align: middle; margin-right: 10px; }
-        .search-wrapper input { width: 310px; height: 50px; padding: 0 22px; background: #0b1a2a; border: 2px solid #1e3b4f; border-radius: 50px; color: white; font-size: 16px; vertical-align: middle; }
+        .is-ps3 .toolbar-left  { display: inline-block; vertical-align: middle; }
+        .is-ps3 .toolbar-right { display: inline-block; vertical-align: middle; float: right; }
 
-        .btn-aleatorio { display: inline-block; background: #ff6b35; color: #fff; text-decoration: none; font-weight: bold; padding: 0 20px; border-radius: 40px; height: 50px; line-height: 50px; font-size: 14px; border: 2px solid #ff6b35; vertical-align: middle; cursor: pointer; margin-left: 10px; text-transform: uppercase; }
+        .search-wrapper {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
 
-        .sort-buttons { display: inline-block; vertical-align: middle; margin-right: 10px; }
-        .sort-btn { height: 50px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #c9d9e8; padding: 0 22px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-right: 7px; font-size: 15px; vertical-align: middle; line-height: 46px; }
+        .search-wrapper input {
+            width: 310px;
+            height: 50px;
+            padding: 0 22px;
+            background: #0b1a2a;
+            border: 2px solid #1e3b4f;
+            border-radius: 50px;
+            color: white;
+            font-size: 16px;
+            vertical-align: middle;
+        }
 
-        .credits-banner { height: 42px; display: inline-block; margin-top: 73px; margin-bottom: -20px; vertical-align: bottom; }
-        .stats { display: inline-block; vertical-align: middle; color: #9ab8d9; font-weight: bold; font-size: 18px; margin-right: 20px; }
-        .btn-pkg { display: inline-block; background: #ff6b35; color: #fff; text-decoration: none; font-weight: bold; padding: 0 25px; border-radius: 40px; height: 50px; line-height: 50px; font-size: 16px; border: 2px solid #ff6b35; vertical-align: middle; }
+        .is-ps3 .search-wrapper input {
+            width: 150px;
+            height: 30px;
+            font-size: 12px;
+            padding: 0 8px;
+            border-radius: 15px;
+        }
 
-        .sort-btn.active { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
-        .btn-genre-active { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
-        .btn-adult { border-color: #ff3535; color: #ff9b9b; }
-        .btn-adult.active { background: #ff3535; color: white; }
+        .btn-aleatorio {
+            display: inline-block;
+            background: #ff6b35;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0 20px;
+            border-radius: 40px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 14px;
+            border: 2px solid #ff6b35;
+            vertical-align: middle;
+            cursor: pointer;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
 
-        /* ===== LAYOUT SIDEBAR + GRID ===== */
-        .body-layout { display: table; width: 100%; table-layout: fixed; }
-        .sidebar-cell { display: table-cell; width: 220px; vertical-align: top; padding-right: 18px; }
+        .is-ps3 .btn-aleatorio {
+            height: 30px;
+            line-height: 30px;
+            font-size: 11px;
+            padding: 0 8px;
+            margin-left: 4px;
+        }
+
+        .sort-buttons {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .sort-btn {
+            height: 50px;
+            background: #1e3b4f;
+            border: 2px solid #1e3b4f;
+            color: #c9d9e8;
+            padding: 0 22px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 7px;
+            font-size: 15px;
+            vertical-align: middle;
+            line-height: 46px;
+        }
+
+        .is-ps3 .sort-btn {
+            height: 30px;
+            line-height: 26px;
+            font-size: 11px;
+            padding: 0 8px;
+            margin-right: 3px;
+        }
+
+        .stats {
+            display: inline-block;
+            vertical-align: middle;
+            color: #9ab8d9;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 20px;
+        }
+
+        .is-ps3 .stats { font-size: 11px; margin-right: 6px; }
+
+        .btn-pkg {
+            display: inline-block;
+            background: #ff6b35;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0 25px;
+            border-radius: 40px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 16px;
+            border: 2px solid #ff6b35;
+            vertical-align: middle;
+        }
+
+        .is-ps3 .btn-pkg {
+            height: 30px;
+            line-height: 30px;
+            font-size: 11px;
+            padding: 0 10px;
+        }
+
+        .sort-btn.active   { background: #ff6b35; color: #0b0f17; border-color: #ff6b35; }
+        .btn-genre-active  { background: #0b1a2a; border-color: #ffb28c; color: #ffb28c; display: none; }
+        .btn-adult         { border-color: #ff3535; color: #ff9b9b; }
+        .btn-adult.active  { background: #ff3535; color: white; }
+
+        /* ══════════════════════════════════════════════════════════
+           ZONA SCROLLEABLE (PS3)
+           ══════════════════════════════════════════════════════════
+           Equivalente al <div class="content"> de la referencia.
+           top = altura del header fijo + toolbar fija.
+           left:0 / right:0 → se adapta a cualquier ancho de pantalla,
+           tanto en 16:9 como en 4:3, sin media queries.
+        ═══════════════════════════════════════════════════════════ */
+        .is-ps3 .ps3-scroll-area {
+            position: fixed;
+            top: 124px;   /* header ~78px + toolbar ~46px */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            z-index: 1;
+            padding: 8px 6px 16px 6px;
+        }
+
+        /* ── LAYOUT SIDEBAR + GRID ────────────────────────────────── */
+        .body-layout {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .sidebar-cell {
+            display: table-cell;
+            width: 220px;
+            vertical-align: top;
+            padding-right: 18px;
+        }
+
+        /* PS3: sidebar más estrecho, se adapta con el resto */
+        .is-ps3 .sidebar-cell {
+            width: 105px;
+            padding-right: 5px;
+        }
+
         .content-cell { display: table-cell; vertical-align: top; }
 
-        /* ===== SIDEBAR ===== */
-        .genre-sidebar { background: #0a1a2a; border-radius: 18px; border: 2px solid #1e3b4f; border-left: 5px solid #ff6b35; overflow: hidden; }
-        .sidebar-title { background: #ff6b35; color: #0b0f17; font-weight: bold; font-size: 15px; padding: 13px 16px; text-transform: uppercase; letter-spacing: 1px; }
+        /* ── SIDEBAR ──────────────────────────────────────────────── */
+        .genre-sidebar {
+            background: #0a1a2a;
+            border-radius: 18px;
+            border: 2px solid #1e3b4f;
+            border-left: 5px solid #ff6b35;
+            overflow: hidden;
+        }
+
+        .is-ps3 .genre-sidebar { border-radius: 8px; }
+
+        .sidebar-title {
+            background: #ff6b35;
+            color: #0b0f17;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 13px 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .is-ps3 .sidebar-title {
+            font-size: 10px;
+            padding: 6px 7px;
+            letter-spacing: 0;
+        }
+
         .genre-list { overflow: visible; }
-        .genre-item { display: block; width: 100%; padding: 11px 16px; background: transparent; border: none; border-bottom: 1px solid #0f2030; color: #b0c8e0; font-size: 14px; font-weight: bold; text-align: left; cursor: pointer; text-decoration: none; }
-        .genre-item:hover { background: #112030; color: #ffb28c; }
-        .genre-item.active { background: #1e3b4f; color: #ff6b35; border-left: 4px solid #ff6b35; padding-left: 12px; }
-        .todos-count { float: right; background: #0b1a2a; color: #5a7a90; font-size: 12px; padding: 2px 7px; border-radius: 8px; font-weight: normal; }
+
+        .genre-item {
+            display: block;
+            width: 100%;
+            padding: 11px 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #0f2030;
+            color: #b0c8e0;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: left;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .is-ps3 .genre-item { font-size: 10px; padding: 5px 6px; }
+
+        .genre-item.active {
+            background: #1e3b4f;
+            color: #ff6b35;
+            border-left: 4px solid #ff6b35;
+            padding-left: 12px;
+        }
+
+        .is-ps3 .genre-item.active { padding-left: 5px; }
+
+        .todos-count {
+            float: right;
+            background: #0b1a2a;
+            color: #5a7a90;
+            font-size: 12px;
+            padding: 2px 7px;
+            border-radius: 8px;
+            font-weight: normal;
+        }
+
+        .is-ps3 .todos-count { display: none; }
+
         .genre-item.active .todos-count { background: #ff6b3530; color: #ffb28c; }
 
-        /* ===== GRID ===== */
+        /* ── GRID ─────────────────────────────────────────────────── */
         .grid { text-align: center; min-height: 600px; }
-        .theme-card { width: 350px; background: #0e1727; border-radius: 20px; overflow: hidden; border: 2px solid #1f3a4c; display: inline-block; vertical-align: top; margin: 12px; text-align: left; }
-        .preview { width: 100%; background: #000; text-align: center; border-bottom: 3px solid #ff6b35; height: 225px; line-height: 225px; overflow: hidden; }
-        .preview img { max-width: 100%; max-height: 100%; vertical-align: middle; }
-        .card-info { padding: 20px; }
-        .theme-name { font-weight: bold; font-size: 19px; color: #fff; height: 45px; overflow: hidden; margin-bottom: 8px; }
-        .theme-genre { background: #1e3b4f; padding: 6px 12px; border-radius: 10px; font-size: 14px; font-weight: bold; color: #ffb28c; margin-bottom: 15px; display: inline-block; border: 1px solid #ff6b35; cursor: pointer; }
-        .download-btn { background: #ff6b35; color: #0b0f17; text-decoration: none; font-weight: bold; padding: 12px; border-radius: 40px; text-align: center; display: block; font-size: 15px; }
 
+        .is-ps3 .grid { min-height: 200px; }
+
+        /*
+         * PC: tarjeta original de 350px
+         * PS3: tarjeta de ancho FIJO en píxeles, igual que la referencia
+         * (que usa 155px fijos para sus tiles).
+         * Con inline-block + text-align:center el navegador las acomoda
+         * automáticamente: en 16:9 caben más columnas, en 4:3 menos,
+         * sin estiramiento porque el ancho nunca cambia.
+         */
+        .theme-card {
+            width: 350px;
+            background: #0e1727;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #1f3a4c;
+            display: inline-block;
+            vertical-align: top;
+            margin: 12px;
+            text-align: left;
+        }
+
+        /*
+         * PS3: 270px llena bien una TV 16:9 (caben ~4 tarjetas por fila)
+         * y en 4:3 (zona ~650px libre) caben ~2, igual de limpio.
+         * Ancho fijo = sin estiramiento en ningún ratio.
+         * Ratio preview: 270 × (225/350) ≈ 174px de alto → sin distorsión.
+         */
+        .is-ps3 .theme-card {
+            width: 270px;
+            margin: 7px 6px;
+            border-radius: 12px;
+        }
+
+        .preview {
+            width: 100%;
+            background: #000;
+            text-align: center;
+            border-bottom: 3px solid #ff6b35;
+            height: 225px;
+            line-height: 225px;
+            overflow: hidden;
+        }
+
+        .is-ps3 .preview {
+            height: 174px;
+            line-height: 174px;
+        }
+
+        .preview img {
+            max-width: 100%;
+            max-height: 100%;
+            vertical-align: middle;
+        }
+
+        .is-ps3 .preview img {
+            width: 270px;
+            height: 174px;
+            object-fit: cover;
+        }
+
+        .card-info    { padding: 20px; }
+        .is-ps3 .card-info { padding: 10px 12px; }
+
+        .theme-name {
+            font-weight: bold;
+            font-size: 19px;
+            color: #fff;
+            height: 45px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .is-ps3 .theme-name { font-size: 13px; height: 34px; margin-bottom: 5px; }
+
+        .theme-genre {
+            background: #1e3b4f;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffb28c;
+            margin-bottom: 15px;
+            display: inline-block;
+            border: 1px solid #ff6b35;
+            cursor: pointer;
+        }
+
+        .is-ps3 .theme-genre {
+            font-size: 11px;
+            padding: 4px 8px;
+            margin-bottom: 8px;
+            border-radius: 7px;
+        }
+
+        .download-btn {
+            background: #ff6b35;
+            color: #0b0f17;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 40px;
+            text-align: center;
+            display: block;
+            font-size: 15px;
+        }
+
+        .is-ps3 .download-btn { font-size: 13px; padding: 9px; border-radius: 20px; }
+
+        /* ── PAGINACION ───────────────────────────────────────────── */
         .pagination-container { text-align: center; margin: 40px 0; }
-        .page-box { display: inline-block; width: 50px; height: 50px; line-height: 46px; background: #1e3b4f; border: 2px solid #1e3b4f; color: #fff; margin: 0 4px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; text-decoration: none; vertical-align: middle; }
+        .is-ps3 .pagination-container { margin: 12px 0; }
+
+        .page-box {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 46px;
+            background: #1e3b4f;
+            border: 2px solid #1e3b4f;
+            color: #fff;
+            margin: 0 4px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            vertical-align: middle;
+        }
+
+        .is-ps3 .page-box {
+            width: 32px;
+            height: 32px;
+            line-height: 28px;
+            font-size: 12px;
+            margin: 0 2px;
+            border-radius: 5px;
+        }
+
         .page-box.active { background: #ff6b35; border-color: #ff6b35; color: #0b0f17; }
 
-        .footer { margin-top: 50px; border-top: 3px solid #ff6b3540; padding: 25px 0; color: #b0c8e0; font-size: 16px; }
+        /* ── FOOTER ───────────────────────────────────────────────── */
+        .footer {
+            margin-top: 50px;
+            border-top: 3px solid #ff6b3540;
+            padding: 25px 0;
+            color: #b0c8e0;
+            font-size: 16px;
+        }
+
+        .is-ps3 .footer { margin-top: 15px; padding: 8px 0; font-size: 11px; }
+
         .clearfix::after { content: ""; display: table; clear: both; }
+
+        /* ── SCROLLBAR PS3 ────────────────────────────────────────── */
+        .is-ps3 ::-webkit-scrollbar       { width: 5px; }
+        .is-ps3 ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
+        .is-ps3 ::-webkit-scrollbar-thumb { background: #ff6b35; border-radius: 3px; }
     </style>
 </head>
 <body>
 
 <div class="main-container">
+
+    <!-- HEADER: fijo en PS3 -->
     <div class="header clearfix">
         <img src="recursos/titulo.png" alt="Logo" class="logo-img" onclick="volverInicio()">
         <img src="recursos/credits.png" class="credits-banner">
@@ -82,6 +604,7 @@
         </div>
     </div>
 
+    <!-- TOOLBAR: fija en PS3, debajo del header -->
     <div class="toolbar">
         <div class="toolbar-left">
             <div class="search-wrapper">
@@ -99,41 +622,55 @@
         </div>
     </div>
 
-    <div class="body-layout">
-        <div class="sidebar-cell">
-            <div class="genre-sidebar">
-                <div class="sidebar-title">Generos</div>
-                <div class="genre-list" id="genreList">
-                    <div style="padding:16px;color:#5a7a90;font-size:13px;">Cargando...</div>
+    <!--
+        ZONA SCROLLEABLE:
+        En PC es un div normal.
+        En PS3 es position:fixed con overflow-y:scroll (como la referencia).
+        left:0 / right:0 asegura que cubra TODO el ancho disponible,
+        ya sea 16:9 o 4:3.
+    -->
+    <div class="ps3-scroll-area">
+
+        <div class="body-layout">
+            <div class="sidebar-cell">
+                <div class="genre-sidebar">
+                    <div class="sidebar-title">Generos</div>
+                    <div class="genre-list" id="genreList">
+                        <div style="padding:12px;color:#5a7a90;font-size:12px;">Cargando...</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="content-cell">
-            <div id="themeGrid" class="grid">
-                <div style="padding:40px;color:#ffb28c;">Cargando base de datos...</div>
+            <div class="content-cell">
+                <div id="themeGrid" class="grid">
+                    <div style="padding:40px;color:#ffb28c;">Cargando base de datos...</div>
+                </div>
+                <div class="pagination-container" id="pagination"></div>
             </div>
-            <div class="pagination-container" id="pagination"></div>
         </div>
-    </div>
 
-    <div class="footer clearfix">
-        <span style="float:left">© PS3 THM KZ</span>
-        <span style="float:right">Youtube KiZeo</span>
-    </div>
-</div>
+        <div class="footer clearfix">
+            <span style="float:left">&#169; PS3 THM KZ</span>
+            <span style="float:right">Youtube KiZeo</span>
+        </div>
+
+    </div><!-- /ps3-scroll-area -->
+
+</div><!-- /main-container -->
 
 <script>
-    /* ── CONFIGURACION ───────────────────────────────────────────── */
-    var JSON_URL      = 'temas_ps3_conlinks.json';
-    var PAGE_SIZE     = 12;
-    var CHUNK_SIZE    = 400;   /* items por tick al procesar el JSON */
-    var IMG_PARALLEL  = 2;     /* imagenes cargando al mismo tiempo  */
-    var SEARCH_DELAY  = 600;   /* ms de debounce en el buscador      */
+    /* ══════════════════════════════════════════════════════════════
+       CONFIGURACION
+    ══════════════════════════════════════════════════════════════ */
+    var JSON_URL     = 'temas_ps3_conlinks.json';
+    var PAGE_SIZE    = isPS3 ? 8  : 12;
+    var CHUNK_SIZE   = isPS3 ? 150 : 400;
+    var IMG_PARALLEL = isPS3 ? 1  : 2;
+    var SEARCH_DELAY = isPS3 ? 800 : 600;
 
     var ADULTO_KEYS = ['adult','18+','girls/adult','sexy','ecchi','hentai',
                        'babes','harem','j-idols','j-idol','girl','girls'];
 
-    var G_EMPTY = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    var G_EMPTY = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
     var BASE = 'https://raw.githubusercontent.com/kizeocloud1/Previews-compresed/main/';
     var FOLDERS = [
@@ -141,30 +678,34 @@
         BASE+'previews4/', BASE+'previews5/', BASE+'previews6/'
     ];
 
-    /* ── ESTADO ──────────────────────────────────────────────────── */
-    var allThemes      = [];   /* todos los temas con campos pre-computados */
-    var genresCache    = [];   /* lista ordenada de generos unicos           */
-    var filteredThemes = [];
-    var currentPage    = 0;
-    var currentGenre   = '';
-    var mostrarAdulto  = false;
+    /* ══════════════════════════════════════════════════════════════
+       ESTADO
+    ══════════════════════════════════════════════════════════════ */
+    var allThemes       = [];
+    var genresCache     = [];
+    var filteredThemes  = [];
+    var currentPage     = 0;
+    var currentGenre    = '';
+    var mostrarAdulto   = false;
     var esModoAleatorio = false;
-    var searchTimer    = null;
-    var imageQueue     = [];
-    var imgActivos     = 0;
+    var searchTimer     = null;
+    var chunkTimer      = null;
+    var imageQueue      = [];
+    var imgActivos      = 0;
+    var imgTimer        = null;
 
-    /* ── REFERENCIAS DOM (una sola vez) ──────────────────────────── */
-    var grid       = document.getElementById('themeGrid');
-    var statsDiv   = document.getElementById('stats');
-    var pagDiv     = document.getElementById('pagination');
+    var grid        = document.getElementById('themeGrid');
+    var statsDiv    = document.getElementById('stats');
+    var pagDiv      = document.getElementById('pagination');
     var searchInput = document.getElementById('searchInput');
-    var genreList  = document.getElementById('genreList');
-    var genreBtn   = document.getElementById('genreActiveBtn');
+    var genreList   = document.getElementById('genreList');
+    var genreBtn    = document.getElementById('genreActiveBtn');
 
-    /* ── UTILIDADES ──────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════════
+       UTILIDADES
+    ══════════════════════════════════════════════════════════════ */
     function trim(s) { return s.replace(/^\s+|\s+$/g, ''); }
 
-    /* Pre-computa si un string de genero es adulto (se llama UNA vez por tema) */
     function calcIsAdult(gen) {
         var g = gen.toLowerCase();
         for (var i = 0; i < ADULTO_KEYS.length; i++) {
@@ -173,10 +714,21 @@
         return false;
     }
 
-    /* ── CARGA DEL JSON ──────────────────────────────────────────── */
+    function cancelarColas() {
+        imageQueue  = [];
+        imgActivos  = 0;
+        if (imgTimer)    { clearTimeout(imgTimer);    imgTimer    = null; }
+        if (chunkTimer)  { clearTimeout(chunkTimer);  chunkTimer  = null; }
+        if (searchTimer) { clearTimeout(searchTimer); searchTimer = null; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CARGA JSON
+    ══════════════════════════════════════════════════════════════ */
     function cargarJSON() {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', JSON_URL + '?t=' + (new Date().getTime()), true);
+        var url = isPS3 ? JSON_URL : (JSON_URL + '?t=' + (new Date().getTime()));
+        xhr.open('GET', url, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState !== 4) return;
             if (xhr.status === 200 || xhr.status === 0) {
@@ -184,30 +736,24 @@
                 try { raw = JSON.parse(xhr.responseText); }
                 catch(e) {
                     grid.innerHTML = '<div style="color:red">Error: JSON invalido.</div>';
-                    return;
+                    xhr = null; return;
                 }
-                xhr = null; /* liberar referencia XHR */
+                xhr = null;
                 procesarChunk(raw, 0);
             } else {
                 grid.innerHTML = '<div style="color:red">Error al cargar JSON (' + xhr.status + ').</div>';
+                xhr = null;
             }
         };
         xhr.send(null);
     }
 
-    /*
-     * Procesa el array raw en bloques de CHUNK_SIZE usando setTimeout
-     * para ceder el hilo al navegador entre chunks y evitar que la
-     * pagina se congele durante el parseo de 12k+ items.
-     */
     function procesarChunk(raw, offset) {
         var fin = Math.min(offset + CHUNK_SIZE, raw.length);
-
         for (var i = offset; i < fin; i++) {
             var item   = raw[i];
             var nombre = item.archivo.replace(/\.p3t$/i, '');
             var genero = item.genero || 'Otro';
-            /* Todos los campos costosos se pre-calculan aqui, una sola vez */
             allThemes.push({
                 descarga:    item.descarga,
                 genero:      genero,
@@ -221,197 +767,178 @@
             });
         }
 
-        /* Mostrar progreso mientras carga */
         grid.innerHTML = '<div style="padding:40px;color:#ffb28c;">Cargando... '
                          + fin + ' / ' + raw.length + '</div>';
 
         if (fin < raw.length) {
-            /* Ceder hilo al navegador y continuar en el siguiente tick */
-            setTimeout(function() { procesarChunk(raw, fin); }, 20);
+            chunkTimer = setTimeout(function() {
+                chunkTimer = null;
+                procesarChunk(raw, fin);
+            }, isPS3 ? 40 : 20);
         } else {
-            raw = null; /* liberar el array JSON crudo de memoria */
+            raw = null;
             construirCacheGeneros();
             construirSidebar();
             aplicarFiltros();
         }
     }
 
-    /* ── CACHE DE GENEROS ────────────────────────────────────────── */
-    /*
-     * Se llama una sola vez al terminar la carga y cada vez que
-     * cambia mostrarAdulto. Genera genresCache: lista ordenada de
-     * generos visibles segun el estado +18.
-     */
+    /* ══════════════════════════════════════════════════════════════
+       GENEROS
+    ══════════════════════════════════════════════════════════════ */
     function construirCacheGeneros() {
-        var seen   = {};
-        var result = [];
+        var seen = {}, result = [];
         for (var i = 0; i < allThemes.length; i++) {
             var g = allThemes[i].genero;
             if (!seen[g] && (!allThemes[i].isAdult || mostrarAdulto)) {
-                seen[g]  = true;
-                result.push(g);
+                seen[g] = true; result.push(g);
             }
         }
-        result.sort(function(a, b) { return a < b ? -1 : a > b ? 1 : 0; });
+        result.sort(function(a,b){ return a<b?-1:a>b?1:0; });
         genresCache = result;
+        seen = null;
     }
 
-    /* ── SIDEBAR ─────────────────────────────────────────────────── */
     function construirSidebar() {
-        /* Contar temas visibles para el boton Todos */
         var total = 0;
         for (var i = 0; i < allThemes.length; i++) {
             if (!allThemes[i].isAdult || mostrarAdulto) total++;
         }
-
-        /* Construir HTML con array + join (mas rapido que += en PS3) */
         var parts = [];
         var activeTodos = (currentGenre === '') ? ' active' : '';
-        parts.push('<button class="genre-item' + activeTodos + '" id="genre-btn-todos" onclick="volverInicio()">');
-        parts.push('Todos <span class="todos-count">' + total + '</span></button>');
-
+        parts.push('<button class="genre-item' + activeTodos + '" id="genre-btn-todos" onclick="volverInicio()">Todos <span class="todos-count">' + total + '</span></button>');
         for (var j = 0; j < genresCache.length; j++) {
-            var gn = genresCache[j];
-            var activeG = (gn === currentGenre) ? ' active' : '';
-            var safeG   = gn.replace(/'/g, '&#39;');
+            var gn = genresCache[j], activeG = (gn === currentGenre) ? ' active' : '';
+            var safeG = gn.replace(/'/g,'&#39;');
             parts.push('<button class="genre-item' + activeG + '" onclick="filtrarPorGenero(\'' + safeG + '\')">' + gn + '</button>');
         }
-
         genreList.innerHTML = parts.join('');
+        parts = null;
     }
 
-    /* Actualiza solo la clase activa en el sidebar sin reconstruirlo */
     function actualizarSidebarActivo() {
         var items = genreList.getElementsByTagName('button');
         for (var i = 0; i < items.length; i++) {
-            var btn  = items[i];
-            var span = btn.getElementsByTagName('span');
-            /* Obtener el texto del boton sin el span del contador */
-            var label = span.length > 0
-                ? btn.innerHTML.replace(span[0].outerHTML, '')
-                : btn.innerHTML;
+            var btn = items[i], span = btn.getElementsByTagName('span');
+            var label = span.length > 0 ? btn.innerHTML.replace(span[0].outerHTML,'') : btn.innerHTML;
             label = trim(label);
-            var isActive = (currentGenre === '' && label === 'Todos') ||
-                           (currentGenre !== '' && label === currentGenre);
+            var isActive = (currentGenre===''&&label==='Todos')||(currentGenre!==''&&label===currentGenre);
             btn.className = isActive ? 'genre-item active' : 'genre-item';
         }
     }
 
-    /* ── FILTRADO ────────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════════
+       FILTRADO
+    ══════════════════════════════════════════════════════════════ */
     window.buscarConRetraso = function() {
         clearTimeout(searchTimer);
         searchTimer = setTimeout(function() {
-            currentGenre    = '';
-            currentPage     = 0;
-            esModoAleatorio = false;
-            actualizarSidebarActivo();
-            aplicarFiltros();
+            searchTimer = null;
+            currentGenre = ''; currentPage = 0; esModoAleatorio = false;
+            actualizarSidebarActivo(); aplicarFiltros();
         }, SEARCH_DELAY);
     };
 
     function aplicarFiltros() {
-        var query          = trim(searchInput.value).toLowerCase();
-        var hayQuery       = query !== '';
-        var hayGenre       = currentGenre !== '';
-        var genreLower     = currentGenre.toLowerCase(); /* pre-calculo fuera del loop */
-        filteredThemes     = [];
+        var query = trim(searchInput.value).toLowerCase();
+        var hayQuery = query !== '', hayGenre = currentGenre !== '';
+        var genreLower = currentGenre.toLowerCase();
+        filteredThemes = [];
 
-        /* Boton de genero activo en toolbar */
-        if (hayGenre) {
-            genreBtn.style.display = 'inline-block';
-            genreBtn.innerHTML     = currentGenre + ' X';
-        } else {
-            genreBtn.style.display = 'none';
-        }
+        genreBtn.style.display = hayGenre ? 'inline-block' : 'none';
+        if (hayGenre) genreBtn.innerHTML = currentGenre + ' X';
 
-        /* Loop unico y eficiente usando campos pre-computados */
         for (var i = 0; i < allThemes.length; i++) {
             var t = allThemes[i];
-            if (!mostrarAdulto && t.isAdult)                         continue;
-            if (hayQuery  && t.nombreLower.indexOf(query) === -1)    continue;
-            if (hayGenre  && t.generoLower !== genreLower)           continue;
+            if (!mostrarAdulto && t.isAdult)                      continue;
+            if (hayQuery  && t.nombreLower.indexOf(query) === -1) continue;
+            if (hayGenre  && t.generoLower !== genreLower)        continue;
             filteredThemes.push(t);
         }
         render();
     }
 
-    /* ── RENDERIZADO ─────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════════
+       RENDER
+    ══════════════════════════════════════════════════════════════ */
     function crearTarjeta(t, id, destacado) {
-        var extra = destacado ? ' style="border-color:#ffb28c;"' : '';
+        var extra  = destacado ? ' style="border-color:#ffb28c;"' : '';
         var folder = FOLDERS[t.preview_idx] || FOLDERS[0];
-        imageQueue.push({ id: 'img_' + id, src: folder + t.imgName, name: t.imgName, idx: t.preview_idx });
-
+        imageQueue.push({ id:'img_'+id, src:folder+t.imgName, name:t.imgName, idx:t.preview_idx });
+        var iw = isPS3 ? 270 : 350;
+        var ih = isPS3 ? 174 : 225;
         return '<div class="theme-card"' + extra + '>'
-             + '<div class="preview"><img src="' + G_EMPTY + '" id="img_' + id + '" width="350" height="225"></div>'
+             + '<div class="preview"><img src="' + G_EMPTY + '" id="img_' + id + '" width="' + iw + '" height="' + ih + '"></div>'
              + '<div class="card-info">'
              + '<div class="theme-name">' + t.nombre + '</div>'
              + '<div class="theme-genre" onclick="filtrarPorGenero(\'' + t.safeGenre + '\')">' + t.genero + '</div>'
-             + '<a href="' + t.descarga + '" class="download-btn">DESCARGAR</a>'
+             + '<a href="' + t.descarga + '" target="_blank" class="download-btn">DESCARGAR</a>'
              + '</div></div>';
     }
 
     function render() {
-        imageQueue = [];
-        imgActivos = 0;
-        var parts  = [];
+        cancelarColas();
+        var parts = [];
 
-        /* Tarjetas destacadas (AnimugenZ) solo en portada */
-        if (!esModoAleatorio && currentPage === 0 && !currentGenre && !trim(searchInput.value)) {
+        if (!esModoAleatorio && currentPage===0 && !currentGenre && !trim(searchInput.value)) {
             var n = 0;
             for (var k = 0; k < allThemes.length && n < 2; k++) {
-                if (allThemes[k].genero === 'AnimugenZ') {
-                    parts.push(crearTarjeta(allThemes[k], 'dest_' + n, true));
-                    n++;
-                }
+                if (allThemes[k].genero === 'AnimugenZ') { parts.push(crearTarjeta(allThemes[k],'dest_'+n,true)); n++; }
             }
         }
 
         var start = currentPage * PAGE_SIZE;
         var end   = Math.min(start + PAGE_SIZE, filteredThemes.length);
-        for (var i = start; i < end; i++) {
-            parts.push(crearTarjeta(filteredThemes[i], i, false));
-        }
+        for (var i = start; i < end; i++) parts.push(crearTarjeta(filteredThemes[i], i, false));
 
-        /* Una sola escritura al DOM */
         grid.innerHTML   = parts.length ? parts.join('') : '<div style="padding:40px;">No se encontraron resultados.</div>';
         statsDiv.innerHTML = filteredThemes.length + ' Temas';
+        parts = null;
 
         dibujarPaginacion();
-        setTimeout(procesarColaImagenes, 80);
+        imgTimer = setTimeout(procesarColaImagenes, isPS3 ? 200 : 80);
     }
 
-    /* ── PAGINACION ──────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════════
+       PAGINACION
+    ══════════════════════════════════════════════════════════════ */
     function dibujarPaginacion() {
         var total = Math.ceil(filteredThemes.length / PAGE_SIZE);
         pagDiv.innerHTML = '';
         if (total <= 1) return;
 
-        var startP = Math.max(0, currentPage - 4);
-        var endP   = Math.min(total - 1, startP + 9);
-
+        var startP = Math.max(0, currentPage-4), endP = Math.min(total-1, startP+9);
         for (var p = startP; p <= endP; p++) {
             var btn = document.createElement('button');
-            btn.className = (p === currentPage) ? 'page-box active' : 'page-box';
-            btn.innerHTML = p + 1;
-            btn.onclick   = (function(pg) {
-                return function() { currentPage = pg; render(); window.scrollTo(0, 300); };
+            btn.className = (p===currentPage) ? 'page-box active' : 'page-box';
+            btn.innerHTML = p+1;
+            btn.onclick = (function(pg){
+                return function() {
+                    currentPage = pg; render();
+                    /* Scroll al inicio del área scrolleable */
+                    var area = document.getElementsByClassName('ps3-scroll-area')[0];
+                    if (area) area.scrollTop = 0; else window.scrollTo(0,0);
+                };
             })(p);
             pagDiv.appendChild(btn);
         }
     }
 
-    /* ── COLA DE IMAGENES (carga paralela limitada) ───────────────── */
+    /* ══════════════════════════════════════════════════════════════
+       COLA DE IMAGENES
+    ══════════════════════════════════════════════════════════════ */
     function procesarColaImagenes() {
+        imgTimer = null;
         while (imageQueue.length > 0 && imgActivos < IMG_PARALLEL) {
-            var item  = imageQueue.shift();
+            var item = imageQueue.shift();
             var imgEl = document.getElementById(item.id);
             if (!imgEl) continue;
             imgActivos++;
-            (function(el, it) {
+            (function(el, it){
                 el.onload = function() {
-                    el.onload = null; el.onerror = null;
-                    imgActivos--;
-                    procesarColaImagenes();
+                    el.onload = null; el.onerror = null; imgActivos--;
+                    imgTimer = isPS3 ? setTimeout(procesarColaImagenes, 60) : null;
+                    if (!isPS3) procesarColaImagenes();
                 };
                 el.onerror = function() {
                     el.onload = null; el.onerror = null;
@@ -423,37 +950,30 @@
     }
 
     window.proximaCarpeta = function(img, idx, name) {
-        var nIdx = idx + 1;
+        var nIdx = idx+1;
         if (nIdx < FOLDERS.length) {
-            img.onerror = function() {
-                img.onload = null; img.onerror = null;
-                proximaCarpeta(img, nIdx, name);
+            img.onerror = function() { img.onload=null; img.onerror=null; proximaCarpeta(img,nIdx,name); };
+            img.onload  = function() {
+                img.onload=null; img.onerror=null; imgActivos--;
+                imgTimer = isPS3 ? setTimeout(procesarColaImagenes,60) : null;
+                if (!isPS3) procesarColaImagenes();
             };
-            img.onload = function() {
-                img.onload = null; img.onerror = null;
-                imgActivos--;
-                procesarColaImagenes();
-            };
-            img.src = FOLDERS[nIdx] + name;
+            img.src = FOLDERS[nIdx]+name;
         } else {
-            img.style.display = 'none';
-            imgActivos--;
-            procesarColaImagenes();
+            img.style.display = 'none'; imgActivos--; procesarColaImagenes();
         }
     };
 
-    /* ── ACCIONES ────────────────────────────────────────────────── */
+    /* ══════════════════════════════════════════════════════════════
+       ACCIONES
+    ══════════════════════════════════════════════════════════════ */
     window.modoAleatorio = function() {
         esModoAleatorio = true;
-        /* Fisher-Yates shuffle: mas uniforme que sort(random) */
-        for (var i = filteredThemes.length - 1; i > 0; i--) {
-            var j   = Math.floor(Math.random() * (i + 1));
-            var tmp = filteredThemes[i];
-            filteredThemes[i] = filteredThemes[j];
-            filteredThemes[j] = tmp;
+        for (var i=filteredThemes.length-1;i>0;i--) {
+            var j=Math.floor(Math.random()*(i+1)), tmp=filteredThemes[i];
+            filteredThemes[i]=filteredThemes[j]; filteredThemes[j]=tmp;
         }
-        currentPage = 0;
-        render();
+        currentPage=0; render();
     };
 
     window.toggleAdulto = function() {
@@ -461,46 +981,44 @@
         var btn = document.getElementById('adultBtn');
         btn.innerHTML = mostrarAdulto ? '+18 ON' : '+18 OFF';
         btn.className = mostrarAdulto ? 'sort-btn btn-adult active' : 'sort-btn btn-adult';
-        /* Si el genero activo era adulto y se oculta, resetear */
-        if (!mostrarAdulto && currentGenre !== '') {
-            for (var i = 0; i < allThemes.length; i++) {
-                if (allThemes[i].genero === currentGenre && allThemes[i].isAdult) {
-                    currentGenre = '';
-                    break;
-                }
+        if (!mostrarAdulto && currentGenre!=='') {
+            for (var i=0;i<allThemes.length;i++) {
+                if (allThemes[i].genero===currentGenre&&allThemes[i].isAdult) { currentGenre=''; break; }
             }
         }
-        currentPage = 0;
-        construirCacheGeneros();
-        construirSidebar();
-        aplicarFiltros();
+        currentPage=0; construirCacheGeneros(); construirSidebar(); aplicarFiltros();
     };
 
     window.filtrarPorGenero = function(g) {
-        currentGenre    = g;
-        searchInput.value = '';
-        currentPage     = 0;
-        actualizarSidebarActivo();
-        aplicarFiltros();
+        currentGenre=g; searchInput.value=''; currentPage=0;
+        actualizarSidebarActivo(); aplicarFiltros();
     };
 
     window.volverInicio = function() {
-        searchInput.value = '';
-        currentGenre    = '';
-        currentPage     = 0;
-        esModoAleatorio = false;
-        actualizarSidebarActivo();
-        aplicarFiltros();
+        searchInput.value=''; currentGenre=''; currentPage=0; esModoAleatorio=false;
+        actualizarSidebarActivo(); aplicarFiltros();
     };
 
-    /* Liberar memoria al abandonar la pagina */
-    window.addEventListener('unload', function() {
-        allThemes = filteredThemes = imageQueue = genresCache = null;
-        grid.innerHTML = '';
-    });
+    /* ══════════════════════════════════════════════════════════════
+       LIMPIEZA DE MEMORIA
+       Crítico en PS3: previene que el estado corrupto dañe el HEN.
+    ══════════════════════════════════════════════════════════════ */
+    window.onbeforeunload = function() {
+        cancelarColas();
+        if (grid)      grid.innerHTML      = '';
+        if (pagDiv)    pagDiv.innerHTML    = '';
+        if (genreList) genreList.innerHTML = '';
+        if (allThemes)      { allThemes.length=0;      allThemes=null; }
+        if (filteredThemes) { filteredThemes.length=0;  filteredThemes=null; }
+        if (genresCache)    { genresCache.length=0;     genresCache=null; }
+        if (imageQueue)     { imageQueue.length=0;      imageQueue=null; }
+        grid=pagDiv=statsDiv=searchInput=genreList=genreBtn=null;
+    };
 
-    /* Dar tiempo al navegador para pintar antes de arrancar la carga */
-    setTimeout(cargarJSON, 500);
+    /* ══════════════════════════════════════════════════════════════
+       ARRANQUE
+    ══════════════════════════════════════════════════════════════ */
+    setTimeout(cargarJSON, isPS3 ? 800 : 500);
 </script>
 </body>
 </html>
