@@ -18,7 +18,7 @@ Características Principales
 Estado del Proyecto
 Actualmente, el sitio se encuentra en fase de **pulido constante**. Se puede aun:
 - [ ] Optimizar aún más los tiempos de carga de las imágenes de previsualización.
-- [ ] Mejorar la categorización de los más de 11k archivos.
+- [ ] Mejorar la categorización de los más de 12k archivos.
 - [ ] Corregir Previews y imagenes incorrectas.
 
 
@@ -40,4 +40,4 @@ Este proyecto es hecho simplemente para conservar los temas y organizarlos, no b
 
 > **Nota Técnica:** Este sitio utiliza una estructura de carga dinámica pensada para no saturar la RAM de la PS3. Si encuentras algún error o tienes un pack de temas que no está en la lista, ¡no dudes en contactarme
 >
-> AUN FALTA PULIR ALGUNAS COSAS COMO PREVIEWS Y CLASIFICACIÓN PERO TODO ESTÁ A UN 80%
+> AUN FALTA PULIR ALGUNAS COSAS COMO PREVIEWS Y CLASIFICACIÓN PERO TODO ESTÁ A UN 85%
