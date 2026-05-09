@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PS3 THM KZ</title>
     <script>
         /* ── DETECCION PS3 ── ejecutar ANTES del render ──────────── */
@@ -587,6 +588,148 @@
         .is-ps3 ::-webkit-scrollbar       { width: 5px; }
         .is-ps3 ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
         .is-ps3 ::-webkit-scrollbar-thumb { background: #ff6b35; border-radius: 3px; }
+
+        /* ══════════════════════════════════════════════════════════
+           MOBILE — solo aplica en .is-pc con pantalla pequeña.
+           No toca NADA de .is-ps3 ni de la lógica existente.
+        ══════════════════════════════════════════════════════════ */
+
+        /* Contenedor: fluido en cualquier pantalla más angosta que 1750px */
+        @media screen and (max-width: 1800px) {
+            .is-pc .main-container {
+                width: 100%;
+                max-width: 1750px;
+                padding: 0 15px;
+            }
+        }
+
+        /* Tablet y móvil grande (≤900px) */
+        @media screen and (max-width: 900px) {
+
+            /* Header: apilar logo y social en columna */
+            .is-pc .header {
+                padding-bottom: 12px;
+            }
+            .is-pc .logo-img {
+                float: none;
+                display: block;
+                margin: 0 auto;
+                height: 75px;
+            }
+            .is-pc .credits-banner {
+                display: none;
+            }
+            .is-pc .social-container {
+                float: none;
+                display: block;
+                width: -webkit-fit-content;
+                width: fit-content;
+                margin: 10px auto 0;
+                padding: 8px 20px;
+            }
+            .is-pc .social-icon {
+                width: 48px;
+                height: 48px;
+                margin: 0 5px;
+            }
+
+            /* Toolbar: bloque apilado */
+            .is-pc .toolbar {
+                display: block;
+                height: auto;
+                border-radius: 20px;
+                padding: 12px 15px;
+                text-align: center;
+            }
+            .is-pc .toolbar-left,
+            .is-pc .toolbar-right {
+                display: block;
+                text-align: center;
+            }
+            .is-pc .toolbar-right {
+                margin-top: 10px;
+            }
+            .is-pc .search-wrapper {
+                display: block;
+                margin-right: 0;
+                margin-bottom: 8px;
+            }
+            .is-pc .search-wrapper input {
+                width: 200px;
+            }
+            .is-pc .sort-buttons {
+                margin-right: 0;
+            }
+
+            /* Layout sidebar + grid: apilar verticalmente */
+            .is-pc .body-layout {
+                display: block;
+                width: 100%;
+            }
+            .is-pc .sidebar-cell {
+                display: block;
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 15px;
+            }
+            .is-pc .content-cell {
+                display: block;
+                width: 100%;
+            }
+
+            /* Género sidebar: horizontal scrolleable en móvil */
+            .is-pc .genre-list {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: nowrap;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .is-pc .genre-item {
+                -ms-flex-negative: 0;
+                flex-shrink: 0;
+                width: auto;
+                border-bottom: none;
+                border-right: 1px solid #0f2030;
+                white-space: nowrap;
+                padding: 11px 14px;
+            }
+            .is-pc .genre-item.active {
+                border-left: none;
+                border-bottom: 3px solid #ff6b35;
+                padding-left: 14px;
+            }
+
+            /* Tarjetas: 2 columnas en tablet */
+            .is-pc .theme-card {
+                width: calc(50% - 24px);
+            }
+        }
+
+        /* Móvil pequeño (≤500px): tarjetas de 1 columna */
+        @media screen and (max-width: 500px) {
+            .is-pc .theme-card {
+                width: calc(100% - 24px);
+            }
+            .is-pc .search-wrapper input {
+                width: 160px;
+            }
+            .is-pc .btn-aleatorio {
+                padding: 0 12px;
+                font-size: 13px;
+            }
+            .is-pc .sort-btn {
+                padding: 0 14px;
+                font-size: 13px;
+                margin-right: 5px;
+            }
+            .is-pc .btn-pkg {
+                padding: 0 15px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
