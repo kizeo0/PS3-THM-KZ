@@ -599,14 +599,14 @@
             .is-pc .main-container {
                 width: 100%;
                 max-width: 1750px;
-                padding: 0 15px;
+                padding: 0 12px;
             }
         }
 
-        /* Tablet y móvil grande (≤900px) */
+        /* Tablet y móvil (≤900px) */
         @media screen and (max-width: 900px) {
 
-            /* Header: apilar logo y social en columna */
+            /* Header: logo y social apilados y centrados */
             .is-pc .header {
                 padding-bottom: 12px;
             }
@@ -614,121 +614,105 @@
                 float: none;
                 display: block;
                 margin: 0 auto;
-                height: 75px;
+                height: auto;
+                max-height: 58px;
+                max-width: 80%;
             }
-            .is-pc .credits-banner {
-                display: none;
-            }
+            .is-pc .credits-banner { display: none; }
             .is-pc .social-container {
                 float: none;
                 display: block;
                 width: -webkit-fit-content;
                 width: fit-content;
-                margin: 10px auto 0;
-                padding: 8px 20px;
+                margin: 8px auto 0;
+                padding: 7px 18px;
             }
             .is-pc .social-icon {
-                width: 48px;
-                height: 48px;
-                margin: 0 5px;
+                width: 44px;
+                height: 44px;
+                margin: 0 4px;
             }
 
-            /* Toolbar: bloque apilado */
+            /* Toolbar: bloque con elementos en fila y centrados */
             .is-pc .toolbar {
                 display: block;
                 height: auto;
+                padding: 10px 12px;
                 border-radius: 20px;
-                padding: 12px 15px;
                 text-align: center;
             }
-            .is-pc .toolbar-left,
-            .is-pc .toolbar-right {
+            /* toolbar-left y toolbar-right: bloques centrados uno sobre otro */
+            .is-pc .toolbar-left {
                 display: block;
                 text-align: center;
-            }
-            .is-pc .toolbar-right {
-                margin-top: 10px;
-            }
-            .is-pc .search-wrapper {
-                display: block;
-                margin-right: 0;
                 margin-bottom: 8px;
             }
-            .is-pc .search-wrapper input {
-                width: 200px;
+            .is-pc .toolbar-right {
+                display: block;
+                text-align: center;
             }
+            /* search-wrapper sigue siendo inline-block:
+               el input y el botón Aleatorio quedan juntos en la misma fila */
+            .is-pc .search-wrapper {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 6px;
+                margin-bottom: 6px;
+            }
+            .is-pc .search-wrapper input {
+                width: 160px;
+            }
+            /* sort-buttons inline-block: botones en la misma fila que search */
             .is-pc .sort-buttons {
+                display: inline-block;
+                vertical-align: middle;
                 margin-right: 0;
             }
 
-            /* Layout sidebar + grid: apilar verticalmente */
-            .is-pc .body-layout {
-                display: block;
-                width: 100%;
-            }
+            /* Layout: sidebar y grid apilados verticalmente */
+            .is-pc .body-layout { display: block; width: 100%; }
             .is-pc .sidebar-cell {
                 display: block;
                 width: 100%;
                 padding-right: 0;
-                margin-bottom: 15px;
+                margin-bottom: 14px;
             }
-            .is-pc .content-cell {
-                display: block;
-                width: 100%;
-            }
+            .is-pc .content-cell { display: block; width: 100%; }
 
-            /* Género sidebar: horizontal scrolleable en móvil */
+            /* Sidebar de géneros: scroll horizontal táctil */
             .is-pc .genre-list {
                 display: -webkit-box;
                 display: -ms-flexbox;
                 display: flex;
                 -ms-flex-wrap: nowrap;
-                flex-wrap: nowrap;
+                    flex-wrap: nowrap;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
             }
             .is-pc .genre-item {
                 -ms-flex-negative: 0;
-                flex-shrink: 0;
+                    flex-shrink: 0;
                 width: auto;
                 border-bottom: none;
                 border-right: 1px solid #0f2030;
                 white-space: nowrap;
-                padding: 11px 14px;
             }
             .is-pc .genre-item.active {
                 border-left: none;
                 border-bottom: 3px solid #ff6b35;
-                padding-left: 14px;
             }
 
-            /* Tarjetas: 2 columnas en tablet */
-            .is-pc .theme-card {
-                width: calc(50% - 24px);
-            }
+            /* Tarjetas: 2 columnas */
+            .is-pc .theme-card { width: calc(50% - 24px); }
         }
 
-        /* Móvil pequeño (≤500px): tarjetas de 1 columna */
+        /* Móvil pequeño (≤500px): 1 columna y botones más compactos */
         @media screen and (max-width: 500px) {
-            .is-pc .theme-card {
-                width: calc(100% - 24px);
-            }
-            .is-pc .search-wrapper input {
-                width: 160px;
-            }
-            .is-pc .btn-aleatorio {
-                padding: 0 12px;
-                font-size: 13px;
-            }
-            .is-pc .sort-btn {
-                padding: 0 14px;
-                font-size: 13px;
-                margin-right: 5px;
-            }
-            .is-pc .btn-pkg {
-                padding: 0 15px;
-                font-size: 14px;
-            }
+            .is-pc .theme-card { width: calc(100% - 24px); }
+            .is-pc .search-wrapper input { width: 130px; }
+            .is-pc .btn-aleatorio { padding: 0 10px; font-size: 13px; }
+            .is-pc .sort-btn     { padding: 0 12px; font-size: 13px; margin-right: 4px; }
+            .is-pc .btn-pkg      { padding: 0 14px; font-size: 14px; }
         }
     </style>
 </head>
