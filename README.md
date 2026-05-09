@@ -40,4 +40,4 @@ Este proyecto es hecho simplemente para conservar los temas y organizarlos, no b
 
 > **Nota Técnica:** Este sitio utiliza una estructura de carga dinámica pensada para no saturar la RAM de la PS3. Si encuentras algún error o tienes un pack de temas que no está en la lista, ¡no dudes en contactarme
 >
-> AUN FALTA PULIR ALGUNAS COSAS COMO PREVIEWS Y CLASIFICACIÓN PERO TODO ESTÁ A UN 85%
+> AUN FALTA PULIR ALGUNAS COSAS COMO PREVIEWS Y CLASIFICACIÓN PERO TODO ESTÁ A UN 90%
