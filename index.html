@@ -558,6 +558,9 @@
             font-size: 16px;
             text-decoration: none;
             vertical-align: middle;
+            /* Fix navegación espacial PS3: marca el elemento como focusable */
+            -webkit-user-focus: normal;
+            tabindex: 0;
         }
 
         .is-ps3 .page-box {
@@ -567,9 +570,39 @@
             font-size: 12px;
             margin: 0 2px;
             border-radius: 5px;
+            -webkit-user-focus: normal;
         }
 
         .page-box.active { background: #ff6b35; border-color: #ff6b35; color: #0b0f17; }
+
+        /* ── PANEL RECIEN AGREGADOS ───────────────────────────────── */
+        .reciente-panel {
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .is-ps3 .reciente-panel { margin-bottom: 6px; }
+
+        .btn-reciente {
+            width: 100%;
+            margin-right: 0;
+            border-color: #2a9d8f;
+            color: #7de8dc;
+            font-size: 13px;
+        }
+
+        .is-ps3 .btn-reciente {
+            font-size: 10px;
+            height: 28px;
+            line-height: 24px;
+            padding: 0 6px;
+        }
+
+        .btn-reciente.active {
+            background: #2a9d8f;
+            color: #0b0f17;
+            border-color: #2a9d8f;
+        }
 
         /* ── FOOTER ───────────────────────────────────────────────── */
         .footer {
@@ -760,6 +793,10 @@
 
         <div class="body-layout">
             <div class="sidebar-cell">
+                <!-- PANEL RECIEN AGREGADOS -->
+                <div class="reciente-panel">
+                    <button class="sort-btn btn-reciente" id="recienteBtn" onclick="toggleReciente()">RECIENTE OFF</button>
+                </div>
                 <div class="genre-sidebar">
                     <div class="sidebar-title">Generos</div>
                     <div class="genre-list" id="genreList">
@@ -815,6 +852,7 @@
     var currentGenre    = '';
     var mostrarAdulto   = false;
     var esModoAleatorio = false;
+    var esModoReciente  = false;
     var searchTimer     = null;
     var chunkTimer      = null;
     var imageQueue      = [];
@@ -848,6 +886,35 @@
         if (chunkTimer)  { clearTimeout(chunkTimer);  chunkTimer  = null; }
         if (searchTimer) { clearTimeout(searchTimer); searchTimer = null; }
     }
+
+    /* ── RECIEN AGREGADOS ──────────────────────────────────────── */
+    function resetReciente() {
+        if (!esModoReciente) return;
+        esModoReciente = false;
+        var btn = document.getElementById('recienteBtn');
+        if (btn) {
+            btn.innerHTML = 'RECIENTE OFF';
+            btn.className = 'sort-btn btn-reciente';
+        }
+    }
+
+    window.toggleReciente = function() {
+        esModoReciente = !esModoReciente;
+        var btn = document.getElementById('recienteBtn');
+        btn.innerHTML = esModoReciente ? 'RECIENTE ON' : 'RECIENTE OFF';
+        btn.className = esModoReciente ? 'sort-btn btn-reciente active' : 'sort-btn btn-reciente';
+        if (esModoReciente) {
+            /* Al activar: limpiar búsqueda, género y modo aleatorio */
+            searchInput.value = '';
+            currentGenre = '';
+            currentPage  = 0;
+            esModoAleatorio = false;
+            actualizarSidebarActivo();
+        } else {
+            currentPage = 0;
+        }
+        aplicarFiltros();
+    };
 
     /* ══════════════════════════════════════════════════════════════
        CARGA JSON
@@ -961,6 +1028,7 @@
         clearTimeout(searchTimer);
         searchTimer = setTimeout(function() {
             searchTimer = null;
+            resetReciente();
             currentGenre = ''; currentPage = 0; esModoAleatorio = false;
             actualizarSidebarActivo(); aplicarFiltros();
         }, SEARCH_DELAY);
@@ -982,6 +1050,12 @@
             if (hayGenre  && t.generoLower !== genreLower)        continue;
             filteredThemes.push(t);
         }
+
+        /* Modo recién agregados: invertir para mostrar los últimos del JSON primero */
+        if (esModoReciente) {
+            filteredThemes.reverse();
+        }
+
         render();
     }
 
@@ -1039,6 +1113,7 @@
             var btn = document.createElement('button');
             btn.className = (p===currentPage) ? 'page-box active' : 'page-box';
             btn.innerHTML = p+1;
+            btn.setAttribute('tabindex', '0');
             btn.onclick = (function(pg){
                 return function() {
                     currentPage = pg; render();
@@ -1095,6 +1170,7 @@
        ACCIONES
     ══════════════════════════════════════════════════════════════ */
     window.modoAleatorio = function() {
+        resetReciente();
         esModoAleatorio = true;
         for (var i=filteredThemes.length-1;i>0;i--) {
             var j=Math.floor(Math.random()*(i+1)), tmp=filteredThemes[i];
@@ -1104,6 +1180,7 @@
     };
 
     window.toggleAdulto = function() {
+        resetReciente();
         mostrarAdulto = !mostrarAdulto;
         var btn = document.getElementById('adultBtn');
         btn.innerHTML = mostrarAdulto ? '+18 ON' : '+18 OFF';
@@ -1117,11 +1194,13 @@
     };
 
     window.filtrarPorGenero = function(g) {
+        resetReciente();
         currentGenre=g; searchInput.value=''; currentPage=0;
         actualizarSidebarActivo(); aplicarFiltros();
     };
 
     window.volverInicio = function() {
+        resetReciente();
         searchInput.value=''; currentGenre=''; currentPage=0; esModoAleatorio=false;
         actualizarSidebarActivo(); aplicarFiltros();
     };
@@ -1132,6 +1211,7 @@
     ══════════════════════════════════════════════════════════════ */
     window.onbeforeunload = function() {
         cancelarColas();
+        esModoReciente = false;
         if (grid)      grid.innerHTML      = '';
         if (pagDiv)    pagDiv.innerHTML    = '';
         if (genreList) genreList.innerHTML = '';
