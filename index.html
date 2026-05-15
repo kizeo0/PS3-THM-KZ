@@ -1081,7 +1081,7 @@
         cancelarColas();
         var parts = [];
 
-        if (!esModoAleatorio && currentPage===0 && !currentGenre && !trim(searchInput.value)) {
+        if (!esModoAleatorio && !esModoReciente && currentPage===0 && !currentGenre && !trim(searchInput.value)) {
             var n = 0;
             for (var k = 0; k < allThemes.length && n < 2; k++) {
                 if (allThemes[k].genero === 'AnimugenZ') { parts.push(crearTarjeta(allThemes[k],'dest_'+n,true)); n++; }
