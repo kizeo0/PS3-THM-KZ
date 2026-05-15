@@ -558,9 +558,7 @@
             font-size: 16px;
             text-decoration: none;
             vertical-align: middle;
-            /* Fix navegación espacial PS3: marca el elemento como focusable */
             -webkit-user-focus: normal;
-            tabindex: 0;
         }
 
         .is-ps3 .page-box {
@@ -574,6 +572,21 @@
         }
 
         .page-box.active { background: #ff6b35; border-color: #ff6b35; color: #0b0f17; }
+
+        /* Foco visible para navegación espacial D-pad PS3 */
+        .page-box:focus {
+            outline: 3px solid #ff6b35;
+            outline-offset: 2px;
+            background: #2a5570;
+        }
+        .is-ps3 .page-box:focus {
+            outline-width: 2px;
+            outline-offset: 1px;
+        }
+        .page-box.active:focus {
+            outline-color: #fff;
+            background: #ff6b35;
+        }
 
         /* ── PANEL RECIEN AGREGADOS ───────────────────────────────── */
         .reciente-panel {
@@ -1110,16 +1123,22 @@
 
         var startP = Math.max(0, currentPage-4), endP = Math.min(total-1, startP+9);
         for (var p = startP; p <= endP; p++) {
-            var btn = document.createElement('button');
+            /*
+             * Usamos <a href="#"> en lugar de <button> porque el navegador
+             * de PS3 incluye los <a> automáticamente en la navegación
+             * espacial del D-pad, igual que los botones de descarga y géneros.
+             */
+            var btn = document.createElement('a');
+            btn.href = '#';
             btn.className = (p===currentPage) ? 'page-box active' : 'page-box';
             btn.innerHTML = p+1;
-            btn.setAttribute('tabindex', '0');
             btn.onclick = (function(pg){
-                return function() {
+                return function(e) {
+                    if (e && e.preventDefault) e.preventDefault();
                     currentPage = pg; render();
-                    /* Scroll al inicio del área scrolleable */
                     var area = document.getElementsByClassName('ps3-scroll-area')[0];
                     if (area) area.scrollTop = 0; else window.scrollTo(0,0);
+                    return false;
                 };
             })(p);
             pagDiv.appendChild(btn);
