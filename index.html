@@ -316,6 +316,38 @@
         .btn-adult         { border-color: #ff3535; color: #ff9b9b; }
         .btn-adult.active  { background: #ff3535; color: white; }
 
+        /* ── CUADRO RECIEN AGREGADOS ──────────────────────────────── */
+        .recent-sidebar-box {
+            background: #0a1a2a;
+            border-radius: 18px;
+            border: 2px solid #1e3b4f;
+            border-left: 5px solid #ff6b35;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .is-ps3 .recent-sidebar-box {
+            border-radius: 8px;
+            padding: 5px 6px;
+            margin-bottom: 7px;
+        }
+
+        /* El botón de recientes ocupa todo el ancho del cuadro */
+        .btn-recent {
+            border-color: #35b8ff;
+            color: #7dd4ff;
+            width: 100%;
+            margin-right: 0;
+            padding: 0 10px;
+        }
+
+        .btn-recent.active {
+            background: #35b8ff;
+            color: #0b0f17;
+            border-color: #35b8ff;
+        }
+
         /* ══════════════════════════════════════════════════════════
            ZONA SCROLLEABLE (PS3)
            ══════════════════════════════════════════════════════════
@@ -760,6 +792,12 @@
 
         <div class="body-layout">
             <div class="sidebar-cell">
+
+                <!-- CUADRO RECIEN AGREGADOS: encima de géneros -->
+                <div class="recent-sidebar-box">
+                    <button class="sort-btn btn-recent" id="recentBtn" onclick="toggleReciente()">RECIENTES OFF</button>
+                </div>
+
                 <div class="genre-sidebar">
                     <div class="sidebar-title">Generos</div>
                     <div class="genre-list" id="genreList">
@@ -815,6 +853,7 @@
     var currentGenre    = '';
     var mostrarAdulto   = false;
     var esModoAleatorio = false;
+    var esModoReciente  = false;   /* NUEVO: modo recién agregados */
     var searchTimer     = null;
     var chunkTimer      = null;
     var imageQueue      = [];
@@ -827,6 +866,7 @@
     var searchInput = document.getElementById('searchInput');
     var genreList   = document.getElementById('genreList');
     var genreBtn    = document.getElementById('genreActiveBtn');
+    var recentBtn   = document.getElementById('recentBtn');   /* NUEVO */
 
     /* ══════════════════════════════════════════════════════════════
        UTILIDADES
@@ -962,6 +1002,8 @@
         searchTimer = setTimeout(function() {
             searchTimer = null;
             currentGenre = ''; currentPage = 0; esModoAleatorio = false;
+            /* Búsqueda manual cancela modo recientes */
+            esModoReciente = false; actualizarRecentBtn();
             actualizarSidebarActivo(); aplicarFiltros();
         }, SEARCH_DELAY);
     };
@@ -982,6 +1024,12 @@
             if (hayGenre  && t.generoLower !== genreLower)        continue;
             filteredThemes.push(t);
         }
+
+        /* Modo recientes: invertir para mostrar los últimos del JSON primero */
+        if (esModoReciente) {
+            filteredThemes.reverse();
+        }
+
         render();
     }
 
@@ -1007,7 +1055,7 @@
         cancelarColas();
         var parts = [];
 
-        if (!esModoAleatorio && currentPage===0 && !currentGenre && !trim(searchInput.value)) {
+        if (!esModoAleatorio && !esModoReciente && currentPage===0 && !currentGenre && !trim(searchInput.value)) {
             var n = 0;
             for (var k = 0; k < allThemes.length && n < 2; k++) {
                 if (allThemes[k].genero === 'AnimugenZ') { parts.push(crearTarjeta(allThemes[k],'dest_'+n,true)); n++; }
@@ -1039,6 +1087,9 @@
             var btn = document.createElement('button');
             btn.className = (p===currentPage) ? 'page-box active' : 'page-box';
             btn.innerHTML = p+1;
+            /* FIX PS3: tabIndex explícito para que el joystick pueda
+               navegar con las flechas hasta estos botones           */
+            btn.tabIndex = 0;
             btn.onclick = (function(pg){
                 return function() {
                     currentPage = pg; render();
@@ -1095,6 +1146,8 @@
        ACCIONES
     ══════════════════════════════════════════════════════════════ */
     window.modoAleatorio = function() {
+        /* Aleatorio cancela modo recientes */
+        esModoReciente = false; actualizarRecentBtn();
         esModoAleatorio = true;
         for (var i=filteredThemes.length-1;i>0;i--) {
             var j=Math.floor(Math.random()*(i+1)), tmp=filteredThemes[i];
@@ -1117,14 +1170,39 @@
     };
 
     window.filtrarPorGenero = function(g) {
+        /* Clic en género cancela modo recientes */
+        esModoReciente = false; actualizarRecentBtn();
         currentGenre=g; searchInput.value=''; currentPage=0;
         actualizarSidebarActivo(); aplicarFiltros();
     };
 
     window.volverInicio = function() {
+        /* Volver al inicio cancela modo recientes */
+        esModoReciente = false; actualizarRecentBtn();
         searchInput.value=''; currentGenre=''; currentPage=0; esModoAleatorio=false;
         actualizarSidebarActivo(); aplicarFiltros();
     };
+
+    /* ── RECIEN AGREGADOS ─────────────────────────────────────── */
+    window.toggleReciente = function() {
+        esModoReciente = !esModoReciente;
+        actualizarRecentBtn();
+        /* Al activar: volver a página 0 y re-filtrar en orden inverso */
+        currentPage = 0;
+        esModoAleatorio = false;
+        aplicarFiltros();
+    };
+
+    function actualizarRecentBtn() {
+        if (!recentBtn) return;
+        if (esModoReciente) {
+            recentBtn.innerHTML = 'RECIENTES ON';
+            recentBtn.className = 'sort-btn btn-recent active';
+        } else {
+            recentBtn.innerHTML = 'RECIENTES OFF';
+            recentBtn.className = 'sort-btn btn-recent';
+        }
+    }
 
     /* ══════════════════════════════════════════════════════════════
        LIMPIEZA DE MEMORIA
@@ -1139,7 +1217,7 @@
         if (filteredThemes) { filteredThemes.length=0;  filteredThemes=null; }
         if (genresCache)    { genresCache.length=0;     genresCache=null; }
         if (imageQueue)     { imageQueue.length=0;      imageQueue=null; }
-        grid=pagDiv=statsDiv=searchInput=genreList=genreBtn=null;
+        grid=pagDiv=statsDiv=searchInput=genreList=genreBtn=recentBtn=null;
     };
 
     /* ══════════════════════════════════════════════════════════════
